@@ -1,0 +1,12 @@
+{
+  "id": "com.nakraku.stash.sync",
+  "name": "Nakraku Design Sync",
+  "version": "1.0.0",
+  "description": "Nakraku Stash high-density desktop design system sync for FigCraft",
+  "author": "Nakraku Team",
+  "main": "plugin.wasm",
+  "api": 2,
+  "permissions": {
+    "edit": true
+  }
+}
