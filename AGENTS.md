@@ -20,7 +20,8 @@
   * **Task 1.2: Design Tokens in FigCraft** — **100% COMPLETE** (Populated 28 variables: 16 Obsidian colors, 12 spacing/metrics; 24 styles: 8 typography, 16 paints in `NakrakuUI.figcraft`)
   * **Task 1.3: Canvas Artboard & 38px Titlebar** — **100% COMPLETE** (Created 900x600 Desktop Window frame, 38px frameless titlebar with window controls, verified PNG render)
   * **Task 1.4: Sidebar Navigation Frame** — **100% COMPLETE** (Designed 200px collapsible sidebar with 32px nav rows, badges, RAM freeze telemetry, verified PNG render)
-* **Next Immediate Task**: Task 1.5 — Dashboard & Live Window Table (design 32px row window list, RAM meter, Stash CTA)
+  * **Task 1.5: Dashboard & Live Window Table** — **100% COMPLETE** (Designed 32px row window list, PID/RAM monospace metrics, RAM meter bar, 28px Stash CTA, verified PNG render)
+* **Next Immediate Task**: Task 1.6 — Spatial Monitor Minimap (design multi-display layout visualizer)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
