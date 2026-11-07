@@ -22,7 +22,8 @@
   * **Task 1.4: Sidebar Navigation Frame** — **100% COMPLETE** (Designed 200px collapsible sidebar with 32px nav rows, badges, RAM freeze telemetry, verified PNG render)
   * **Task 1.5: Dashboard & Live Window Table** — **100% COMPLETE** (Designed 32px row window list, PID/RAM monospace metrics, RAM meter bar, 28px Stash CTA, verified PNG render)
   * **Task 1.6: Spatial Monitor Minimap** — **100% COMPLETE** (Designed multi-display layout visualizer with 2 monitors, live window boxes, HWND coordinate inspector, verified 1850x600 PNG render)
-* **Next Immediate Task**: Task 1.7 — Workspace Cards & Quick Switcher (design workspace list rows & status indicators)
+  * **Task 1.7: Workspace Cards & Quick Switcher** — **100% COMPLETE** (Designed 900x600 Workspaces view frame at x:2000, 3 x 42px workspace rows, drag handles, color tags, Free Tier 3/3 banner, verified 2800x600 PNG render)
+* **Next Immediate Task**: Task 1.8 — Command Palette (Ctrl+K) Overlay (design search modal with fuzzy results & kbd pills)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
