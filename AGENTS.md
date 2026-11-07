@@ -23,7 +23,8 @@
   * **Task 1.5: Dashboard & Live Window Table** — **100% COMPLETE** (Designed 32px row window list, PID/RAM monospace metrics, RAM meter bar, 28px Stash CTA, verified PNG render)
   * **Task 1.6: Spatial Monitor Minimap** — **100% COMPLETE** (Designed multi-display layout visualizer with 2 monitors, live window boxes, HWND coordinate inspector, verified 1850x600 PNG render)
   * **Task 1.7: Workspace Cards & Quick Switcher** — **100% COMPLETE** (Designed 900x600 Workspaces view frame at x:2000, 3 x 42px workspace rows, drag handles, color tags, Free Tier 3/3 banner, verified 2800x600 PNG render)
-* **Next Immediate Task**: Task 1.8 — Command Palette (Ctrl+K) Overlay (design search modal with fuzzy results & kbd pills)
+  * **Task 1.8: Command Palette (Ctrl+K) Overlay** — **100% COMPLETE** (Designed 900x600 dim overlay frame at x:100,y:750 with 560px modal, search input, active windows fuzzy list, workspaces, and system action accelerators, verified 2800x1250 PNG render)
+* **Next Immediate Task**: Task 1.9 — Settings & Danger Zone Frames (design general, stash behavior, browser extension, license)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
