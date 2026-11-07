@@ -13,23 +13,11 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 0 — Foundations & Toolchain
-* **Completed Tasks**:
-  * Task 0.1: Minimal Project Scaffold (`package.json`, `vite.config.ts`, `tsconfig.json`, `index.html`, `src/main.tsx`, `src/App.tsx`, `.gitignore`, `AGENTS.md`)
-  * Task 0.2: Verify Node.js / npm / Rust / Cargo environment (`scripts/check-env.ps1`)
-  * Task 0.3: Install Rust via rustup (`rustc 1.99.1`, `cargo 1.99.1`)
-  * Task 0.4: Install Tauri CLI v2 (`tauri-cli 2.12.4`)
-  * Task 0.5: Scaffold Tauri v2 into project (`src-tauri/` skeleton, verified via `cargo check`)
-  * Task 0.6: Verify Tauri dev mode boots (`nakraku-stash.exe` boot verified, 34.5MB RAM, 0 panics)
-  * Task 0.7: Configure `tauri.conf.json` — window basics (`title: "Nakraku Stash"`, `width: 900`, `height: 600`, `decorations: false`, `transparent: true`, `center: true`)
-  * Task 0.8: Configure `tauri.conf.json` — security (strict CSP with WebSocket bridge `ws://127.0.0.1:48123`, minimal `core:default`)
-  * Task 0.9: Configure `tauri.conf.json` — build targets (`targets: ["nsis", "msi"]`, `productName: "Nakraku Stash"`, `identifier: "com.nakraku.stash"`)
-  * Task 0.10: Add `.editorconfig` + oxlint config with anti-slop rules (`.editorconfig`, `oxlint.json`, `npm run lint` verified)
-  * Task 0.11: Add `lefthook.yml` pre-commit hooks (`lefthook.yml`, verified with `npx lefthook run pre-commit`)
-  * Task 0.12: Write `scripts/guardrails.ps1` v1 (verified with 0 violations across TS and Rust)
-  * Task 0.13: Formalize `docs/CONTEXT.md` v1 (ADRs 001-007, North Star metrics, 21-phase master tracker)
-  * Task 0.14: Write `docs/BUGS.md` v1 (formalize bug tracker schema, severity classification, and initial triage log)
-* **Next Immediate Task**: Task 0.15 — Finalize Git repo baseline & commit Task 0 deliverables (`git tag v0.0.1-scaffold`)
+* **Active Phase**: Phase 1 — FigCraft UI/UX Design & Vibe Coding (MCP)
+* **Completed Phases**:
+  * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
+    * Tasks 0.1 – 0.15: Scaffolding, toolchain audit, Rust/Cargo, Tauri v2 CLI & init, 34.5MB RAM boot verification, window/security/target configs, `.editorconfig`, `oxlint`, `lefthook` 4-stage pre-commit hooks, `guardrails.ps1` v1, `CONTEXT.md` v1, `BUGS.md` v1, Git baseline.
+* **Next Immediate Task**: Task 1.1 — FigCraft MCP & CLI bridge setup (verify `figcraft-cli` connectivity to `NakrakuUI.figcraft`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

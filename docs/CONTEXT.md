@@ -76,8 +76,8 @@ Audit executed via `scripts/check-env.ps1`:
 
 | Phase | Description | Task Count | Status |
 |---|---|---|---|
-| **Phase 0** | Foundations & Toolchain | 15 | **In Progress (13/15 completed)** |
-| **Phase 1** | FigCraft UI/UX Design & Vibe Coding (MCP) | 10 | Queued |
+| **Phase 0** | Foundations & Toolchain | 15 | **COMPLETED (15/15) [Tag: v0.0.1-scaffold]** |
+| **Phase 1** | FigCraft UI/UX Design & Vibe Coding (MCP) | 10 | **ACTIVE (In Progress)** |
 | **Phase 2** | React Design System & Component Library | 28 | Queued |
 | **Phase 3** | Application Shell & Navigation | 18 | Queued |
 | **Phase 4** | Data Layer & Local Database | 17 | Queued |
@@ -116,4 +116,18 @@ Audit executed via `scripts/check-env.ps1`:
 - `[0.12]` Write `scripts/guardrails.ps1` v1 (checks anti-slop patterns, `any`, `unwrap()`, `expect()`, excessive padding, integrated into lefthook) — **DONE**
 - `[0.13]` Formalize living documentation (`docs/CONTEXT.md` v1 with ADRs and complete task table) — **DONE**
 - `[0.14]` Write `docs/BUGS.md` v1 (formalize bug tracker schema, severity classification, and initial triage log) — **DONE**
-- `[0.15]` Initialize Git repo + first commit (`git init`, initial commit, tag `v0.0.1-scaffold`) — **NEXT**
+- `[0.15]` Finalize Git repo baseline & commit Task 0 deliverables (`commit: 15cd469`, tag `v0.0.1-scaffold`) — **DONE**
+
+---
+
+## 6. Phase 1 Task Log (FigCraft UI/UX Design & Vibe Coding)
+- `[1.1]` FigCraft MCP & CLI bridge setup (verify `figcraft-cli` connectivity to `NakrakuUI.figcraft`) — **NEXT**
+- `[1.2]` Design Tokens in FigCraft (populate Obsidian color variables & typography styles) — **PENDING**
+- `[1.3]` Canvas Artboard & 38px Titlebar (create 900x600 Desktop Window frame with custom titlebar) — **PENDING**
+- `[1.4]` Sidebar Navigation Frame (design 200px collapsible sidebar with nav icons) — **PENDING**
+- `[1.5]` Dashboard & Live Window Table (design 32px row window list, RAM meter, Stash CTA) — **PENDING**
+- `[1.6]` Spatial Monitor Minimap (design multi-display layout visualizer) — **PENDING**
+- `[1.7]` Workspace Cards & Quick Switcher (design workspace list rows & status indicators) — **PENDING**
+- `[1.8]` Command Palette (Ctrl+K) Overlay (design search modal with fuzzy results & kbd pills) — **PENDING**
+- `[1.9]` Settings & Danger Zone Frames (design general, stash behavior, browser extension, license) — **PENDING**
+- `[1.10]` Render PNG Visual Review & Code-Connect (export canvas PNG to `docs/previews/` & map nodes) — **PENDING**
