@@ -1,0 +1,3 @@
+@echo off
+echo Membuka FigCraft dengan Live MCP Control Port 47800...
+start "" "C:\Program Files\FigCraft\figcraft.exe" --control 47800 "c:\Nakraku\NakrakuUI.figcraft"
