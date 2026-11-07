@@ -16,24 +16,24 @@ FigCraft is an open-source, native Rust vector design tool with built-in MCP (Mo
 - Target Document: `c:\Nakraku\NakrakuUI.figcraft`
 
 ### 2.2 Connection Modes
-1. **Headless MCP / CLI Mode (Default)**:
-   - Configured in `.mcp.json` and `~/.gemini/config/mcp_config.json`:
-     ```json
-     {
-       "mcpServers": {
-         "figcraft": {
-           "command": "C:\\Program Files\\FigCraft\\figcraft-cli.exe",
-           "args": ["mcp", "--automation-read-root", "c:\\Nakraku", "--automation-write-root", "c:\\Nakraku"]
-         }
-       }
-     }
-     ```
-2. **Live Attached Mode (Real-Time Visual Vibe Coding)**:
-   - Start FigCraft desktop app with control port:
-     ```powershell
-     & "C:\Program Files\FigCraft\figcraft.exe" --control 7979
-     ```
-   - Connect MCP with `--attach 7979` to see changes live on the desktop canvas.
+1. **Live Interactive Mode via Antigravity MCP (Primary & Active)**:
+   - Antigravity exposes the lazy MCP server `figcraft` directly connected to the active FigCraft window in the IDE.
+   - All design mutations (`create_node`, `set_properties`, `run_command`, `batch`) execute live in the active window canvas instantly.
+   - Call `save_file` to commit changes to `c:/Nakraku/NakrakuUI.figcraft`.
+2. **Headless CLI / Automation Mode (Secondary)**:
+   - CLI executable: `C:\Program Files\FigCraft\figcraft-cli.exe`
+   - Commands: `info`, `render`, `export`, `run`, `connect`.
+   - Used for headless validation, automated PNG snapshots (`scripts/figcraft-preview.ps1`), and CI/CD checks.
+
+### 2.3 Antigravity MCP Tools Reference (`ServerName: "figcraft"`)
+- `inspect_document`: Read the active document tree, selection, styles, and variables.
+- `open_file`: Open or reload `c:/Nakraku/NakrakuUI.figcraft` as the active front tab.
+- `create_node`: Create a frame, rectangle, text, vector, or component live on canvas.
+- `set_properties`: Update layout, fills, strokes, padding, gap, typography, etc.
+- `run_command`: Execute any FigCraft engine command (e.g. `page.setBackground`, `align.left`, `variable.create`).
+- `batch`: Execute multiple commands atomically in one undo step.
+- `save_file`: Persist the active document to disk.
+- `screenshot`: Capture visual PNG data of layers or window.
 
 ## 3. Vibe Coding & Design Loop
 

@@ -9,6 +9,14 @@
         "--automation-write-root",
         "c:\\Nakraku"
       ]
+    },
+    "figcraft-live": {
+      "command": "C:\\Program Files\\FigCraft\\figcraft-cli.exe",
+      "args": [
+        "mcp",
+        "--attach",
+        "47800"
+      ]
     }
   }
 }

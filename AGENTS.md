@@ -14,10 +14,10 @@
 
 ## 2. Current Execution State
 * **Active Phase**: Phase 1 — FigCraft UI/UX Design & Vibe Coding (MCP)
-* **Completed Phases**:
+* **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
-    * Tasks 0.1 – 0.15: Scaffolding, toolchain audit, Rust/Cargo, Tauri v2 CLI & init, 34.5MB RAM boot verification, window/security/target configs, `.editorconfig`, `oxlint`, `lefthook` 4-stage pre-commit hooks, `guardrails.ps1` v1, `CONTEXT.md` v1, `BUGS.md` v1, Git baseline.
-* **Next Immediate Task**: Task 1.1 — FigCraft MCP & CLI bridge setup (verify `figcraft-cli` connectivity to `NakrakuUI.figcraft`)
+  * **Task 1.1: FigCraft MCP & CLI bridge setup** — **100% COMPLETE** (Verified live MCP connection in IDE, set page background to `#080A0E`, synchronized with `NakrakuUI.figcraft`, CLI verified via `figcraft-cli info`)
+* **Next Immediate Task**: Task 1.2 — Design Tokens in FigCraft (populate Obsidian color variables `#080A0E`, `#10B981` & typography styles)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
