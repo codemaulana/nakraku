@@ -126,8 +126,8 @@ Audit executed via `scripts/check-env.ps1`:
 - `[1.3]` Canvas Artboard & 38px Titlebar (created 900x600 Desktop Window frame, 38px frameless titlebar with window controls, verified PNG render) — **DONE**
 - `[1.4]` Sidebar Navigation Frame (designed 200px collapsible sidebar with 32px nav rows, badges, RAM freeze telemetry, verified PNG render) — **DONE**
 - `[1.5]` Dashboard & Live Window Table (designed 32px row window list, PID/RAM monospace metrics, RAM meter bar, 28px Stash CTA, verified PNG render) — **DONE**
-- `[1.6]` Spatial Monitor Minimap (design multi-display layout visualizer) — **NEXT**
-- `[1.7]` Workspace Cards & Quick Switcher (design workspace list rows & status indicators) — **PENDING**
+- `[1.6]` Spatial Monitor Minimap (designed multi-display layout visualizer with 2 monitors, live window boxes, HWND coordinate inspector, verified 1850x600 PNG render) — **DONE**
+- `[1.7]` Workspace Cards & Quick Switcher (design workspace list rows & status indicators) — **NEXT**
 - `[1.8]` Command Palette (Ctrl+K) Overlay (design search modal with fuzzy results & kbd pills) — **PENDING**
 - `[1.9]` Settings & Danger Zone Frames (design general, stash behavior, browser extension, license) — **PENDING**
 - `[1.10]` Render PNG Visual Review & Code-Connect (export canvas PNG to `docs/previews/` & map nodes) — **PENDING**
