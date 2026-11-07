@@ -18,7 +18,8 @@
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Task 1.1: FigCraft MCP & CLI bridge setup** — **100% COMPLETE** (Verified live MCP connection in IDE, set page background to `#080A0E`, synchronized with `NakrakuUI.figcraft`, CLI verified via `figcraft-cli info`)
   * **Task 1.2: Design Tokens in FigCraft** — **100% COMPLETE** (Populated 28 variables: 16 Obsidian colors, 12 spacing/metrics; 24 styles: 8 typography, 16 paints in `NakrakuUI.figcraft`)
-* **Next Immediate Task**: Task 1.3 — Canvas Artboard & 38px Titlebar (create 900x600 Desktop Window frame with custom titlebar)
+  * **Task 1.3: Canvas Artboard & 38px Titlebar** — **100% COMPLETE** (Created 900x600 Desktop Window frame, 38px frameless titlebar with window controls, verified PNG render)
+* **Next Immediate Task**: Task 1.4 — Sidebar Navigation Frame (design 200px collapsible sidebar with nav icons)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

@@ -123,8 +123,8 @@ Audit executed via `scripts/check-env.ps1`:
 ## 6. Phase 1 Task Log (FigCraft UI/UX Design & Vibe Coding)
 - `[1.1]` FigCraft MCP & CLI bridge setup (verify live Antigravity MCP connection and `figcraft-cli` info on `NakrakuUI.figcraft`, page background initialized to `#080A0E`) — **DONE**
 - `[1.2]` Design Tokens in FigCraft (populated 28 variables: 16 Obsidian colors, 12 spacing/metrics, and 24 styles: 8 typography, 16 paints in `NakrakuUI.figcraft`) — **DONE**
-- `[1.3]` Canvas Artboard & 38px Titlebar (create 900x600 Desktop Window frame with custom titlebar) — **NEXT**
-- `[1.4]` Sidebar Navigation Frame (design 200px collapsible sidebar with nav icons) — **PENDING**
+- `[1.3]` Canvas Artboard & 38px Titlebar (created 900x600 Desktop Window frame, 38px frameless titlebar with window controls, verified PNG render) — **DONE**
+- `[1.4]` Sidebar Navigation Frame (design 200px collapsible sidebar with nav icons) — **NEXT**
 - `[1.5]` Dashboard & Live Window Table (design 32px row window list, RAM meter, Stash CTA) — **PENDING**
 - `[1.6]` Spatial Monitor Minimap (design multi-display layout visualizer) — **PENDING**
 - `[1.7]` Workspace Cards & Quick Switcher (design workspace list rows & status indicators) — **PENDING**
