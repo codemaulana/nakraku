@@ -32,3 +32,6 @@ windows-sys = { version = "0.59", features = [
     "Win32_System_ProcessStatus",
     "Win32_System_SystemInformation",
 ] }
+tokio-tungstenite = "0.30.0"
+futures-util = "0.3.34"
+tokio = { version = "1.54.1", features = ["full"] }

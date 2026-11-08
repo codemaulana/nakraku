@@ -17,6 +17,8 @@ import {
   QuickSwitchResultSchema,
   SessionDiffSchema,
   UndoItemSchema,
+  WsTabItemSchema,
+  WsStatusPayloadSchema,
   type Workspace,
   type CreateWorkspaceInput,
   type Session,
@@ -33,6 +35,8 @@ import {
   type QuickSwitchResult,
   type SessionDiff,
   type UndoItem,
+  type WsTabItem,
+  type WsStatusPayload,
 } from "./schemas";
 
 export class ApiError extends Error {
@@ -268,4 +272,28 @@ export const triggerAutoSnapshot = async (
     workspaceId,
   });
   return String(raw);
+};
+
+export const getWsStatus = async (): Promise<WsStatusPayload> => {
+  const raw = await safeInvoke<unknown>("cmd_ws_get_status");
+  return WsStatusPayloadSchema.parse(raw);
+};
+
+export const getWsTabs = async (): Promise<WsTabItem[]> => {
+  const raw = await safeInvoke<unknown>("cmd_ws_get_tabs");
+  return z.array(WsTabItemSchema).parse(raw);
+};
+
+export const stashWsTabs = async (): Promise<WsTabItem[]> => {
+  const raw = await safeInvoke<unknown>("cmd_ws_stash_tabs");
+  return z.array(WsTabItemSchema).parse(raw);
+};
+
+export const restoreWsTabs = async (tabs: WsTabItem[]): Promise<void> => {
+  await safeInvoke<void>("cmd_ws_restore_tabs", { tabs });
+};
+
+export const getLastStashedWsTabs = async (): Promise<WsTabItem[]> => {
+  const raw = await safeInvoke<unknown>("cmd_ws_get_last_stashed");
+  return z.array(WsTabItemSchema).parse(raw);
 };

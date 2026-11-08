@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nakraku Stash Companion</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="brand">
+        <span class="brand-title">NAKRAKU</span>
+        <span class="brand-badge">MV3</span>
+      </div>
+      <div id="status-badge" class="status-badge status-disconnected">
+        <span class="status-dot"></span>
+        <span id="status-text" class="status-label">OFFLINE</span>
+      </div>
+    </header>
+
+    <div class="telemetry-card">
+      <div class="telemetry-row">
+        <span class="telemetry-label">Endpoint</span>
+        <span class="telemetry-value font-mono">127.0.0.1:48123</span>
+      </div>
+      <div class="telemetry-row">
+        <span class="telemetry-label">Open Tabs</span>
+        <span id="tab-count" class="telemetry-value font-mono">--</span>
+      </div>
+      <div class="telemetry-row">
+        <span class="telemetry-label">Retries</span>
+        <span id="retry-count" class="telemetry-value font-mono">0 / 5</span>
+      </div>
+    </div>
+
+    <div class="actions-group">
+      <button id="btn-stash" class="btn btn-primary" type="button">
+        Stash Active Tabs
+      </button>
+      <div class="btn-row">
+        <button id="btn-restore" class="btn btn-secondary" type="button">
+          Restore Last
+        </button>
+        <button id="btn-reconnect" class="btn btn-secondary" type="button">
+          Reconnect
+        </button>
+      </div>
+    </div>
+
+    <div class="cache-section">
+      <div class="cache-header">
+        <span class="cache-title">OFFLINE CACHE</span>
+        <span id="cache-meta" class="cache-meta font-mono">0 tabs</span>
+      </div>
+      <ul id="cache-list" class="cache-list">
+        <li class="cache-empty">No cached stashed tabs</li>
+      </ul>
+    </div>
+
+    <footer class="popup-footer">
+      <span class="footer-text">Nakraku Stash v0.1.0</span>
+      <span class="footer-sep">•</span>
+      <span class="footer-text">Local IPC</span>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

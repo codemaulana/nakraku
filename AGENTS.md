@@ -13,7 +13,7 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 10 — Browser Extension (MV3)
+* **Active Phase**: Phase 11 — Licensing & Monetization
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
@@ -25,7 +25,8 @@
   * **Phase 7: Frontend — Dashboard & Live View (Tasks 7.1 – 7.12)** — **100% COMPLETE** (LiveWindowList 32px rows, process icon resolution & caching, multi-selection, memory meter, live process counter, StashButton 36px CTA with confirmation tooltip, event-driven reactive refresh, empty and error states, 51 Vitest tests)
   * **Phase 8: Frontend — Workspaces View (Tasks 8.1 – 8.13)** — **100% COMPLETE** (WorkspaceCard 36px rows, inline double-click rename, delete confirmation modal, up/down drag reordering, 8-dot color palette popover, free-tier slot #4 locking, sliding SessionHistoryPanel with window inspect list, session restore & delete, 63 Vitest tests)
   * **Phase 9: Frontend — Settings View (Tasks 9.1 – 9.9)** — **100% COMPLETE** (General section, stash behavior, browser extension bridge status, storage DB backup & path telemetry, shortcut registry, Ed25519 offline license activation with machine ID, danger zone with session purge & JSON export/import, optimistic save hook, Zod validation, 74 Vitest tests, 12 Rust tests)
-* **Next Immediate Task**: Task 10.1 — Scaffold Chrome MV3 extension
+  * **Phase 10: Browser Extension (MV3) (Tasks 10.1 – 10.16)** — **100% COMPLETE** (Manifest v3, `background.js` service worker, exponential backoff reconnect, `tokio-tungstenite` WS server on port 48123, WS protocol specification, GET/STASH/RESTORE commands, 10s keepalive ping/pong, 320x400 popup UI, Obsidian dark theme, multi-browser support, `chrome.storage.local` caching, 14 Rust tests, 82 Vitest tests, packaging script)
+* **Next Immediate Task**: Task 11.1 — Design offline license verification architecture
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

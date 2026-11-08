@@ -86,8 +86,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | **COMPLETED (12/12)** |
 | **Phase 8** | Frontend — Workspaces View | 13 | **COMPLETED (13/13)** |
 | **Phase 9** | Frontend — Settings View | 9 | **COMPLETED (9/9)** |
-| **Phase 10**| Browser Extension (MV3) | 16 | **ACTIVE (In Progress)** |
-| **Phase 11**| Licensing & Monetization | 15 | Queued |
+| **Phase 10**| Browser Extension (MV3) | 16 | **COMPLETED (16/16)** |
+| **Phase 11**| Licensing & Monetization | 15 | **ACTIVE (In Progress)** |
 | **Phase 12**| Error Handling & Telemetry | 10 | Queued |
 | **Phase 13**| Performance & Optimization | 10 | Queued |
 | **Phase 14**| Testing Suite | 20 | Queued |
@@ -299,6 +299,26 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 15. Phase 10 Task Log (Browser Extension - MV3)
-- `[10.1]` Scaffold Chrome MV3 extension — **NEXT**
-- `[10.2]` Write `background.js` service worker — **QUEUED**
-- `[10.3]` Implement WebSocket reconnect logic — **QUEUED**
+- `[10.1]` Scaffold Chrome MV3 extension (`extension/manifest.json`, icons, permissions `tabs`, `storage`) — **DONE**
+- `[10.2]` Write `background.js` service worker connecting to `ws://127.0.0.1:48123` — **DONE**
+- `[10.3]` Implement WebSocket reconnect logic with exponential backoff (1s, 2s, 4s, 8s, 16s, max 5 attempts) — **DONE**
+- `[10.4]` Implement WebSocket server in Rust backend via `tokio-tungstenite` on port 48123 (`src-tauri/src/ws/server.rs`) — **DONE**
+- `[10.5]` Define WebSocket message protocol (`docs/ws-protocol.md`) — **DONE**
+- `[10.6]` Handle `GET_TABS` command (`cmd_ws_get_tabs` extension -> app) — **DONE**
+- `[10.7]` Handle `STASH_TABS` command (`cmd_ws_stash_tabs` app -> extension) — **DONE**
+- `[10.8]` Handle `RESTORE_TABS` command (`cmd_ws_restore_tabs` app -> extension) — **DONE**
+- `[10.9]` Connection status & 10s ping/pong keepalive heartbeat — **DONE**
+- `[10.10]` Extension popup UI (`extension/popup.html`, `extension/popup.js`, 320x400px high-density layout) — **DONE**
+- `[10.11]` Extension popup dark theme (`extension/popup.css` matching Nakraku Obsidian palette `#080A0E`, `#10B981`) — **DONE**
+- `[10.12]` Multi-browser support (Chrome 120+, Edge 120+, Brave) — **DONE**
+- `[10.13]` `chrome.storage.local` fallback caching last-stashed tabs offline — **DONE**
+- `[10.14]` Rust integration tests for WebSocket handshake & ping (`ws::tests::test_ws_handshake_and_ping`) — **DONE**
+- `[10.15]` Rust & Vitest integration tests for tab roundtrip (`ws::tests::test_ws_protocol_tabs_roundtrip`, `tests/extension.test.ts`) — **DONE**
+- `[10.16]` Packaging script (`scripts/package-extension.mjs`, `npm run build:extension`) — **DONE**
+
+---
+
+## 16. Phase 11 Task Log (Licensing & Monetization)
+- `[11.1]` Design offline license verification architecture — **NEXT**
+- `[11.2]` Generate Ed25519 keypair for offline signing — **QUEUED**
+- `[11.3]` Rust Ed25519 verification module (`ed25519-dalek`) — **QUEUED**

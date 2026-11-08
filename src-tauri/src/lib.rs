@@ -1,6 +1,7 @@
 pub mod core;
 pub mod db;
 pub mod os;
+pub mod ws;
 mod shortcuts;
 mod tray;
 mod window_state;
@@ -34,6 +35,7 @@ pub fn run() {
             }
 
             app.manage(core::undo_stack::UndoStack::new());
+            app.manage(ws::init_ws_server());
 
             if let Err(err) = tray::setup_tray(app.handle()) {
                 eprintln!("Warning: Failed to setup system tray: {}", err);
@@ -100,6 +102,11 @@ pub fn run() {
             core::commands::cmd_create_workspace_validated,
             core::commands::cmd_diff_live_with_session,
             core::commands::cmd_trigger_auto_snapshot,
+            ws::commands::cmd_ws_get_status,
+            ws::commands::cmd_ws_get_tabs,
+            ws::commands::cmd_ws_stash_tabs,
+            ws::commands::cmd_ws_restore_tabs,
+            ws::commands::cmd_ws_get_last_stashed,
         ])
         .run(tauri::generate_context!());
 

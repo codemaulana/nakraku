@@ -228,11 +228,29 @@ export const ExportDataSchema = z.object({
   sessions: z.array(SessionSchema),
 });
 
+export const WsTabItemSchema = z.object({
+  id: z.number().nullable().optional(),
+  window_id: z.number().nullable().optional(),
+  url: z.string(),
+  title: z.string(),
+  fav_icon_url: z.string().nullable().optional(),
+  active: z.boolean().nullable().optional(),
+  index: z.number().nullable().optional(),
+});
+
+export const WsStatusPayloadSchema = z.object({
+  connected: z.boolean(),
+  client_count: z.number().int(),
+  port: z.number().int(),
+});
+
 export type AutoSnapshotInterval = z.infer<typeof AutoSnapshotIntervalSchema>;
 export type RestoreConflictMode = z.infer<typeof RestoreConflictModeSchema>;
 export type LicenseTier = z.infer<typeof LicenseTierSchema>;
 export type AppSettings = z.infer<typeof AppSettingsSchema>;
 export type ExportData = z.infer<typeof ExportDataSchema>;
+export type WsTabItem = z.infer<typeof WsTabItemSchema>;
+export type WsStatusPayload = z.infer<typeof WsStatusPayloadSchema>;
 
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 export type CreateWorkspaceInput = z.infer<typeof CreateWorkspaceInputSchema>;

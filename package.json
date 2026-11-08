@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:extension": "node scripts/package-extension.mjs",
     "check": "tsc --noEmit",
     "lint": "oxlint",
     "audit:a11y": "node scripts/a11y-audit.mjs",
