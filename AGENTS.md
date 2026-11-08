@@ -31,7 +31,8 @@
   * **Task 2.12: Build `Row` base component** — **100% COMPLETE** (Authored `src/components/Row.tsx` 32px standard desktop row with `h-row`/`h-row-sm`/`h-row-lg`, selected border accent, hover state, text truncation, slots for icon, label, description, meta, actions, and keyboard accessibility, integrated into `src/App.tsx`)
   * **Task 2.13: Build `Badge` component** — **100% COMPLETE** (Authored `src/components/Badge.tsx` compact pill/micro-tag with `active`/`frozen`/`warning`/`danger`/`count`/`accent`/`neutral` variants, dot indicators, pulse animation, and monospace metrics, integrated into `Sidebar.tsx`, `Row.tsx`, and `App.tsx`)
   * **Task 2.14: Build `Icon` system** — **100% COMPLETE** (Authored `src/components/Icon.tsx` thin-line SVG icon set mapped to curated `IconName` registry at 14px/16px with consistent 1.5 stroke, accessible title/aria support, integrated into `Row.tsx` and `App.tsx`)
-* **Next Immediate Task**: Task 2.15 — Build `Tooltip` component (200ms delay, 12px font, dark surface, no arrow, keyboard-accessible)
+  * **Task 2.15: Build `Tooltip` component** — **100% COMPLETE** (Authored `src/components/Tooltip.tsx` 200ms delay, 12px font `--text-sm`, dark surface `bg-bg-elevated`, no arrow, keyboard accessibility, shortcut keycaps hint support, positionable top/bottom/left/right, integrated into `src/App.tsx`)
+* **Next Immediate Task**: Task 2.16 — Build `ContextMenu` component (Right-click menu, keyboard navigation (up/down/enter/esc), sub-menu support)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

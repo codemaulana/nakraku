@@ -6,6 +6,7 @@ import { StatusBar } from "./components/StatusBar";
 import { Row } from "./components/Row";
 import { Badge, type BadgeVariant } from "./components/Badge";
 import { Icon, type IconName } from "./components/Icon";
+import { Tooltip } from "./components/Tooltip";
 
 interface ProcessItem {
   id: string;
@@ -68,6 +69,16 @@ const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void
         description={item.desc}
         selected={selectedId === item.id}
         onClick={() => onSelect(item.id)}
+        actions={
+          <Tooltip content={`Pin ${item.title}`} shortcut="Alt+P" position="left">
+            <button
+              type="button"
+              className="p-1 rounded-xs hover:bg-bg-hover text-text-disabled hover:text-text-primary transition-colors"
+            >
+              <Icon name="pin" size={12} />
+            </button>
+          </Tooltip>
+        }
         meta={
           <div className="flex items-center gap-xs">
             <Badge variant={item.status} size="sm" dot={item.status !== "neutral"}>
@@ -82,34 +93,39 @@ const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void
   </div>
 );
 
-const SHOWCASE_ICONS: IconName[] = [
-  "stash",
-  "restore",
-  "search",
-  "filter",
-  "pin",
-  "trash",
-  "lock",
-  "wifi",
-  "cpu",
-  "memory",
-  "sparkles",
-];
-
-const IconShowcase: React.FC = () => (
+const ActionToolbar: React.FC = () => (
   <div className="flex items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
     <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">
-      Icon System (14px/1.5px):
+      Actions:
     </span>
-    {SHOWCASE_ICONS.map((name) => (
-      <div
-        key={name}
-        title={name}
-        className="w-5 h-5 flex items-center justify-center rounded-xs bg-bg-elevated hover:bg-bg-hover text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+    <Tooltip content="Stash All Windows" shortcut="Ctrl+S" position="bottom">
+      <button
+        type="button"
+        className="flex items-center gap-1.5 px-2 py-1 rounded-xs bg-accent-emerald text-bg-base font-medium text-xs hover:bg-accent-emerald-hover transition-colors"
       >
-        <Icon name={name} size={14} />
-      </div>
-    ))}
+        <Icon name="stash" size={13} strokeWidth={2} />
+        <span>Stash Now</span>
+      </button>
+    </Tooltip>
+
+    <Tooltip content="Restore Previous Session" shortcut="Ctrl+R" position="bottom">
+      <button
+        type="button"
+        className="flex items-center gap-1.5 px-2 py-1 rounded-xs bg-bg-elevated text-text-primary border border-border-subtle hover:bg-bg-hover transition-colors text-xs"
+      >
+        <Icon name="restore" size={13} />
+        <span>Restore</span>
+      </button>
+    </Tooltip>
+
+    <Tooltip content="Filter Active Windows" shortcut="Ctrl+F" position="bottom">
+      <button
+        type="button"
+        className="p-1.5 rounded-xs bg-bg-elevated text-text-secondary hover:text-text-primary border border-border-subtle hover:bg-bg-hover transition-colors"
+      >
+        <Icon name="filter" size={13} />
+      </button>
+    </Tooltip>
   </div>
 );
 
@@ -128,16 +144,18 @@ export const App: React.FC = () => {
               <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
                 {activeTab}
               </span>
-              <Badge variant="active" dot pulse size="sm">
-                SYSTEM OK
-              </Badge>
+              <Tooltip content="System IPC healthy (48123)" position="left">
+                <Badge variant="active" dot pulse size="sm">
+                  SYSTEM OK
+                </Badge>
+              </Tooltip>
             </div>
           }
         >
           <div className="p-base flex flex-col gap-sm">
-            <IconShowcase />
+            <ActionToolbar />
             <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-              Task 2.14: Unified Thin-Line Icon System
+              Task 2.15: Tooltip (200ms Delay, Dark Surface, Kbd Shortcuts)
             </div>
             <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
               <ProcessList
