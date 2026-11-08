@@ -12,6 +12,11 @@ import {
   SessionSnapshotSchema,
   RawWindowSchema,
   MemoryStatsSchema,
+  StashResultSchema,
+  RestoreResultSchema,
+  QuickSwitchResultSchema,
+  SessionDiffSchema,
+  UndoItemSchema,
   type Workspace,
   type CreateWorkspaceInput,
   type Session,
@@ -23,6 +28,11 @@ import {
   type SessionSnapshot,
   type RawWindow,
   type MemoryStats,
+  type StashResult,
+  type RestoreResult,
+  type QuickSwitchResult,
+  type SessionDiff,
+  type UndoItem,
 } from "./schemas";
 
 export class ApiError extends Error {
@@ -176,4 +186,76 @@ export const restoreSessionById = async (
 ): Promise<number> => {
   const raw = await safeInvoke<number>("cmd_restore_session", { sessionId });
   return Number(raw);
+};
+
+export const stashNow = async (
+  workspaceId: string,
+  sessionName: string
+): Promise<StashResult> => {
+  const raw = await safeInvoke<unknown>("cmd_stash_now", {
+    workspaceId,
+    sessionName,
+  });
+  return StashResultSchema.parse(raw);
+};
+
+export const restoreWorkspace = async (
+  workspaceId: string
+): Promise<RestoreResult> => {
+  const raw = await safeInvoke<unknown>("cmd_restore_workspace", {
+    workspaceId,
+  });
+  return RestoreResultSchema.parse(raw);
+};
+
+export const quickSwitch = async (
+  fromWorkspaceId: string,
+  toWorkspaceId: string
+): Promise<QuickSwitchResult> => {
+  const raw = await safeInvoke<unknown>("cmd_quick_switch", {
+    fromWorkspaceId,
+    toWorkspaceId,
+  });
+  return QuickSwitchResultSchema.parse(raw);
+};
+
+export const undoLastOperation = async (): Promise<UndoItem> => {
+  const raw = await safeInvoke<unknown>("cmd_undo_last_operation");
+  return UndoItemSchema.parse(raw);
+};
+
+export const getUndoStackSize = async (): Promise<number> => {
+  const raw = await safeInvoke<number>("cmd_get_undo_stack_size");
+  return Number(raw);
+};
+
+export const createWorkspaceValidated = async (
+  name: string,
+  color?: string,
+  icon?: string
+): Promise<Workspace> => {
+  const raw = await safeInvoke<unknown>("cmd_create_workspace_validated", {
+    name,
+    color,
+    icon,
+  });
+  return WorkspaceSchema.parse(raw);
+};
+
+export const diffLiveWithSession = async (
+  sessionId: string
+): Promise<SessionDiff> => {
+  const raw = await safeInvoke<unknown>("cmd_diff_live_with_session", {
+    sessionId,
+  });
+  return SessionDiffSchema.parse(raw);
+};
+
+export const triggerAutoSnapshot = async (
+  workspaceId: string
+): Promise<string> => {
+  const raw = await safeInvoke<string>("cmd_trigger_auto_snapshot", {
+    workspaceId,
+  });
+  return String(raw);
 };

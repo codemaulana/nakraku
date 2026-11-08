@@ -1,3 +1,4 @@
+pub mod core;
 pub mod db;
 pub mod os;
 mod shortcuts;
@@ -31,6 +32,8 @@ pub fn run() {
                     eprintln!("Warning: Failed to initialize SQLite database: {}", err);
                 }
             }
+
+            app.manage(core::undo_stack::UndoStack::new());
 
             if let Err(err) = tray::setup_tray(app.handle()) {
                 eprintln!("Warning: Failed to setup system tray: {}", err);
@@ -87,6 +90,14 @@ pub fn run() {
             os::commands::cmd_get_memory_stats,
             os::commands::cmd_restore_window,
             os::commands::cmd_restore_session,
+            core::commands::cmd_stash_now,
+            core::commands::cmd_restore_workspace,
+            core::commands::cmd_quick_switch,
+            core::commands::cmd_undo_last_operation,
+            core::commands::cmd_get_undo_stack_size,
+            core::commands::cmd_create_workspace_validated,
+            core::commands::cmd_diff_live_with_session,
+            core::commands::cmd_trigger_auto_snapshot,
         ])
         .run(tauri::generate_context!());
 

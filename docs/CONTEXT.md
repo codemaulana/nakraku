@@ -82,7 +82,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 3** | Application Shell & Navigation | 18 | **COMPLETED (18/18)** |
 | **Phase 4** | Data Layer & Local Database | 17 | **COMPLETED (17/17)** |
 | **Phase 5** | Win32 OS Engine (Rust) | 21 | **COMPLETED (21/21)** |
-| **Phase 6** | Core Business Logic | 14 | **ACTIVE (In Progress)** |
+| **Phase 6** | Core Business Logic | 14 | **COMPLETED (14/14)** |
+| **Phase 7** | Frontend — Dashboard & Live View | 12 | **ACTIVE (In Progress)** |
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | Queued |
 | **Phase 8** | Frontend — Workspaces View | 13 | Queued |
 | **Phase 9** | Frontend — Settings View | 9 | Queued |
@@ -235,6 +236,24 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 11. Phase 6 Task Log (Core Business Logic)
-- `[6.1]` Write `StashService` — `stash_now()` — **NEXT**
-- `[6.2]` Write `StashService` — `restore_workspace(id)` — **QUEUED**
-- `[6.3]` Write `StashService` — `quick_switch(from, to)` — **QUEUED**
+- `[6.1]` Write `StashService` — `stash_now()` (`src-tauri/src/core/stash_service.rs`: takes live snapshot, saves session with `is_frozen = true`, stores window records, minimizes windows, pushes to undo stack) — **DONE**
+- `[6.2]` Write `StashService` — `restore_workspace(id)` (`src-tauri/src/core/stash_service.rs`: retrieves latest frozen session, queries window positions, restores via OS restore engine, tracks undo) — **DONE**
+- `[6.3]` Write `StashService` — `quick_switch(from, to)` (`src-tauri/src/core/stash_service.rs`: atomic stash of current workspace followed immediately by restore of target workspace) — **DONE**
+- `[6.4]` Write workspace limit enforcement (`src-tauri/src/core/workspace_manager.rs`: free-tier maximum 3 workspaces enforced with typed `CoreError::WorkspaceLimitExceeded(3)`) — **DONE**
+- `[6.5]` Write `WorkspaceManager` — ordering (`src-tauri/src/core/workspace_manager.rs`: `reorder_workspaces()` updating `sort_order` in SQLite transaction) — **DONE**
+- `[6.6]` Write `WorkspaceManager` — naming rules (`src-tauri/src/core/workspace_manager.rs`: 2..=40 chars, whitespace trimmed, case-insensitive uniqueness check) — **DONE**
+- `[6.7]` Write auto-snapshot on interval (`src-tauri/src/core/auto_snapshot.rs`: parses `"5m"`, `"15m"`, `"30m"`, takes labeled snapshots, and prunes older ones keeping max 5) — **DONE**
+- `[6.8]` Write session diff engine (`src-tauri/src/core/session_diff.rs`: compares base vs current windows, reporting added, removed, moved coordinates, and unchanged count) — **DONE**
+- `[6.9]` Write restore conflict resolution (`src-tauri/src/core/types.rs`, `stash_service.rs`: `ConflictResolutionMode::OverwritePosition`, `SkipIfRunning`) — **DONE**
+- `[6.10]` Write undo stack for stash operations (`src-tauri/src/core/undo_stack.rs`, `stash_service.rs`: bounded 5-item ring buffer with `undo_last_operation()` reversing stashes and restores) — **DONE**
+- `[6.11]` Expose all StashService commands to Tauri (`src-tauri/src/core/commands.rs`: `cmd_stash_now`, `cmd_restore_workspace`, `cmd_quick_switch`, `cmd_undo_last_operation`, `cmd_get_undo_stack_size`, `cmd_create_workspace_validated`, `cmd_diff_live_with_session`, `cmd_trigger_auto_snapshot`) — **DONE**
+- `[6.12]` Unit tests — StashService (`src-tauri/src/core/mod.rs`: `test_undo_stack_bounded_capacity`; `tests/core.test.ts`: Vitest API client tests) — **DONE**
+- `[6.13]` Unit tests — workspace limit (`src-tauri/src/core/mod.rs`: `test_workspace_name_validation`, `test_workspace_limit_enforcement`) — **DONE**
+- `[6.14]` Unit tests — session diff engine (`src-tauri/src/core/mod.rs`: `test_session_diff_engine_comprehensive` testing empty, identical, moved, added, and removed windows) — **DONE**
+
+---
+
+## 12. Phase 7 Task Log (Frontend — Dashboard & Live View)
+- `[7.1]` Build real-time live window table with 32px compact rows — **NEXT**
+- `[7.2]` Build live memory gauge meter component — **QUEUED**
+- `[7.3]` Wire 1-Click Stash CTA to `stashNow()` — **QUEUED**

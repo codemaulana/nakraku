@@ -158,6 +158,50 @@ export const WindowLifecyclePayloadSchema = z.object({
   hwnd: z.string(),
 });
 
+export const StashResultSchema = z.object({
+  session_id: z.string(),
+  workspace_id: z.string(),
+  window_count: z.number().int(),
+  ram_saved_bytes: z.number().int(),
+  minimized_count: z.number().int(),
+});
+
+export const RestoreResultSchema = z.object({
+  session_id: z.string(),
+  workspace_id: z.string(),
+  restored_count: z.number().int(),
+});
+
+export const QuickSwitchResultSchema = z.object({
+  stashed: StashResultSchema,
+  restored: RestoreResultSchema,
+});
+
+export const WindowMoveDiffSchema = z.object({
+  process_name: z.string(),
+  title: z.string(),
+  old_x: z.number().int(),
+  old_y: z.number().int(),
+  new_x: z.number().int(),
+  new_y: z.number().int(),
+});
+
+export const SessionDiffSchema = z.object({
+  added_windows: z.array(RawWindowSchema),
+  removed_windows: z.array(RawWindowSchema),
+  moved_windows: z.array(WindowMoveDiffSchema),
+  unchanged_count: z.number().int(),
+});
+
+export const UndoItemSchema = z.object({
+  id: z.string(),
+  action_type: z.string(),
+  workspace_id: z.string(),
+  session_id: z.string(),
+  timestamp: z.number().int(),
+  window_hwnds: z.array(z.string()),
+});
+
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 export type CreateWorkspaceInput = z.infer<typeof CreateWorkspaceInputSchema>;
 export type Session = z.infer<typeof SessionSchema>;
@@ -174,3 +218,9 @@ export type MemoryStats = z.infer<typeof MemoryStatsSchema>;
 export type SessionSnapshot = z.infer<typeof SessionSnapshotSchema>;
 export type ForegroundChangedPayload = z.infer<typeof ForegroundChangedPayloadSchema>;
 export type WindowLifecyclePayload = z.infer<typeof WindowLifecyclePayloadSchema>;
+export type StashResult = z.infer<typeof StashResultSchema>;
+export type RestoreResult = z.infer<typeof RestoreResultSchema>;
+export type QuickSwitchResult = z.infer<typeof QuickSwitchResultSchema>;
+export type WindowMoveDiff = z.infer<typeof WindowMoveDiffSchema>;
+export type SessionDiff = z.infer<typeof SessionDiffSchema>;
+export type UndoItem = z.infer<typeof UndoItemSchema>;
