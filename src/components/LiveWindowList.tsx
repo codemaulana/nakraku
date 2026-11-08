@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useVirtualList } from "../hooks/useVirtualList";
 import { Row } from "./Row";
 import { Icon } from "./Icon";
 import { Badge } from "./Badge";
@@ -7,6 +8,8 @@ import { resolveProcessIcon } from "../lib/processIcons";
 import type { RawWindow } from "../lib/schemas";
 
 export type WindowSortOption = "memory" | "title" | "process" | "zorder";
+
+const titleCollator = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
 
 export interface LiveWindowListProps {
   windows: RawWindow[];
@@ -27,9 +30,9 @@ export const sortWindows = (
       case "memory":
         return b.ram_bytes - a.ram_bytes;
       case "title":
-        return a.title.localeCompare(b.title);
+        return titleCollator.compare(a.title, b.title);
       case "process":
-        return a.process_name.localeCompare(b.process_name);
+        return titleCollator.compare(a.process_name, b.process_name);
       case "zorder":
       default:
         return a.z_order - b.z_order;
@@ -133,12 +136,12 @@ const WindowRowMeta: React.FC<{ win: RawWindow }> = ({ win }) => (
   </div>
 );
 
-const LiveWindowRow: React.FC<{
+const LiveWindowRow = React.memo<{
   win: RawWindow;
   isChecked: boolean;
   onToggle: (hwnd: string) => void;
   onContextMenu?: (e: React.MouseEvent, win: RawWindow) => void;
-}> = ({ win, isChecked, onToggle, onContextMenu }) => (
+}>(({ win, isChecked, onToggle, onContextMenu }) => (
   <Row
     key={win.hwnd}
     size="md"
@@ -165,6 +168,73 @@ const LiveWindowRow: React.FC<{
     }
     meta={<WindowRowMeta win={win} />}
   />
+));
+LiveWindowRow.displayName = "LiveWindowRow";
+
+const VirtualWindowListContent: React.FC<{
+  windows: RawWindow[];
+  selectedHwnds: Set<string>;
+  onToggleSelect: (hwnd: string) => void;
+  onContextMenu?: (event: React.MouseEvent, window: RawWindow) => void;
+}> = ({ windows, selectedHwnds, onToggleSelect, onContextMenu }) => {
+  const { totalHeight, items, onScroll } = useVirtualList({
+    count: windows.length,
+    itemHeight: 36,
+    viewportHeight: 360,
+  });
+
+  return (
+    <div
+      onScroll={onScroll}
+      className="max-h-[360px] overflow-y-auto custom-scrollbar relative"
+    >
+      <div style={{ height: `${totalHeight}px`, position: "relative" }}>
+        {items.map((item) => {
+          const win = windows[item.index];
+          if (!win) return null;
+          return (
+            <div
+              key={win.hwnd}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "36px",
+                transform: `translateY(${item.start}px)`,
+              }}
+            >
+              <LiveWindowRow
+                win={win}
+                isChecked={selectedHwnds.has(win.hwnd)}
+                onToggle={onToggleSelect}
+                onContextMenu={onContextMenu}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const StandardWindowListContent: React.FC<{
+  windows: RawWindow[];
+  selectedHwnds: Set<string>;
+  onToggleSelect: (hwnd: string) => void;
+  onContextMenu?: (event: React.MouseEvent, window: RawWindow) => void;
+}> = ({ windows, selectedHwnds, onToggleSelect, onContextMenu }) => (
+  <div className="flex flex-col divide-y divide-border-subtle/50 max-h-[360px] overflow-y-auto custom-scrollbar">
+    {windows.map((win) => (
+      <LiveWindowRow
+        key={win.hwnd}
+        win={win}
+        isChecked={selectedHwnds.has(win.hwnd)}
+        onToggle={onToggleSelect}
+        onContextMenu={onContextMenu}
+      />
+    ))}
+  </div>
 );
 
 export const LiveWindowList: React.FC<LiveWindowListProps> = ({
@@ -176,7 +246,7 @@ export const LiveWindowList: React.FC<LiveWindowListProps> = ({
   onSortChange,
   onContextMenu,
 }) => {
-  const sorted = sortWindows(windows, sortBy);
+  const sorted = useMemo(() => sortWindows(windows, sortBy), [windows, sortBy]);
   const allSelected = windows.length > 0 && selectedHwnds.size === windows.length;
   const someSelected = selectedHwnds.size > 0 && !allSelected;
 
@@ -196,17 +266,21 @@ export const LiveWindowList: React.FC<LiveWindowListProps> = ({
         onSortChange={onSortChange}
       />
 
-      <div className="flex flex-col divide-y divide-border-subtle/50 max-h-[360px] overflow-y-auto custom-scrollbar">
-        {sorted.map((win) => (
-          <LiveWindowRow
-            key={win.hwnd}
-            win={win}
-            isChecked={selectedHwnds.has(win.hwnd)}
-            onToggle={onToggleSelect}
-            onContextMenu={onContextMenu}
-          />
-        ))}
-      </div>
+      {windows.length > 30 ? (
+        <VirtualWindowListContent
+          windows={sorted}
+          selectedHwnds={selectedHwnds}
+          onToggleSelect={onToggleSelect}
+          onContextMenu={onContextMenu}
+        />
+      ) : (
+        <StandardWindowListContent
+          windows={sorted}
+          selectedHwnds={selectedHwnds}
+          onToggleSelect={onToggleSelect}
+          onContextMenu={onContextMenu}
+        />
+      )}
     </div>
   );
 };

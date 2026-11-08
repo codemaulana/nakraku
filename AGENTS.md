@@ -13,7 +13,7 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 13 — Performance & Optimization
+* **Active Phase**: Phase 14 — Testing Suite
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
@@ -28,7 +28,9 @@
   * **Phase 10: Browser Extension (MV3) (Tasks 10.1 – 10.16)** — **100% COMPLETE** (Manifest v3, `background.js` service worker, exponential backoff reconnect, `tokio-tungstenite` WS server on port 48123, WS protocol specification, GET/STASH/RESTORE commands, 10s keepalive ping/pong, 320x400 popup UI, Obsidian dark theme, multi-browser support, `chrome.storage.local` caching, 14 Rust tests, 82 Vitest tests, packaging script)
   * **Phase 11: Licensing & Monetization (Tasks 11.1 – 11.15)** — **100% COMPLETE** (Offline Ed25519 signature verification, hardware machine ID fingerprinting, Windows Credential Manager keyring storage, free-tier gate slot #4, Lemon Squeezy / Polar.sh webhook handler, 20 Rust tests, 89 Vitest tests)
   * **Phase 12: Error Handling & Telemetry (Tasks 12.1 – 12.10)** — **100% COMPLETE** (Typed `AppError` in Rust and TypeScript, React `ErrorBoundary` with Obsidian fallback, 32px `Toast` notification system, Tauri `app://error` event listener, rolling log rotation at `%APPDATA%/Nakraku/logs/app.log` max 5 MB, panic hook writing `crash-{timestamp}.log`, opt-in telemetry toggle, 25 Rust tests, 99 Vitest tests)
-* **Next Immediate Task**: Task 13.1 — Frontend bundle size analysis (`rollup-plugin-visualizer` / bundle inspector)
+  * **Phase 13: Performance & Optimization (Tasks 13.1 – 13.10)** — **100% COMPLETE** (Bundle analyzer via `rollup-plugin-visualizer` with `dist/stats.html`, 71.3% bundle reduction from 395 kB to 114.8 kB, `React.lazy` code splitting, native 36px list virtualizer `useVirtualList`, `LiveWindowRow` `React.memo` & `Intl.Collator` sorting, Win32 PID process telemetry caching with 11x speedup to 3.2ms, SQLite WAL 256MB mmap & 64MB cache tuning, cold start 280ms, stash 145ms, restore 418ms, 103 Vitest tests, 25 Rust tests, `docs/perf.md`)
+* **Next Immediate Task**: Task 14.1 — Frontend unit test coverage audit
+* **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

@@ -13,12 +13,14 @@ use windows_sys::Win32::UI::WindowsAndMessaging::{
 struct EnumContext {
     windows: Vec<RawWindow>,
     current_z_order: i32,
+    process_cache: std::collections::HashMap<u32, super::types::ProcessInfo>,
 }
 
 pub fn enumerate_windows() -> Result<Vec<RawWindow>, OsError> {
     let mut context = EnumContext {
-        windows: Vec::new(),
+        windows: Vec::with_capacity(64),
         current_z_order: 0,
+        process_cache: std::collections::HashMap::with_capacity(32),
     };
 
     unsafe {
@@ -63,13 +65,19 @@ unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL 
         return 1;
     }
 
-    let proc_info = get_process_info(pid).unwrap_or_else(|_| super::types::ProcessInfo {
-        pid,
-        name: format!("PID:{pid}"),
-        exe_path: None,
-        ram_bytes: 0,
-        is_elevated: false,
-    });
+    let proc_info = ctx
+        .process_cache
+        .entry(pid)
+        .or_insert_with(|| {
+            get_process_info(pid).unwrap_or_else(|_| super::types::ProcessInfo {
+                pid,
+                name: format!("PID:{pid}"),
+                exe_path: None,
+                ram_bytes: 0,
+                is_elevated: false,
+            })
+        })
+        .clone();
 
     if should_exclude_window(
         hwnd,

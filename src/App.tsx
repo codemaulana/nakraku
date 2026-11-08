@@ -8,10 +8,19 @@ import { StashModal } from "./components/StashModal";
 import { CommandPalette } from "./components/CommandPalette";
 import { DashboardView } from "./views/DashboardView";
 import { WorkspacesView } from "./views/WorkspacesView";
-import { ActiveSessionView } from "./views/ActiveSessionView";
-import { SettingsView } from "./views/SettingsView";
-import { AboutView } from "./views/AboutView";
-import { Gallery } from "./dev/Gallery";
+
+const ActiveSessionView = React.lazy(() =>
+  import("./views/ActiveSessionView").then((m) => ({ default: m.ActiveSessionView }))
+);
+const SettingsView = React.lazy(() =>
+  import("./views/SettingsView").then((m) => ({ default: m.SettingsView }))
+);
+const AboutView = React.lazy(() =>
+  import("./views/AboutView").then((m) => ({ default: m.AboutView }))
+);
+const Gallery = React.lazy(() =>
+  import("./dev/Gallery").then((m) => ({ default: m.Gallery }))
+);
 import { useAppShortcuts } from "./hooks/useAppShortcuts";
 import { useWsBridgeStatus } from "./hooks/useWsBridgeStatus";
 import { useAppErrorListener } from "./hooks/useAppErrorListener";
@@ -123,6 +132,59 @@ const useAppShellState = (navigate: (r: AppRoute) => void) => {
   };
 };
 
+const ViewLoadingSkeleton: React.FC = () => (
+  <div className="p-base flex flex-col gap-2 animate-pulse w-full h-full">
+    <div className="h-8 bg-bg-surface border border-border-subtle/40 rounded-sm w-1/3" />
+    <div className="h-8 bg-bg-surface border border-border-subtle/30 rounded-sm w-full" />
+    <div className="h-8 bg-bg-surface border border-border-subtle/30 rounded-sm w-full" />
+  </div>
+);
+
+const AppShellOverlays: React.FC<{
+  menuItems: ReturnType<typeof createProcessMenuItems>;
+  position: { x: number; y: number } | null;
+  onCloseMenu: () => void;
+  isStashOpen: boolean;
+  onCloseStash: () => void;
+  isPaletteOpen: boolean;
+  onClosePalette: () => void;
+  onSelectCommand: (cmd: ShortcutItem) => void;
+}> = ({
+  menuItems,
+  position,
+  onCloseMenu,
+  isStashOpen,
+  onCloseStash,
+  isPaletteOpen,
+  onClosePalette,
+  onSelectCommand,
+}) => (
+  <>
+    <ContextMenu items={menuItems} position={position} onClose={onCloseMenu} />
+    <StashModal isOpen={isStashOpen} onClose={onCloseStash} />
+    <CommandPalette
+      isOpen={isPaletteOpen}
+      onClose={onClosePalette}
+      onSelectCommand={onSelectCommand}
+    />
+  </>
+);
+
+const createViewState = (
+  s: ReturnType<typeof useAppShellState>,
+  openContextMenu: (e: React.MouseEvent, item: ProcessItem) => void
+): DashboardState => ({
+  selectedProcess: s.selectedProcess,
+  setSelectedProcess: s.setSelectedProcess,
+  searchQuery: s.searchQuery,
+  setSearchQuery: s.setSearchQuery,
+  isLoading: s.isLoading,
+  searchInputRef: s.searchInputRef,
+  handleRefresh: s.handleRefresh,
+  onOpenStashModal: () => s.setIsStashModalOpen(true),
+  onContextMenu: openContextMenu,
+});
+
 const AppShell: React.FC = () => {
   const { currentRoute, navigate } = useRouter();
   const s = useAppShellState(navigate);
@@ -130,18 +192,7 @@ const AppShell: React.FC = () => {
   useAppErrorListener();
   const { position, data, open, close } = useContextMenu<ProcessItem>();
   const menuItems = createProcessMenuItems(data, close);
-
-  const viewState: DashboardState = {
-    selectedProcess: s.selectedProcess,
-    setSelectedProcess: s.setSelectedProcess,
-    searchQuery: s.searchQuery,
-    setSearchQuery: s.setSearchQuery,
-    isLoading: s.isLoading,
-    searchInputRef: s.searchInputRef,
-    handleRefresh: s.handleRefresh,
-    onOpenStashModal: () => s.setIsStashModalOpen(true),
-    onContextMenu: open,
-  };
+  const viewState = createViewState(s, open);
 
   return (
     <div className="flex flex-col h-screen bg-bg-base text-text-primary font-ui overflow-hidden select-none">
@@ -149,7 +200,9 @@ const AppShell: React.FC = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar activeId={currentRoute} onSelect={(id) => navigate(id as AppRoute)} />
         <ErrorBoundary>
-          {renderActiveView(currentRoute, navigate, viewState)}
+          <React.Suspense fallback={<ViewLoadingSkeleton />}>
+            {renderActiveView(currentRoute, navigate, viewState)}
+          </React.Suspense>
         </ErrorBoundary>
       </div>
       <StatusBar
@@ -157,14 +210,14 @@ const AppShell: React.FC = () => {
         bridgeConnected={bridgeConnected}
         bridgePort={bridgePort}
       />
-      <ContextMenu items={menuItems} position={position} onClose={close} />
-      <StashModal
-        isOpen={s.isStashModalOpen}
-        onClose={() => s.setIsStashModalOpen(false)}
-      />
-      <CommandPalette
-        isOpen={s.isPaletteOpen}
-        onClose={() => s.setIsPaletteOpen(false)}
+      <AppShellOverlays
+        menuItems={menuItems}
+        position={position}
+        onCloseMenu={close}
+        isStashOpen={s.isStashModalOpen}
+        onCloseStash={() => s.setIsStashModalOpen(false)}
+        isPaletteOpen={s.isPaletteOpen}
+        onClosePalette={() => s.setIsPaletteOpen(false)}
         onSelectCommand={(cmd) =>
           handleCommand(cmd, navigate, () => s.setIsStashModalOpen(true), s.focusSearch)
         }
