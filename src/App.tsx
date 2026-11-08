@@ -13,6 +13,7 @@ import { Kbd } from "./components/Kbd";
 import { Spinner } from "./components/Spinner";
 import { SkeletonList } from "./components/SkeletonRow";
 import { EmptyState } from "./components/EmptyState";
+import { Divider } from "./components/Divider";
 import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
 import {
@@ -98,6 +99,8 @@ const ActionToolbar: React.FC<ActionToolbarProps> = ({
       </Button>
     </Tooltip>
 
+    <Divider orientation="vertical" spacing="xs" className="h-5 my-auto" />
+
     <Tooltip content="Emergency purge" position="bottom">
       <Button variant="danger" icon="trash">
         Purge
@@ -132,16 +135,19 @@ interface MainContentProps {
 }
 
 const TaskStatusHeader: React.FC<{ isLoading: boolean }> = ({ isLoading }) => (
-  <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
-    <div className="flex items-center gap-1.5">
-      <span>Task 2.22: EmptyState Component</span>
-      {isLoading && <Spinner size="xs" variant="accent" />}
+  <div className="flex flex-col gap-1.5 w-full">
+    <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
+      <div className="flex items-center gap-1.5">
+        <span>Task 2.23: Divider Component</span>
+        {isLoading && <Spinner size="xs" variant="accent" />}
+      </div>
+      <div className="flex items-center gap-1.5">
+        <span className="text-text-disabled">Keys:</span>
+        <Kbd shortcut="Ctrl+B" size="xs" variant="elevated" />
+        <Kbd shortcut="Ctrl+K" size="xs" variant="default" splitKeys />
+      </div>
     </div>
-    <div className="flex items-center gap-1.5">
-      <span className="text-text-disabled">Keys:</span>
-      <Kbd shortcut="Ctrl+B" size="xs" variant="elevated" />
-      <Kbd shortcut="Ctrl+K" size="xs" variant="default" splitKeys />
-    </div>
+    <Divider label="Active Processes" labelAlign="left" spacing="none" />
   </div>
 );
 

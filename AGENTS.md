@@ -39,7 +39,8 @@
   * **Task 2.20: Build `Kbd` component** — **100% COMPLETE** (Authored `src/components/Kbd.tsx` keyboard shortcut display with sizes `xs`/`sm`/`md`, variants `default`/`elevated`/`outline`/`ghost`, multi-key splitting `splitKeys`, and accessible ARIA labeling; integrated into `Tooltip.tsx`, `Input.tsx`, `Sidebar.tsx`, `Button.tsx`, `ContextMenu.tsx`, and `App.tsx`)
   * **Task 2.21: Build `Spinner` / `SkeletonRow` loading states** — **100% COMPLETE** (Authored `src/components/Spinner.tsx` circular animated SVG spinner and `src/components/SkeletonRow.tsx` base `Skeleton`, 32px `SkeletonRow`, and `SkeletonList` with staggered realistic widths, integrated into `Button.tsx` and async loading in `src/App.tsx`)
   * **Task 2.22: Build `EmptyState` component** — **100% COMPLETE** (Authored `src/components/EmptyState.tsx` high-density utility empty state with presets `windows`, `workspaces`, `search`, `history`, `tabs`, compact mode, action CTA slot, and shortcut keycaps; integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.23 — Build `Divider` component (1px horizontal/vertical separator respecting `--border-subtle`)
+  * **Task 2.23: Build `Divider` component** — **100% COMPLETE** (Authored `src/components/Divider.tsx` 1px horizontal and vertical separator respecting `--border-subtle`, variants `subtle`/`muted`/`accent`/`danger`, spacing scales, and horizontal labeled dividers; integrated into `ContextMenu.tsx` and `App.tsx`)
+* **Next Immediate Task**: Task 2.24 — Build `ScrollArea` component (Custom thin scrollbar 4px, auto-hide on idle, works in sidebar + main panel)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

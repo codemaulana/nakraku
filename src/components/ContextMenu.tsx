@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Icon, type IconName } from "./Icon";
 import { Kbd } from "./Kbd";
+import { Divider } from "./Divider";
 
 export { useContextMenu } from "../hooks/useContextMenu";
 
@@ -56,9 +57,7 @@ const resolveItemClasses = (
   return isActive ? "bg-bg-hover text-text-primary" : "text-text-primary hover:bg-bg-hover";
 };
 
-const ContextMenuSeparator: React.FC = () => (
-  <div className="h-px my-1 bg-border-subtle" role="separator" />
-);
+const ContextMenuSeparator: React.FC = () => <Divider spacing="xs" />;
 
 interface SubMenuWrapperProps {
   subMenu: ContextMenuItem[];
