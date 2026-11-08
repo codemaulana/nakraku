@@ -37,7 +37,8 @@
   * **Task 2.18: Build `Button` component variants** — **100% COMPLETE** (Authored `src/components/Button.tsx` high-density 32px height buttons with `primary`, `secondary`, `ghost`, and `danger` variants, equal-aspect `icon-only` square mode, loading spinner state, keyboard accessibility, integrated into `src/App.tsx`)
   * **Task 2.19: Build `Input` component** — **100% COMPLETE** (Authored `src/components/Input.tsx` high-density 32px/28px input with monospace text, focus ring, error state, label above, icon slots, clear button, and shortcut badge, plus extracted `src/components/StashModal.tsx`, integrated into `src/App.tsx`)
   * **Task 2.20: Build `Kbd` component** — **100% COMPLETE** (Authored `src/components/Kbd.tsx` keyboard shortcut display with sizes `xs`/`sm`/`md`, variants `default`/`elevated`/`outline`/`ghost`, multi-key splitting `splitKeys`, and accessible ARIA labeling; integrated into `Tooltip.tsx`, `Input.tsx`, `Sidebar.tsx`, `Button.tsx`, `ContextMenu.tsx`, and `App.tsx`)
-* **Next Immediate Task**: Task 2.21 — Build `Spinner` / `SkeletonRow` loading states (32px skeleton row for async list loading)
+  * **Task 2.21: Build `Spinner` / `SkeletonRow` loading states** — **100% COMPLETE** (Authored `src/components/Spinner.tsx` circular animated SVG spinner and `src/components/SkeletonRow.tsx` base `Skeleton`, 32px `SkeletonRow`, and `SkeletonList` with staggered realistic widths, integrated into `Button.tsx` and async loading in `src/App.tsx`)
+* **Next Immediate Task**: Task 2.22 — Build `EmptyState` component (Icon + title + message for empty workspace/window lists — no generic "No data found" slop)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

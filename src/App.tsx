@@ -4,86 +4,21 @@ import { Sidebar } from "./components/Sidebar";
 import { MainPanel } from "./components/MainPanel";
 import { StatusBar } from "./components/StatusBar";
 import { Row } from "./components/Row";
-import { Badge, type BadgeVariant } from "./components/Badge";
-import { Icon, type IconName } from "./components/Icon";
+import { Badge } from "./components/Badge";
+import { Icon } from "./components/Icon";
 import { Tooltip } from "./components/Tooltip";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { Kbd } from "./components/Kbd";
-import {
-  ContextMenu,
-  useContextMenu,
-  type ContextMenuItem,
-} from "./components/ContextMenu";
+import { Spinner } from "./components/Spinner";
+import { SkeletonList } from "./components/SkeletonRow";
+import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
-
-interface ProcessItem {
-  id: string;
-  title: string;
-  desc: string;
-  iconName: IconName;
-  iconColor: string;
-  pid: string;
-  ram: string;
-  status: BadgeVariant;
-  statusText: string;
-}
-
-const SAMPLE_PROCESSES: ProcessItem[] = [
-  {
-    id: "p1",
-    title: "Visual Studio Code — nakraku",
-    desc: "C:\\Nakraku\\src\\components\\Row.tsx",
-    iconName: "window",
-    iconColor: "text-accent-emerald",
-    pid: "PID 18420",
-    ram: "142.4 MB",
-    status: "active",
-    statusText: "RUNNING",
-  },
-  {
-    id: "p2",
-    title: "Google Chrome — GitHub PR #42",
-    desc: "chrome.exe — 8 tabs active",
-    iconName: "globe",
-    iconColor: "text-status-frozen",
-    pid: "PID 9424",
-    ram: "624.1 MB",
-    status: "frozen",
-    statusText: "FROZEN",
-  },
-  {
-    id: "p3",
-    title: "Windows PowerShell — cargo check",
-    desc: "powershell.exe — dev profile",
-    iconName: "terminal",
-    iconColor: "text-text-secondary",
-    pid: "PID 3112",
-    ram: "28.5 MB",
-    status: "neutral",
-    statusText: "IDLE",
-  },
-];
-
-const createWorkspaceSubMenu = (onClose: () => void): ContextMenuItem[] => [
-  { id: "ws-dev", label: "Dev Core (Active)", onClick: onClose },
-  { id: "ws-ai", label: "Research & AI", onClick: onClose },
-  { id: "ws-personal", label: "Personal", onClick: onClose },
-];
-
-const createProcessMenuItems = (
-  item: ProcessItem | null,
-  onClose: () => void
-): ContextMenuItem[] => [
-  { id: "focus", label: "Focus Window", icon: "window", shortcut: "Enter", onClick: onClose },
-  { id: "pin", label: "Pin to Workspace", icon: "pin", shortcut: "Alt+P", onClick: onClose },
-  { id: "move-sub", label: "Move to Workspace", icon: "workspaces", subMenu: createWorkspaceSubMenu(onClose) },
-  { id: "sep-1", separator: true },
-  { id: "stash", label: "Stash Window", icon: "stash", shortcut: "Ctrl+S", onClick: onClose },
-  { id: "copy", label: "Copy Process Info", icon: "copy", shortcut: "Ctrl+C", onClick: onClose },
-  { id: "sep-2", separator: true },
-  { id: "kill", label: `End Task (${item?.pid ?? "PID"})`, icon: "trash", danger: true, shortcut: "Del", onClick: onClose },
-];
+import {
+  SAMPLE_PROCESSES,
+  createProcessMenuItems,
+  type ProcessItem,
+} from "./data/sampleProcesses";
 
 interface ProcessListProps {
   items: ProcessItem[];
@@ -135,22 +70,30 @@ const ProcessList: React.FC<ProcessListProps> = ({
 
 interface ActionToolbarProps {
   onOpenStashModal: () => void;
+  isLoading: boolean;
+  onRefresh: () => void;
 }
 
-const ActionToolbar: React.FC<ActionToolbarProps> = ({ onOpenStashModal }) => (
+const ActionToolbar: React.FC<ActionToolbarProps> = ({
+  onOpenStashModal,
+  isLoading,
+  onRefresh,
+}) => (
   <div className="flex items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
-    <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">
-      Buttons:
-    </span>
     <Tooltip content="Stash All Windows" shortcut="Ctrl+S" position="bottom">
       <Button variant="primary" icon="stash" onClick={onOpenStashModal}>
         Stash Now
       </Button>
     </Tooltip>
 
-    <Tooltip content="Restore Previous Session" shortcut="Ctrl+R" position="bottom">
-      <Button variant="secondary" icon="restore">
-        Restore
+    <Tooltip content="Scan Desktop Windows" shortcut="Ctrl+R" position="bottom">
+      <Button
+        variant="secondary"
+        icon={isLoading ? undefined : "restore"}
+        loading={isLoading}
+        onClick={onRefresh}
+      >
+        Scan
       </Button>
     </Tooltip>
 
@@ -159,10 +102,6 @@ const ActionToolbar: React.FC<ActionToolbarProps> = ({ onOpenStashModal }) => (
         Purge
       </Button>
     </Tooltip>
-
-    <Button variant="ghost">
-      Ghost
-    </Button>
   </div>
 );
 
@@ -183,16 +122,63 @@ interface MainContentProps {
   activeTab: string;
   selectedProcess: string;
   searchQuery: string;
+  isLoading: boolean;
+  onRefresh: () => void;
   onSearchChange: (val: string) => void;
   onSelectProcess: (id: string) => void;
   onOpenStashModal: () => void;
   onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
 }
 
+const TaskStatusHeader: React.FC<{ isLoading: boolean }> = ({ isLoading }) => (
+  <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
+    <div className="flex items-center gap-1.5">
+      <span>Task 2.21: Spinner & SkeletonRow</span>
+      {isLoading && <Spinner size="xs" variant="accent" />}
+    </div>
+    <div className="flex items-center gap-1.5">
+      <span className="text-text-disabled">Keys:</span>
+      <Kbd shortcut="Ctrl+B" size="xs" variant="elevated" />
+      <Kbd shortcut="Ctrl+K" size="xs" variant="default" splitKeys />
+    </div>
+  </div>
+);
+
+interface TableContainerProps {
+  isLoading: boolean;
+  filtered: ProcessItem[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+  onContextMenu: (e: React.MouseEvent, item: ProcessItem) => void;
+}
+
+const ProcessTableContainer: React.FC<TableContainerProps> = ({
+  isLoading,
+  filtered,
+  selectedId,
+  onSelect,
+  onContextMenu,
+}) => (
+  <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
+    {isLoading ? (
+      <SkeletonList count={4} />
+    ) : (
+      <ProcessList
+        items={filtered}
+        selectedId={selectedId}
+        onSelect={onSelect}
+        onContextMenu={onContextMenu}
+      />
+    )}
+  </div>
+);
+
 const MainContent: React.FC<MainContentProps> = ({
   activeTab,
   selectedProcess,
   searchQuery,
+  isLoading,
+  onRefresh,
   onSearchChange,
   onSelectProcess,
   onOpenStashModal,
@@ -207,7 +193,11 @@ const MainContent: React.FC<MainContentProps> = ({
   return (
     <MainPanel header={<MainPanelHeader activeTab={activeTab} />}>
       <div className="p-base flex flex-col gap-sm">
-        <ActionToolbar onOpenStashModal={onOpenStashModal} />
+        <ActionToolbar
+          onOpenStashModal={onOpenStashModal}
+          isLoading={isLoading}
+          onRefresh={onRefresh}
+        />
         <Input
           leftIcon="search"
           shortcut="Ctrl+F"
@@ -217,23 +207,14 @@ const MainContent: React.FC<MainContentProps> = ({
           clearable
           onClear={() => onSearchChange("")}
         />
-        <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
-          <span>Task 2.20: Kbd & Input Components</span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-text-disabled">Keys:</span>
-            <Kbd shortcut="Ctrl+B" size="xs" variant="elevated" />
-            <Kbd shortcut="Ctrl+K" size="xs" variant="default" splitKeys />
-            <Kbd shortcut="Esc" size="xs" variant="default" />
-          </div>
-        </div>
-        <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-          <ProcessList
-            items={filtered}
-            selectedId={selectedProcess}
-            onSelect={onSelectProcess}
-            onContextMenu={onContextMenu}
-          />
-        </div>
+        <TaskStatusHeader isLoading={isLoading} />
+        <ProcessTableContainer
+          isLoading={isLoading}
+          filtered={filtered}
+          selectedId={selectedProcess}
+          onSelect={onSelectProcess}
+          onContextMenu={onContextMenu}
+        />
       </div>
     </MainPanel>
   );
@@ -243,8 +224,14 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [selectedProcess, setSelectedProcess] = useState<string>("p1");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
   const { position, data, open, close } = useContextMenu<ProcessItem>();
+
+  const handleRefresh = () => {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 1200);
+  };
 
   const menuItems = createProcessMenuItems(data, close);
 
@@ -257,6 +244,8 @@ export const App: React.FC = () => {
           activeTab={activeTab}
           selectedProcess={selectedProcess}
           searchQuery={searchQuery}
+          isLoading={isLoading}
+          onRefresh={handleRefresh}
           onSearchChange={setSearchQuery}
           onSelectProcess={setSelectedProcess}
           onOpenStashModal={() => setIsStashModalOpen(true)}
