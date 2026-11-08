@@ -11,11 +11,28 @@ pub fn init_ws_server() -> WsServer {
     let server = WsServer::new();
     let server_clone = server.clone();
 
-    tokio::spawn(async move {
-        if let Err(e) = run_ws_server(server_clone, WS_ADDR).await {
-            log::warn!("WebSocket server stopped or failed to bind: {}", e);
-        }
-    });
+    std::thread::Builder::new()
+        .name("nakraku-ws-server".to_string())
+        .spawn(move || {
+            let rt = match tokio::runtime::Builder::new_current_thread()
+                .enable_all()
+                .build()
+            {
+                Ok(rt) => rt,
+                Err(err) => {
+                    log::error!("Failed to initialize Tokio runtime for WebSocket server: {}", err);
+                    return;
+                }
+            };
+
+            rt.block_on(async move {
+                if let Err(e) = run_ws_server(server_clone, WS_ADDR).await {
+                    log::warn!("WebSocket server stopped or failed to bind: {}", e);
+                }
+            });
+        })
+        .map_err(|e| log::error!("Failed to spawn WebSocket background thread: {}", e))
+        .ok();
 
     server
 }
