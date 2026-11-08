@@ -154,6 +154,16 @@ export const backupDatabase = async (): Promise<string> => {
   return String(raw);
 };
 
+export const getDatabasePath = async (): Promise<string> => {
+  const raw = await safeInvoke<string>("get_database_path");
+  return String(raw ?? "%APPDATA%\\com.nakraku.stash\\stash.db");
+};
+
+export const purgeAllSessions = async (): Promise<number> => {
+  const raw = await safeInvoke<number>("purge_all_sessions");
+  return Number(raw ?? 0);
+};
+
 export const snapshotSession = async (): Promise<SessionSnapshot> => {
   const raw = await safeInvoke<unknown>("cmd_snapshot_session");
   return SessionSnapshotSchema.parse(raw);

@@ -109,6 +109,11 @@ pub fn delete_session(conn: &Connection, id: &str) -> Result<bool, DbError> {
     Ok(rows > 0)
 }
 
+pub fn purge_all_sessions(conn: &Connection) -> Result<usize, DbError> {
+    let rows = conn.execute("DELETE FROM sessions", [])?;
+    Ok(rows)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -158,6 +163,49 @@ mod tests {
         let deleted = delete_session(&conn, "sess-1")?;
         assert!(deleted);
         assert!(get_session(&conn, "sess-1").is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn test_purge_all_sessions() -> Result<(), Box<dyn std::error::Error>> {
+        let conn = setup_test_db()?;
+        workspace_repo::create(
+            &conn,
+            workspace_repo::CreateWorkspaceInput {
+                id: "ws-1".into(),
+                name: "Purge Test WS".into(),
+                color: None,
+                icon: None,
+            },
+        )?;
+
+        save_session(
+            &conn,
+            CreateSessionInput {
+                id: "sess-1".into(),
+                workspace_id: "ws-1".into(),
+                name: "Session 1".into(),
+                window_count: 2,
+                ram_saved_bytes: 100,
+                is_frozen: true,
+            },
+        )?;
+        save_session(
+            &conn,
+            CreateSessionInput {
+                id: "sess-2".into(),
+                workspace_id: "ws-1".into(),
+                name: "Session 2".into(),
+                window_count: 3,
+                ram_saved_bytes: 200,
+                is_frozen: true,
+            },
+        )?;
+
+        assert_eq!(list_sessions(&conn, "ws-1")?.len(), 2);
+        let purged = purge_all_sessions(&conn)?;
+        assert_eq!(purged, 2);
+        assert_eq!(list_sessions(&conn, "ws-1")?.len(), 0);
         Ok(())
     }
 }

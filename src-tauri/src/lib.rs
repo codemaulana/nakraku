@@ -84,6 +84,8 @@ pub fn run() {
             db::commands::get_setting,
             db::commands::set_setting,
             db::commands::backup_database,
+            db::commands::get_database_path,
+            db::commands::purge_all_sessions,
             os::commands::cmd_snapshot_session,
             os::commands::cmd_get_live_windows,
             os::commands::cmd_minimize_all,

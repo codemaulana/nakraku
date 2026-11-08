@@ -202,6 +202,38 @@ export const UndoItemSchema = z.object({
   window_hwnds: z.array(z.string()),
 });
 
+export const AutoSnapshotIntervalSchema = z.enum(["off", "5m", "15m", "30m"]);
+export const RestoreConflictModeSchema = z.enum(["overwrite", "skip"]);
+export const LicenseTierSchema = z.enum(["free", "pro"]);
+
+export const AppSettingsSchema = z.object({
+  autostart_on_boot: z.boolean(),
+  minimize_to_tray: z.boolean(),
+  close_to_tray: z.boolean(),
+  language: z.string().default("en-US"),
+  auto_snapshot_interval: AutoSnapshotIntervalSchema,
+  restore_conflict_mode: RestoreConflictModeSchema,
+  minimize_on_stash: z.boolean(),
+  extension_bridge_enabled: z.boolean(),
+  auto_stash_tabs: z.boolean(),
+  license_tier: LicenseTierSchema,
+  license_key: z.string(),
+  machine_id: z.string(),
+});
+
+export const ExportDataSchema = z.object({
+  version: z.string(),
+  exported_at: z.string(),
+  workspaces: z.array(WorkspaceSchema),
+  sessions: z.array(SessionSchema),
+});
+
+export type AutoSnapshotInterval = z.infer<typeof AutoSnapshotIntervalSchema>;
+export type RestoreConflictMode = z.infer<typeof RestoreConflictModeSchema>;
+export type LicenseTier = z.infer<typeof LicenseTierSchema>;
+export type AppSettings = z.infer<typeof AppSettingsSchema>;
+export type ExportData = z.infer<typeof ExportDataSchema>;
+
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 export type CreateWorkspaceInput = z.infer<typeof CreateWorkspaceInputSchema>;
 export type Session = z.infer<typeof SessionSchema>;

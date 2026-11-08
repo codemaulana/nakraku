@@ -126,3 +126,15 @@ pub fn set_setting(pool: State<DbPool>, key: String, value: String) -> Result<()
 pub fn backup_database(app: AppHandle) -> Result<String, DbError> {
     backup_db(&app)
 }
+
+#[tauri::command]
+pub fn get_database_path(app: AppHandle) -> Result<String, DbError> {
+    let path = super::get_db_path(&app).map_err(DbError::Io)?;
+    Ok(path.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+pub fn purge_all_sessions(pool: State<DbPool>) -> Result<usize, DbError> {
+    let conn = pool.lock().map_err(|_| DbError::Poisoned)?;
+    session_repo::purge_all_sessions(&conn)
+}

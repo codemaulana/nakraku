@@ -85,8 +85,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 6** | Core Business Logic | 14 | **COMPLETED (14/14)** |
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | **COMPLETED (12/12)** |
 | **Phase 8** | Frontend — Workspaces View | 13 | **COMPLETED (13/13)** |
-| **Phase 9** | Frontend — Settings View | 9 | **ACTIVE (In Progress)** |
-| **Phase 10**| Browser Extension (MV3) | 16 | Queued |
+| **Phase 9** | Frontend — Settings View | 9 | **COMPLETED (9/9)** |
+| **Phase 10**| Browser Extension (MV3) | 16 | **ACTIVE (In Progress)** |
 | **Phase 11**| Licensing & Monetization | 15 | Queued |
 | **Phase 12**| Error Handling & Telemetry | 10 | Queued |
 | **Phase 13**| Performance & Optimization | 10 | Queued |
@@ -286,12 +286,19 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 14. Phase 9 Task Log (Frontend — Settings View)
-- `[9.1]` General settings panel — **NEXT**
-- `[9.2]` Stash behavior settings — **QUEUED**
-- `[9.3]` Browser extension bridge toggle — **QUEUED**
-- `[9.4]` Storage & database settings — **QUEUED**
-- `[9.5]` Shortcut customization — **QUEUED**
-- `[9.6]` License & activation panel — **QUEUED**
-- `[9.7]` Danger zone — reset data — **QUEUED**
-- `[9.8]` Wire settings to SQLite — **QUEUED**
-- `[9.9]` Unit tests — Settings View — **QUEUED**
+- `[9.1]` General settings panel (`src/components/settings/GeneralSettingsSection.tsx`: auto-launch on boot toggle, minimize-to-tray toggle, close-to-tray toggle, language locale selector) — **DONE**
+- `[9.2]` Stash behavior settings (`src/components/settings/StashBehaviorSection.tsx`: auto-snapshot interval picker `off/5m/15m/30m`, restore conflict mode `overwrite/skip`, minimize on stash toggle) — **DONE**
+- `[9.3]` Browser extension bridge (`src/components/settings/ExtensionBridgeSection.tsx`: status card for `ws://127.0.0.1:48123`, auto-stash browser tabs toggle, Chromium browser badges Chrome/Edge/Brave) — **DONE**
+- `[9.4]` Storage & database settings (`src/components/settings/StorageSection.tsx`: SQLite WAL/ACID metrics, file path telemetry via `get_database_path`, manual `.bak` backup button via `backup_database`) — **DONE**
+- `[9.5]` Shortcut registry (`src/components/settings/ShortcutsSection.tsx`: high-density desktop hotkey registry for Global OS, App Shell, and Navigation shortcuts) — **DONE**
+- `[9.6]` License & activation panel (`src/components/settings/LicensingSection.tsx`: hardware machine ID with 1-click copy, Ed25519 license activation input, Free vs Pro tier status badge) — **DONE**
+- `[9.7]` Danger zone (`src/components/settings/DangerZoneSection.tsx`: purge stored sessions from SQLite, export/import JSON backup, factory reset defaults with double confirmation modals) — **DONE**
+- `[9.8]` Settings form state management (`src/hooks/useSettings.ts`: optimistic settings update hook, auto-persisting to SQLite `app_settings` table, backup, purge, and feedback banner state) — **DONE**
+- `[9.9]` Settings validation & tests (`src/lib/schemas.ts`, `src/lib/settingsDefaults.ts`, `tests/settings.test.ts`: Zod schema validation for all settings inputs, parsers, license keys, and export data, 11 Vitest tests) — **DONE**
+
+---
+
+## 15. Phase 10 Task Log (Browser Extension - MV3)
+- `[10.1]` Scaffold Chrome MV3 extension — **NEXT**
+- `[10.2]` Write `background.js` service worker — **QUEUED**
+- `[10.3]` Implement WebSocket reconnect logic — **QUEUED**

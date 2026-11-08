@@ -1,157 +1,87 @@
-import React, { useState } from "react";
+import React from "react";
 import { MainPanel } from "../components/MainPanel";
 import { Badge } from "../components/Badge";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
-import { Divider } from "../components/Divider";
-import { Kbd } from "../components/Kbd";
+import { useSettings } from "../hooks/useSettings";
+import { GeneralSettingsSection } from "../components/settings/GeneralSettingsSection";
+import { StashBehaviorSection } from "../components/settings/StashBehaviorSection";
+import { ExtensionBridgeSection } from "../components/settings/ExtensionBridgeSection";
+import { StorageSection } from "../components/settings/StorageSection";
+import { ShortcutsSection } from "../components/settings/ShortcutsSection";
+import { LicensingSection } from "../components/settings/LicensingSection";
+import { DangerZoneSection } from "../components/settings/DangerZoneSection";
 
-const SettingsHeader: React.FC = () => (
+const SettingsHeader: React.FC<{ isPro: boolean }> = ({ isPro }) => (
   <div className="flex items-center justify-between h-row px-base">
     <div className="flex items-center gap-xs">
       <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
-        Settings
+        Settings & Preferences
       </span>
       <Badge variant="neutral" size="sm">
         v0.1.0-scaffold
       </Badge>
     </div>
+    <Badge variant={isPro ? "active" : "neutral"} size="sm">
+      {isPro ? "PRO LICENSE" : "FREE TIER"}
+    </Badge>
   </div>
 );
 
-interface ToggleItemProps {
-  label: string;
-  description: string;
-  enabled: boolean;
-  onToggle: () => void;
-}
+const SettingsFeedbackBanner: React.FC<{
+  error: string | null;
+  successMessage: string | null;
+  onDismiss: () => void;
+}> = ({ error, successMessage, onDismiss }) => {
+  if (!error && !successMessage) return null;
 
-const ToggleItem: React.FC<ToggleItemProps> = ({
-  label,
-  description,
-  enabled,
-  onToggle,
-}) => (
-  <div className="flex items-center justify-between p-sm bg-bg-surface border border-border-subtle rounded-sm">
-    <div className="flex flex-col gap-0.5">
-      <span className="text-xs font-medium text-text-primary">{label}</span>
-      <span className="text-2xs text-text-secondary">{description}</span>
-    </div>
-    <Button
-      size="sm"
-      variant={enabled ? "primary" : "secondary"}
-      onClick={onToggle}
+  const isError = Boolean(error);
+  return (
+    <div
+      className={`p-2 rounded-sm flex items-center justify-between text-2xs font-mono border ${
+        isError
+          ? "bg-danger/10 border-danger/40 text-danger"
+          : "bg-accent-emerald/10 border-accent-emerald/40 text-accent-emerald"
+      }`}
     >
-      {enabled ? "Enabled" : "Disabled"}
-    </Button>
-  </div>
-);
-
-const GeneralSettingsSection: React.FC = () => {
-  const [autostart, setAutostart] = useState<boolean>(true);
-  const [minToTray, setMinToTray] = useState<boolean>(true);
-
-  return (
-    <div className="flex flex-col gap-xs">
-      <Divider label="General & System Integration" labelAlign="left" spacing="none" />
-      <ToggleItem
-        label="Start on Windows Boot"
-        description="Launch Nakraku minimized to system tray upon login"
-        enabled={autostart}
-        onToggle={() => setAutostart((p) => !p)}
-      />
-      <ToggleItem
-        label="Minimize to System Tray"
-        description="Closing the window keeps the background freeze worker active"
-        enabled={minToTray}
-        onToggle={() => setMinToTray((p) => !p)}
-      />
-    </div>
-  );
-};
-
-const ExtensionBridgeSection: React.FC = () => (
-  <div className="flex flex-col gap-xs">
-    <Divider label="Browser Extension Loopback Bridge" labelAlign="left" spacing="none" />
-    <div className="flex items-center justify-between p-sm bg-bg-surface border border-border-subtle rounded-sm font-mono text-2xs">
-      <div className="flex items-center gap-sm">
-        <span className="text-text-secondary">WebSocket Bridge:</span>
-        <span className="text-text-primary">ws://127.0.0.1:48123</span>
-      </div>
-      <Badge variant="active" dot size="sm">
-        LISTENING
-      </Badge>
-    </div>
-  </div>
-);
-
-const ShortcutsSection: React.FC = () => (
-  <div className="flex flex-col gap-xs">
-    <Divider label="Global Desktop Hotkeys" labelAlign="left" spacing="none" />
-    <div className="grid grid-cols-2 gap-xs">
-      <div className="p-xs bg-bg-surface border border-border-subtle rounded-sm flex items-center justify-between">
-        <span className="text-xs text-text-secondary">Instant Stash</span>
-        <Kbd shortcut="Ctrl+Shift+N" size="xs" variant="elevated" />
-      </div>
-      <div className="p-xs bg-bg-surface border border-border-subtle rounded-sm flex items-center justify-between">
-        <span className="text-xs text-text-secondary">Quick Restore</span>
-        <Kbd shortcut="Ctrl+Shift+R" size="xs" variant="elevated" />
-      </div>
-    </div>
-  </div>
-);
-
-const DangerZoneSection: React.FC = () => (
-  <div className="flex flex-col gap-xs">
-    <Divider label="Danger Zone" labelAlign="left" spacing="none" variant="danger" />
-    <div className="p-sm bg-bg-surface border border-danger/40 rounded-sm flex items-center justify-between">
-      <div className="flex flex-col gap-0.5">
-        <span className="text-xs font-semibold text-danger">Purge Stored Snapshots</span>
-        <span className="text-2xs text-text-secondary">Deletes all saved sessions from SQLite database</span>
-      </div>
-      <Button size="sm" variant="danger" icon="trash">
-        Purge Database
-      </Button>
-    </div>
-  </div>
-);
-
-const LicensingSection: React.FC = () => {
-  const [licenseKey, setLicenseKey] = useState<string>("");
-
-  return (
-    <div className="flex flex-col gap-xs">
-      <Divider label="Offline Ed25519 Licensing" labelAlign="left" spacing="none" />
-      <div className="p-sm bg-bg-surface border border-border-subtle rounded-sm flex flex-col gap-xs">
-        <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
-          <span>Machine ID: SHA256-D0E1-99B4-48FA</span>
-          <Badge variant="neutral" size="sm">Free Tier (3/3)</Badge>
-        </div>
-        <div className="flex items-center gap-xs">
-          <Input
-            placeholder="Paste your Ed25519 Pro License Key..."
-            value={licenseKey}
-            onChange={(e) => setLicenseKey(e.target.value)}
-            className="flex-1"
-          />
-          <Button size="md" variant="primary" icon="check">
-            Activate
-          </Button>
-        </div>
-      </div>
+      <span>{error ?? successMessage}</span>
+      <button
+        type="button"
+        onClick={onDismiss}
+        className="hover:underline text-text-primary ml-2 font-sans font-medium"
+      >
+        Dismiss
+      </button>
     </div>
   );
 };
 
 export const SettingsView: React.FC = () => {
+  const s = useSettings();
+  const isPro = s.settings.license_tier === "pro";
+
   return (
-    <MainPanel header={<SettingsHeader />}>
+    <MainPanel header={<SettingsHeader isPro={isPro} />}>
       <div className="p-base flex flex-col gap-md">
-        <GeneralSettingsSection />
-        <ExtensionBridgeSection />
+        <SettingsFeedbackBanner
+          error={s.error}
+          successMessage={s.successMessage}
+          onDismiss={s.clearMessages}
+        />
+        <GeneralSettingsSection settings={s.settings} onUpdate={s.updateSetting} />
+        <StashBehaviorSection settings={s.settings} onUpdate={s.updateSetting} />
+        <ExtensionBridgeSection settings={s.settings} onUpdate={s.updateSetting} />
+        <StorageSection
+          dbPath={s.dbPath}
+          backupPath={s.backupPath}
+          onBackup={s.backupDatabaseAction}
+        />
         <ShortcutsSection />
-        <LicensingSection />
-        <DangerZoneSection />
+        <LicensingSection settings={s.settings} onActivate={s.activateLicense} />
+        <DangerZoneSection
+          onPurgeSessions={s.purgeSessionsAction}
+          onExportData={s.exportDataAction}
+          onImportData={s.importDataAction}
+          onResetDefaults={s.resetToDefaults}
+        />
       </div>
     </MainPanel>
   );
