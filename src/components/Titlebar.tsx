@@ -4,6 +4,7 @@ import { useWindowControls } from "../hooks/useWindowControls";
 export interface TitlebarProps {
   title?: string;
   badge?: string;
+  vibrant?: boolean;
   isMaximized?: boolean;
   onMinimize?: () => void;
   onMaximize?: () => void;
@@ -68,6 +69,7 @@ const WindowControls: React.FC<WindowControlsProps> = ({
 export const Titlebar: React.FC<TitlebarProps> = ({
   title = "NAKRAKU STASH",
   badge,
+  vibrant = true,
   isMaximized: controlledMaximized,
   onMinimize,
   onMaximize,
@@ -80,10 +82,14 @@ export const Titlebar: React.FC<TitlebarProps> = ({
   const handleMaximize = onMaximize ?? controls.toggleMaximize;
   const handleClose = onClose ?? controls.close;
 
+  const bgStyle = vibrant
+    ? "bg-bg-surface-glass backdrop-blur-vibrant backdrop-saturate-150"
+    : "bg-bg-surface";
+
   return (
     <header
       data-tauri-drag-region
-      className="flex items-center justify-between h-titlebar w-full bg-bg-surface border-b border-border-subtle select-none px-sm"
+      className={`flex items-center justify-between h-titlebar w-full border-b border-border-subtle select-none px-sm transition-colors ${bgStyle}`}
     >
       <div data-tauri-drag-region className="flex items-center gap-xs">
         <span className="w-1.5 h-1.5 rounded-full bg-status-active" />

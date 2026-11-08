@@ -12,6 +12,7 @@ const config: Config = {
       bg: {
         base: "var(--bg-base)",
         surface: "var(--bg-surface)",
+        "surface-glass": "var(--bg-surface-glass)",
         elevated: "var(--bg-elevated)",
         hover: "var(--bg-hover)",
         active: "var(--bg-active)",
@@ -110,6 +111,9 @@ const config: Config = {
       borderWidth: {
         DEFAULT: "var(--border-width)",
         thick: "var(--border-width-thick)",
+      },
+      backdropBlur: {
+        vibrant: "var(--backdrop-blur)",
       },
     },
   },

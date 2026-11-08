@@ -142,4 +142,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.5]` Configure Tailwind CSS (`tailwind.config.ts` consuming `tokens.css` with strict colors isolation, PostCSS configured, purge paths set, verified in `src/App.tsx`) — **DONE**
 - `[2.6]` Build `Titlebar` component (`src/components/Titlebar.tsx`: Frameless 38px bar with status dot, title, badge, drag region `data-tauri-drag-region`, and pixel-perfect minimize/maximize/close buttons, integrated into `src/App.tsx`) — **DONE**
 - `[2.7]` Build `Titlebar` — window control logic (`src/hooks/useWindowControls.ts`: Wired Tauri v2 `appWindow.minimize()`, `appWindow.toggleMaximize()`, `appWindow.close()`, and `appWindow.onResized()` maximize state listener, with capabilities configured in `src-tauri/capabilities/default.json` and safe browser fallbacks) — **DONE**
-- `[2.8]` Build `Titlebar` — vibrancy / blur effect (CSS backdrop-filter blur on titlebar background) — **NEXT**
+- `[2.8]` Build `Titlebar` — vibrancy / blur effect (`src/components/Titlebar.tsx`: Added `vibrant` glass mode via `bg-bg-surface-glass` and `backdrop-blur-vibrant` with tokens `--bg-surface-glass` and `--backdrop-blur: 16px`) — **DONE**
+- `[2.9]` Build `Sidebar` layout shell (Left sidebar 200px: nav icons + labels, collapse toggle, keyboard shortcut hint) — **NEXT**

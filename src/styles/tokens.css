@@ -5,6 +5,8 @@
 :root {
   --bg-base: #080A0E;
   --bg-surface: #0F1319;
+  --bg-surface-glass: rgba(15, 19, 25, 0.75);
+  --backdrop-blur: 16px;
   --bg-elevated: #161B22;
   --bg-hover: #1C232E;
   --bg-active: #222B38;
