@@ -146,4 +146,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.9]` Build `Sidebar` layout shell (`src/components/Sidebar.tsx`: 200px collapsible sidebar with 32px nav rows, badges, Ctrl+B keyboard shortcut listener, icon-only 48px collapse mode, integrated into `src/App.tsx`) — **DONE**
 - `[2.10]` Build `MainPanel` layout shell (`src/components/MainPanel.tsx`: Right content area with flex-1 grow, fixed optional header/footer slots, overflow-y auto with thin `.custom-scrollbar`, integrated into `src/App.tsx`) — **DONE**
 - `[2.11]` Build `StatusBar` component (`src/components/StatusBar.tsx`: 24px bottom bar with WebSocket bridge indicator `WS:48123`, process and window counts, monospace RAM usage and saved metrics, live 24h clock, integrated into `src/App.tsx`) — **DONE**
-- `[2.12]` Build `Row` base component (32px height, hover state, selected state, truncated text, slot for icon + meta) — **NEXT**
+- `[2.12]` Build `Row` base component (`src/components/Row.tsx`: 32px standard desktop row with `h-row`/`h-row-sm`/`h-row-lg` sizing, selected border accent, hover state, text truncation, slots for icon, label, description, meta, and actions, keyboard Enter/Space accessibility, integrated into `src/App.tsx`) — **DONE**
+- `[2.13]` Build `Badge` component (Compact pill: count badge, status badge (active/frozen/warning/danger)) — **NEXT**
