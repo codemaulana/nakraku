@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
 import { MainPanel } from "./components/MainPanel";
+import { StatusBar } from "./components/StatusBar";
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
@@ -39,11 +40,13 @@ export const App: React.FC = () => {
             </p>
 
             <div className="border border-border-subtle rounded-sm bg-bg-surface px-base py-sm text-xs text-accent-emerald font-mono">
-              Task 2.10: MainPanel Layout Shell Active (Custom Scrollbar Ready)
+              Task 2.11: StatusBar Active (24px Live Telemetry)
             </div>
           </div>
         </MainPanel>
       </div>
+
+      <StatusBar ramSaved="1.8 GB" />
     </div>
   );
 };
