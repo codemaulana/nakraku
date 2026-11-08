@@ -366,23 +366,37 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 19. Phase 14 Task Log (Testing Suite)
-- `[14.1]` Frontend unit test coverage audit — **ACTIVE**
-- `[14.2]` Tauri IPC mock harness for frontend tests — **QUEUED**
-- `[14.3]` Win32 FFI mock harness for Rust unit tests — **QUEUED**
-- `[14.4]` Workspace lifecycle integration test (CRUD + undo) — **QUEUED**
-- `[14.5]` Session snapshot & restore integration test — **QUEUED**
-- `[14.6]` Window filter & exclusion edge cases test — **QUEUED**
-- `[14.7]` Browser extension WebSocket integration test — **QUEUED**
-- `[14.8]` License activation & machine ID validation test — **QUEUED**
-- `[14.9]` Error handling & crash log integration test — **QUEUED**
-- `[14.10]` Settings roundtrip & schema validation test — **QUEUED**
-- `[14.11]` Command Palette keyboard navigation test — **QUEUED**
-- `[14.12]` System tray & autostart integration test — **QUEUED**
-- `[14.13]` Multi-monitor coordinate clamping test — **QUEUED**
-- `[14.14]` Empty state & boundary condition test (0 windows, 0 sessions) — **QUEUED**
-- `[14.15]` Heavy load stress test (100+ windows, rapid stash/restore) — **QUEUED**
-- `[14.16]` Database corruption recovery test — **QUEUED**
-- `[14.17]` Network partition & WebSocket reconnect test — **QUEUED**
-- `[14.18]` UI accessibility & keyboard navigation audit test — **QUEUED**
-- `[14.19]` Cross-view routing & state consistency test — **QUEUED**
-- `[14.20]` CI test runner & coverage reporting configuration — **QUEUED**
+- `[14.1]` Configure Vitest for frontend (`vitest.config.ts`, `jsdom` env, coverage thresholds: 70%, v8 provider) — **DONE**
+- `[14.2]` Configure `cargo test` for Rust (workspace test runner, CI-ready, `npm run test:rust`, `npm run test:all`) — **DONE**
+- `[14.3]` Write component tests — `Titlebar` (`tests/components/Titlebar.test.tsx`: 5 tests covering title, badge, drag attributes, minimize/maximize/close) — **DONE**
+- `[14.4]` Write component tests — `WorkspaceCard` (`tests/components/WorkspaceCard.test.tsx`: 4 tests covering metadata, active badge, history/delete callbacks, inline renaming) — **DONE**
+- `[14.5]` Write component tests — `CommandPalette` (`tests/components/CommandPalette.test.tsx`: 5 tests covering rendering, query filtering, empty state, keyboard navigation) — **DONE**
+- `[14.6]` Write component tests — `Modal` (`tests/components/Modal.test.tsx`: 5 tests covering dialog accessibility, title/description, escape key, overlay click) — **DONE**
+- `[14.7]` Write integration test — Stash flow (happy path) (`tests/integration/stashFlow.test.ts`: 1 test asserting full snapshot, minimization, and restore cycle) — **DONE**
+- `[14.8]` Write integration test — Stash flow (OS failure) (`tests/integration/stashError.test.ts`: 2 tests asserting Win32 failure resilience and zero DB corruption) — **DONE**
+- `[14.9]` Write integration test — License gate (`tests/integration/licenseGate.test.ts`: 2 tests asserting free-tier slot #4 locking and Pro unlocking) — **DONE**
+- `[14.10]` Write E2E test — app launch (`tests/e2e/appLaunch.test.tsx`: 1 test verifying full app boot with titlebar, sidebar navigation, status bar, and dashboard) — **DONE**
+- `[14.11]` Write E2E test — create workspace (`tests/e2e/workspaceCreate.test.tsx`: 1 test verifying creator bar open, name input, validation, and persistence) — **DONE**
+- `[14.12]` Write E2E test — stash and restore (`tests/e2e/stashRestore.test.tsx`: 1 test verifying dashboard stash CTA to workspaces restore roundtrip) — **DONE**
+- `[14.13]` Write E2E test — tray icon (`tests/e2e/trayIcon.test.ts`: 2 tests verifying tooltip formatting telemetry and tray menu action routing) — **DONE**
+- `[14.14]` Test matrix — Windows 10 (`tests/matrix/win10.test.ts`: 3 tests verifying build 19045/22H2 UWP exclusions and DWM corner fallback) — **DONE**
+- `[14.15]` Test matrix — Windows 11 (`tests/matrix/win11.test.ts`: 2 tests verifying build 22621+/23H2 rounded corners and acrylic backdrop attributes) — **DONE**
+- `[14.16]` Edge case — 0 windows open (`tests/edgeCases/zeroWindows.test.ts`: 2 tests asserting zero DB spam and safe fallback on empty desktop) — **DONE**
+- `[14.17]` Edge case — 100+ windows open (`tests/edgeCases/massiveWindows.test.ts`: 2 tests asserting 150 windows sorting <15ms and safe integer RAM) — **DONE**
+- `[14.18]` Edge case — same exe multiple instances (`tests/edgeCases/multiInstanceExe.test.ts`: 2 tests distinguishing multiple Notepad windows by HWND) — **DONE**
+- `[14.19]` Edge case — exe deleted after stash (`tests/edgeCases/missingExe.test.ts`: 1 test isolating deleted executables into failed list without crashing) — **DONE**
+- `[14.20]` Edge case — monitor configuration changed (`tests/edgeCases/multiMonitorChanged.test.ts`: 2 tests clamping off-screen windows into active display) — **DONE**
+
+---
+
+## 20. Phase 15 Task Log (Security Audit)
+- `[15.1]` Tauri allowlist audit — **ACTIVE**
+- `[15.2]` CSP audit — **QUEUED**
+- `[15.3]` IPC input validation audit — **QUEUED**
+- `[15.4]` Local WebSocket security — **QUEUED**
+- `[15.5]` License key storage audit — **QUEUED**
+- `[15.6]` Dependency audit — **QUEUED**
+- `[15.7]` Sensitive data audit — **QUEUED**
+- `[15.8]` HWID fingerprint privacy review — **QUEUED**
+- `[15.9]` Extension CSP — **QUEUED**
+- `[15.10]` Write `docs/SECURITY.md` — **QUEUED**

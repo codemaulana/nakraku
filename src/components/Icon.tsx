@@ -35,6 +35,7 @@ import {
   WifiOff,
   GripVertical,
   X,
+  Plus,
 } from "lucide-react";
 
 export type IconSize = "xs" | "sm" | "md" | "lg" | number;
@@ -73,12 +74,17 @@ export type IconName =
   | "wifi"
   | "wifi-off"
   | "grip-vertical"
-  | "close";
+  | "close"
+  | "plus"
+  | "workspace"
+  | "monitor";
 
 export const ICON_MAP: Record<IconName, LucideIcon> = {
   dashboard: LayoutDashboard,
   workspaces: Layers,
+  workspace: Layers,
   minimap: Monitor,
+  monitor: Monitor,
   settings: Settings,
   window: AppWindow,
   terminal: Terminal,
@@ -110,6 +116,7 @@ export const ICON_MAP: Record<IconName, LucideIcon> = {
   "wifi-off": WifiOff,
   "grip-vertical": GripVertical,
   close: X,
+  plus: Plus,
 };
 
 export interface IconProps {
@@ -146,7 +153,7 @@ export const Icon: React.FC<IconProps> = ({
   "aria-label": ariaLabel,
   title,
 }) => {
-  const Component = ICON_MAP[name];
+  const Component = ICON_MAP[name] ?? LayoutDashboard;
   const pixelSize = resolveIconPixelSize(size);
   const isAccessible = Boolean(ariaLabel || title);
 

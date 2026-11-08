@@ -33,7 +33,7 @@ export const APP_SHORTCUTS: readonly ShortcutItem[] = [
     description: "View and restore stashed workspaces",
     shortcut: "Alt+2",
     category: "navigation",
-    icon: "workspace",
+    icon: "workspaces",
     route: "workspaces",
   },
   {
@@ -51,7 +51,7 @@ export const APP_SHORTCUTS: readonly ShortcutItem[] = [
     description: "View multi-monitor spatial desktop layout",
     shortcut: "Alt+4",
     category: "navigation",
-    icon: "monitor",
+    icon: "minimap",
     route: "minimap",
   },
   {
