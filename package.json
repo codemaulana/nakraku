@@ -17,6 +17,8 @@
     "test:all": "npm test && npm run test:rust",
     "checksums": "powershell -ExecutionPolicy Bypass -File scripts/generate-checksums.ps1",
     "sign:release": "powershell -ExecutionPolicy Bypass -File scripts/sign-release.ps1",
+    "perf:gate": "node scripts/perf-regression-gate.mjs",
+    "ci:all": "npm run lint && npm run check && npm run test:coverage && npm run test:rust && npm run build && npm run perf:gate",
     "prepare": "lefthook install",
     "tauri": "tauri"
   },

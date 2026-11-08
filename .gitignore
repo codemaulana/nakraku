@@ -5,5 +5,6 @@ dist-extension.zip
 src-tauri/target/
 src-tauri/gen/schemas/
 *.log
+coverage/
 .DS_Store
 Thumbs.db

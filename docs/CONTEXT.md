@@ -93,8 +93,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 14**| Testing Suite | 20 | **COMPLETED (20/20)** |
 | **Phase 15**| Security Audit | 10 | **COMPLETED (10/10)** |
 | **Phase 16**| Installer & Distribution | 12 | **COMPLETED (12/12)** |
-| **Phase 17**| CI/CD Pipeline | 8 | **ACTIVE (In Progress)** |
-| **Phase 18**| Documentation | 14 | Queued |
+| **Phase 17**| CI/CD Pipeline | 8 | **COMPLETED (8/8)** |
+| **Phase 18**| Documentation | 14 | **ACTIVE (In Progress)** |
 | **Phase 19**| Open Source Hygiene | 9 | Queued |
 | **Phase 20**| Landing Page | 7 | Queued |
 | **TOTAL** | | **288** | |
@@ -420,11 +420,29 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 22. Phase 17 Task Log (CI/CD Pipeline)
-- `[17.1]` GitHub Actions — PR checks — **ACTIVE**
-- `[17.2]` GitHub Actions — build check — **QUEUED**
-- `[17.3]` GitHub Actions — guardrails check — **QUEUED**
-- `[17.4]` GitHub Actions — release workflow — **QUEUED**
-- `[17.5]` Branch protection rules — **QUEUED**
-- `[17.6]` Dependabot / Renovate config — **QUEUED**
-- `[17.7]` CI — test coverage report — **QUEUED**
-- `[17.8]` CI — performance regression gate — **QUEUED**
+- `[17.1]` GitHub Actions — PR checks (`.github/workflows/ci.yml`: automated workflow on PR/push to `master`/`main` with parallel jobs for lint, typecheck, tests, and build) — **DONE**
+- `[17.2]` GitHub Actions — build check (`.github/workflows/ci.yml`: `build-check` job validating Vite production build & extension packaging) — **DONE**
+- `[17.3]` GitHub Actions — guardrails check (`.github/workflows/ci.yml`: runs `scripts/guardrails.ps1` in CI, failing PR on any anti-slop violations) — **DONE**
+- `[17.4]` GitHub Actions — release workflow (`.github/workflows/release.yml`: on tag `v*` compiles NSIS/MSI bundles, code signs, hashes artifacts, and uploads to GitHub Releases) — **DONE**
+- `[17.5]` Branch protection rules (`docs/CI-CD.md`: formal specifications for required status checks, approvals, linear history, and admin enforcement) — **DONE**
+- `[17.6]` Dependabot / Renovate config (`.github/dependabot.yml`: automated weekly dependency update PRs for npm, cargo, and monthly for github-actions) — **DONE**
+- `[17.7]` CI — test coverage report (`vitest.config.ts` v8 coverage, `npm run test:coverage` passing thresholds, artifacts uploaded to GitHub Actions) — **DONE**
+- `[17.8]` CI — performance regression gate (`scripts/perf-regression-gate.mjs`: asserts main bundle <200 kB, total gzip <250 kB, and 150-window diff <15 ms, tested via `tests/cicd.test.ts`) — **DONE**
+
+---
+
+## 23. Phase 18 Task Log (Documentation)
+- `[18.1]` Write `README.md` — **ACTIVE**
+- `[18.2]` Write `CONTRIBUTING.md` — **QUEUED**
+- `[18.3]` Write `CHANGELOG.md` — **QUEUED**
+- `[18.4]` Write `docs/ARCHITECTURE.md` — **QUEUED**
+- `[18.5]` Write `docs/WIN32-API-SURFACE.md` — **QUEUED**
+- `[18.6]` Write `docs/WS-PROTOCOL.md` — **QUEUED**
+- `[18.7]` Write `docs/SCHEMA.md` — **QUEUED**
+- `[18.8]` Write `docs/LICENSE-SPEC.md` — **QUEUED**
+- `[18.9]` Write `docs/SECURITY.md` — **DONE (Completed in Phase 15)**
+- `[18.10]` Write `docs/PERF.md` — **DONE (Completed in Phase 13)**
+- `[18.11]` Write `docs/BUGS.md` — **DONE (Living document)**
+- `[18.12]` Inline JSDoc on all exported TS functions — **QUEUED**
+- `[18.13]` Inline `///` doc comments on all public Rust items — **QUEUED**
+- `[18.14]` Record demo GIF / video assets — **QUEUED**

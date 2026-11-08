@@ -13,7 +13,7 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 17 — CI/CD Pipeline
+* **Active Phase**: Phase 18 — Documentation
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
@@ -32,7 +32,8 @@
   * **Phase 14: Testing Suite (Tasks 14.1 – 14.20)** — **100% COMPLETE** (`vitest.config.ts` with JSDOM & v8 coverage, `cargo test` workspace runner with `npm run test:rust`, 30 test suites, 146 Vitest tests, 25 Rust tests, component tests for Titlebar/WorkspaceCard/CommandPalette/Modal, integration tests for StashFlow/StashError/LicenseGate, E2E tests for appLaunch/workspaceCreate/stashRestore/trayIcon, Win10/Win11 matrices, 0-window/150-window/multi-instance/missing-exe/multi-monitor edge cases)
   * **Phase 15: Security Audit (Tasks 15.1 – 15.10)** — **100% COMPLETE** (Tauri allowlist audit, strict CSP, dual-layer IPC input validation with Zod & Rust structs, local WS handshake Origin validation rejecting untrusted origins with 403 Forbidden, Windows Credential Manager keyring storage, npm audit --omit=dev 0 vulns, PII username sanitization in logs/crashes, SHA-256 HWID domain separation, extension CSP, 31 Vitest suites / 150 tests, 27 Rust tests, docs/SECURITY.md)
   * **Phase 16: Installer & Distribution (Tasks 16.1 – 16.12)** — **100% COMPLETE** (NSIS currentUser non-admin install, WiX MSI enterprise packager with RFC 4122 GUID, multi-resolution icon suite, scripts/sign.ps1 & sign-release.ps1 with RFC 3161 dual timestamping, docs/DISTRIBUTION.md, tauri-plugin-updater v2.14.1 with Ed25519 verification, Titlebar & Settings AppUpdaterRow UI, .github/workflows/release.yml, scripts/generate-checksums.ps1, scripts/generate-updater-manifest.mjs, 33 Vitest suites / 163 tests, 27 Rust tests)
-* **Next Immediate Task**: Task 17.1 — GitHub Actions PR checks
+  * **Phase 17: CI/CD Pipeline (Tasks 17.1 – 17.8)** — **100% COMPLETE** (GitHub Actions ci.yml with parallel quality/test/build/perf jobs, release.yml on tag push, branch protection specs in docs/CI-CD.md, dependabot.yml for npm/cargo/actions, v8 code coverage with test:coverage, scripts/perf-regression-gate.mjs enforcing bundle <250kB & diff latency <15ms, 34 Vitest suites / 169 tests, 27 Rust tests)
+* **Next Immediate Task**: Task 18.1 — Write `README.md`
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
