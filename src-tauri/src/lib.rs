@@ -1,5 +1,6 @@
 pub mod core;
 pub mod db;
+pub mod license;
 pub mod os;
 pub mod ws;
 mod shortcuts;
@@ -107,6 +108,10 @@ pub fn run() {
             ws::commands::cmd_ws_stash_tabs,
             ws::commands::cmd_ws_restore_tabs,
             ws::commands::cmd_ws_get_last_stashed,
+            license::commands::cmd_get_machine_id,
+            license::commands::cmd_get_license_status,
+            license::commands::cmd_activate_license,
+            license::commands::cmd_deactivate_license,
         ])
         .run(tauri::generate_context!());
 

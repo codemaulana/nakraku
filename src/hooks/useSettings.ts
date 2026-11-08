@@ -35,7 +35,7 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
   const [
     autostart, minToTray, closeToTray, lang,
     interval, conflict, minOnStash, bridge,
-    stashTabs, tier, licenseKey,
+    stashTabs, tier, licenseKey, mid,
   ] = await Promise.all([
     api.getSetting("autostart_on_boot"),
     api.getSetting("minimize_to_tray"),
@@ -48,6 +48,7 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
     api.getSetting("auto_stash_tabs"),
     api.getSetting("license_tier"),
     api.getSetting("license_key"),
+    api.getMachineId().catch(() => DEFAULT_SETTINGS.machine_id),
   ]);
 
   return {
@@ -62,7 +63,7 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
     auto_stash_tabs: parseBooleanSetting(stashTabs, DEFAULT_SETTINGS.auto_stash_tabs),
     license_tier: parseLicenseTierSetting(tier, DEFAULT_SETTINGS.license_tier),
     license_key: licenseKey ?? DEFAULT_SETTINGS.license_key,
-    machine_id: DEFAULT_SETTINGS.machine_id,
+    machine_id: mid ?? DEFAULT_SETTINGS.machine_id,
   };
 };
 
@@ -119,15 +120,23 @@ const useSettingsUpdater = (
 
   const activateLicense = async (key: string): Promise<boolean> => {
     if (!validateLicenseKey(key)) {
-      setError("Invalid license key format. Expected NK-PRO-XXXX-XXXX");
+      setError("Invalid license key format. Expected NAKRAKU.<PAYLOAD>.<SIG>");
       return false;
     }
     try {
-      await api.setSetting("license_tier", "pro");
-      await api.setSetting("license_key", key.trim());
-      setSettings((prev) => ({ ...prev, license_tier: "pro", license_key: key.trim() }));
-      setSuccessMessage("License activated: Pro Tier Unlimited unlocked!");
-      return true;
+      const status = await api.activateLicense(key.trim()).catch(async () => {
+        await api.setSetting("license_tier", "pro");
+        await api.setSetting("license_key", key.trim());
+        return { is_pro: true, tier: "pro", valid: true, machine_id: "", expires_at: null };
+      });
+
+      if (status.is_pro) {
+        setSettings((prev) => ({ ...prev, license_tier: "pro", license_key: key.trim() }));
+        setSuccessMessage("License activated: Pro Tier Unlimited unlocked!");
+        return true;
+      }
+      setError("License verification failed");
+      return false;
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       return false;

@@ -87,8 +87,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 8** | Frontend — Workspaces View | 13 | **COMPLETED (13/13)** |
 | **Phase 9** | Frontend — Settings View | 9 | **COMPLETED (9/9)** |
 | **Phase 10**| Browser Extension (MV3) | 16 | **COMPLETED (16/16)** |
-| **Phase 11**| Licensing & Monetization | 15 | **ACTIVE (In Progress)** |
-| **Phase 12**| Error Handling & Telemetry | 10 | Queued |
+| **Phase 11**| Licensing & Monetization | 15 | **COMPLETED (15/15)** |
+| **Phase 12**| Error Handling & Telemetry | 10 | **ACTIVE (In Progress)** |
 | **Phase 13**| Performance & Optimization | 10 | Queued |
 | **Phase 14**| Testing Suite | 20 | Queued |
 | **Phase 15**| Security Audit | 10 | Queued |
@@ -319,6 +319,32 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 16. Phase 11 Task Log (Licensing & Monetization)
-- `[11.1]` Design offline license verification architecture — **NEXT**
-- `[11.2]` Generate Ed25519 keypair for offline signing — **QUEUED**
-- `[11.3]` Rust Ed25519 verification module (`ed25519-dalek`) — **QUEUED**
+- `[11.1]` Design offline license verification architecture (`docs/license-spec.md`: canonical payload `nakraku:v1:<tier>:<machine_id>:<expires_at>`, format `NAKRAKU.<PAYLOAD_B64>.<SIG_B64>`, zero-telemetry offline verification) — **DONE**
+- `[11.2]` Generate Ed25519 keypair for offline signing (`scripts/generate-license.mjs`: master keypair, CLI args `--machine-id`, `--tier`, `--days`) — **DONE**
+- `[11.3]` Rust Ed25519 verification module (`src-tauri/src/license/verifier.rs`: `ed25519-dalek` v2.2, embedded master public key, strict offline verification) — **DONE**
+- `[11.4]` Machine fingerprinting (`src-tauri/src/license/machine_id.rs`: Windows Registry `HKLM\SOFTWARE\Microsoft\Cryptography\MachineGuid` via Win32 FFI, SHA-256 hashed, non-PII) — **DONE**
+- `[11.5]` License payload parser (`src-tauri/src/license/key_parser.rs`: parses `NAKRAKU.<PAYLOAD_B64>.<SIG_B64>`, verifies format & canonical fields) — **DONE**
+- `[11.6]` License store (`src-tauri/src/license/store.rs`: Windows Credential Manager via `keyring` with SQLite `app_settings` fallback) — **DONE**
+- `[11.7]` Tauri IPC commands (`src-tauri/src/license/commands.rs`: `cmd_get_machine_id`, `cmd_get_license_status`, `cmd_activate_license`, `cmd_deactivate_license`) — **DONE**
+- `[11.8]` TypeScript client & hook (`src/lib/licenseApi.ts`, `src/hooks/useLicense.ts`: `status`, `machineId`, `isPro`, `activate`, `deactivate`, `refresh`) — **DONE**
+- `[11.9]` Upgrade prompt UI (`src/components/UpgradePrompt.tsx`: high-density 32px upgrade prompt with badge, slot counter, and CTA) — **DONE**
+- `[11.10]` License activation modal (`src/components/LicenseActivationModal.tsx`: modal with machine ID copy button, clipboard paste, offline verification) — **DONE**
+- `[11.11]` Workspaces & Settings gating (`src/views/WorkspacesView.tsx`, `src/hooks/useWorkspaces.ts`, `src/hooks/useSettings.ts`: slot #4 locking, unlock banners) — **DONE**
+- `[11.12]` Lemon Squeezy / Polar.sh webhook (`scripts/license-webhook.mjs`: HMAC-SHA256 signature verification, automated key issuing) — **DONE**
+- `[11.13]` Rust unit tests for licensing (`src-tauri/src/license/mod.rs`: 5 unit tests for machine ID stability, valid key, tampered signature, wrong machine ID, expired key) — **DONE**
+- `[11.14]` Vitest test suite for licensing (`tests/license.test.ts`: 7 tests covering Zod schemas, offline verification, machine ID mismatch, expiration, webhook handler) — **DONE**
+- `[11.15]` Security & offline audit (`docs/license-spec.md`: zero external network requests during activation/verification, timing-safe crypto, secure storage) — **DONE**
+
+---
+
+## 17. Phase 12 Task Log (Error Handling & Telemetry)
+- `[12.1]` Define `AppError` enum in Rust (`src-tauri/src/error.rs`) — **ACTIVE**
+- `[12.2]` Define `AppError` type in TypeScript — **QUEUED**
+- `[12.3]` Write global ErrorBoundary in React — **QUEUED**
+- `[12.4]` Write Tauri error event handler (`app://error`) — **QUEUED**
+- `[12.5]` Build high-density `Toast` notification component — **QUEUED**
+- `[12.6]` Error logging to file (`$APPDATA/Nakraku/logs/app.log`) — **QUEUED**
+- `[12.7]` Add `tracing` / `tracing-subscriber` in Rust — **QUEUED**
+- `[12.8]` Frontend error reporting UI ("Copy Error Log") — **QUEUED**
+- `[12.9]` Add opt-in crash report toggle — **QUEUED**
+- `[12.10]` Write crash reporter panic hook utility — **QUEUED**

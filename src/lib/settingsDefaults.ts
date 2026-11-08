@@ -60,9 +60,17 @@ export const parseLicenseTierSetting = (
 };
 
 export const validateLicenseKey = (key: string): boolean => {
-  const trimmed = key.trim().toUpperCase();
-  if (!trimmed.startsWith("NK-PRO-")) return false;
-  const parts = trimmed.split("-");
+  const trimmed = key.trim();
+  if (trimmed.startsWith("NAKRAKU.") || trimmed.startsWith("NAKRAKU-")) {
+    const normalized = trimmed.startsWith("NAKRAKU-")
+      ? `NAKRAKU.${trimmed.slice(8)}`
+      : trimmed;
+    const parts = normalized.split(".");
+    return parts.length === 3 && parts[1].length > 10 && parts[2].length > 20;
+  }
+  const upper = trimmed.toUpperCase();
+  if (!upper.startsWith("NK-PRO-")) return false;
+  const parts = upper.split("-");
   return parts.length >= 3 && parts.every((p) => p.length >= 2);
 };
 

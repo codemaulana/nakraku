@@ -1,42 +1,24 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import { z } from "zod";
 import {
-  WorkspaceSchema,
-  CreateWorkspaceInputSchema,
-  SessionSchema,
-  CreateSessionInputSchema,
-  WindowSchema,
-  InsertWindowInputSchema,
-  TabSchema,
-  InsertTabInputSchema,
-  SessionSnapshotSchema,
-  RawWindowSchema,
-  MemoryStatsSchema,
-  StashResultSchema,
-  RestoreResultSchema,
-  QuickSwitchResultSchema,
-  SessionDiffSchema,
-  UndoItemSchema,
-  WsTabItemSchema,
-  WsStatusPayloadSchema,
-  type Workspace,
-  type CreateWorkspaceInput,
-  type Session,
-  type CreateSessionInput,
-  type WindowData,
-  type InsertWindowInput,
-  type TabData,
-  type InsertTabInput,
-  type SessionSnapshot,
-  type RawWindow,
-  type MemoryStats,
-  type StashResult,
-  type RestoreResult,
-  type QuickSwitchResult,
-  type SessionDiff,
-  type UndoItem,
-  type WsTabItem,
-  type WsStatusPayload,
+  WorkspaceSchema, CreateWorkspaceInputSchema,
+  SessionSchema, CreateSessionInputSchema,
+  WindowSchema, InsertWindowInputSchema,
+  TabSchema, InsertTabInputSchema,
+  SessionSnapshotSchema, RawWindowSchema,
+  MemoryStatsSchema, StashResultSchema,
+  RestoreResultSchema, QuickSwitchResultSchema,
+  SessionDiffSchema, UndoItemSchema,
+  WsTabItemSchema, WsStatusPayloadSchema,
+  type Workspace, type CreateWorkspaceInput,
+  type Session, type CreateSessionInput,
+  type WindowData, type InsertWindowInput,
+  type TabData, type InsertTabInput,
+  type SessionSnapshot, type RawWindow,
+  type MemoryStats, type StashResult,
+  type RestoreResult, type QuickSwitchResult,
+  type SessionDiff, type UndoItem,
+  type WsTabItem, type WsStatusPayload,
 } from "./schemas";
 
 export class ApiError extends Error {
@@ -46,7 +28,7 @@ export class ApiError extends Error {
   }
 }
 
-const safeInvoke = async <T>(
+export const safeInvoke = async <T>(
   cmd: string,
   args?: Record<string, unknown>
 ): Promise<T> => {
@@ -297,3 +279,5 @@ export const getLastStashedWsTabs = async (): Promise<WsTabItem[]> => {
   const raw = await safeInvoke<unknown>("cmd_ws_get_last_stashed");
   return z.array(WsTabItemSchema).parse(raw);
 };
+
+export * from "./licenseApi";

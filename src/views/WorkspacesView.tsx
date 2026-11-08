@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MainPanel } from "../components/MainPanel";
 import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
@@ -7,7 +7,10 @@ import { Divider } from "../components/Divider";
 import { WorkspaceList, WorkspaceDeleteModal } from "../components/WorkspaceList";
 import { WorkspaceCreatorBar } from "../components/WorkspaceCreatorBar";
 import { SessionHistoryPanel } from "../components/SessionHistoryPanel";
+import { UpgradePrompt } from "../components/UpgradePrompt";
+import { LicenseActivationModal } from "../components/LicenseActivationModal";
 import { useWorkspaces, type UseWorkspacesReturn } from "../hooks/useWorkspaces";
+import { useLicense } from "../hooks/useLicense";
 
 const WorkspacesHeader: React.FC<{
   count: number;
@@ -55,26 +58,29 @@ const WorkspacesStorageStatus: React.FC<{
   </div>
 );
 
-const WorkspacesErrorBanner: React.FC<{
-  error: string;
-  onDismiss: () => void;
-}> = ({ error, onDismiss }) => (
-  <div className="p-2 bg-danger/10 border border-danger/40 rounded-sm flex items-center justify-between text-2xs text-danger font-mono">
-    <span>{error}</span>
-    <button type="button" onClick={onDismiss} className="hover:underline text-text-primary ml-2">
-      Dismiss
-    </button>
-  </div>
-);
-
-const WorkspacesContent: React.FC<{
+const WorkspacesTopSection: React.FC<{
   w: UseWorkspacesReturn;
-  canCreate: boolean;
-}> = ({ w, canCreate }) => (
-  <div className="p-base flex flex-col gap-sm relative min-h-full">
-    {w.error && <WorkspacesErrorBanner error={w.error} onDismiss={w.clearError} />}
+  onOpenActivation: () => void;
+}> = ({ w, onOpenActivation }) => (
+  <>
+    {w.error && (
+      <div className="p-2 bg-danger/10 border border-danger/40 rounded-sm flex items-center justify-between text-2xs text-danger font-mono">
+        <span>{w.error}</span>
+        <button type="button" onClick={w.clearError} className="hover:underline text-text-primary ml-2">
+          Dismiss
+        </button>
+      </div>
+    )}
 
     <WorkspacesStorageStatus count={w.workspaces.length} isFreeTier={w.isFreeTier} />
+
+    {w.isFreeTier && w.workspaces.length >= 3 && (
+      <UpgradePrompt
+        currentCount={w.workspaces.length}
+        maxFreeCount={3}
+        onOpenActivation={onOpenActivation}
+      />
+    )}
 
     {w.isCreating && (
       <WorkspaceCreatorBar
@@ -83,6 +89,16 @@ const WorkspacesContent: React.FC<{
         onCancel={() => w.setIsCreating(false)}
       />
     )}
+  </>
+);
+
+const WorkspacesContent: React.FC<{
+  w: UseWorkspacesReturn;
+  canCreate: boolean;
+  onOpenActivation: () => void;
+}> = ({ w, canCreate, onOpenActivation }) => (
+  <div className="p-base flex flex-col gap-sm relative min-h-full">
+    <WorkspacesTopSection w={w} onOpenActivation={onOpenActivation} />
 
     <Divider label="Saved Workspaces" labelAlign="left" spacing="none" />
 
@@ -110,8 +126,8 @@ const WorkspacesContent: React.FC<{
       <SessionHistoryPanel
         workspace={w.historyTarget}
         sessions={w.historySessions}
-        expandedSessionId={w.expandedSessionId}
         sessionWindows={w.sessionWindows}
+        expandedSessionId={w.expandedSessionId}
         onClose={w.closeHistory}
         onToggleExpand={w.toggleExpandSession}
         onRestoreSession={w.restoreSession}
@@ -123,7 +139,17 @@ const WorkspacesContent: React.FC<{
 
 export const WorkspacesView: React.FC = () => {
   const w = useWorkspaces();
+  const lic = useLicense();
+  const [isActivationOpen, setIsActivationOpen] = useState<boolean>(false);
   const canCreate = !w.isFreeTier || w.workspaces.length < 3;
+
+  const handleActivate = async (key: string) => {
+    const success = await lic.activate(key);
+    if (success) {
+      await w.loadWorkspaces();
+    }
+    return success;
+  };
 
   return (
     <MainPanel
@@ -136,7 +162,17 @@ export const WorkspacesView: React.FC = () => {
         />
       }
     >
-      <WorkspacesContent w={w} canCreate={canCreate} />
+      <WorkspacesContent
+        w={w}
+        canCreate={canCreate}
+        onOpenActivation={() => setIsActivationOpen(true)}
+      />
+      <LicenseActivationModal
+        isOpen={isActivationOpen}
+        onClose={() => setIsActivationOpen(false)}
+        machineId={lic.machineId}
+        onActivate={handleActivate}
+      />
     </MainPanel>
   );
 };

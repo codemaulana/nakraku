@@ -45,8 +45,13 @@ const useWorkspacesState = () => {
       setIsLoading(true);
       const list = await api.listWorkspaces();
       setWorkspaces(list);
-      const license = await api.getSetting("license_tier");
-      setIsFreeTier(license !== "pro");
+      const lic = await api.getLicenseStatus().catch(() => null);
+      if (lic) {
+        setIsFreeTier(!lic.is_pro);
+      } else {
+        const license = await api.getSetting("license_tier");
+        setIsFreeTier(license !== "pro");
+      }
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));

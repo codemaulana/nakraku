@@ -244,6 +244,14 @@ export const WsStatusPayloadSchema = z.object({
   port: z.number().int(),
 });
 
+export const LicenseStatusSchema = z.object({
+  valid: z.boolean(),
+  tier: z.string(),
+  machine_id: z.string(),
+  expires_at: z.number().int().nullable().optional(),
+  is_pro: z.boolean(),
+});
+
 export type AutoSnapshotInterval = z.infer<typeof AutoSnapshotIntervalSchema>;
 export type RestoreConflictMode = z.infer<typeof RestoreConflictModeSchema>;
 export type LicenseTier = z.infer<typeof LicenseTierSchema>;
@@ -251,6 +259,7 @@ export type AppSettings = z.infer<typeof AppSettingsSchema>;
 export type ExportData = z.infer<typeof ExportDataSchema>;
 export type WsTabItem = z.infer<typeof WsTabItemSchema>;
 export type WsStatusPayload = z.infer<typeof WsStatusPayloadSchema>;
+export type LicenseStatus = z.infer<typeof LicenseStatusSchema>;
 
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 export type CreateWorkspaceInput = z.infer<typeof CreateWorkspaceInputSchema>;
