@@ -143,4 +143,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.6]` Build `Titlebar` component (`src/components/Titlebar.tsx`: Frameless 38px bar with status dot, title, badge, drag region `data-tauri-drag-region`, and pixel-perfect minimize/maximize/close buttons, integrated into `src/App.tsx`) — **DONE**
 - `[2.7]` Build `Titlebar` — window control logic (`src/hooks/useWindowControls.ts`: Wired Tauri v2 `appWindow.minimize()`, `appWindow.toggleMaximize()`, `appWindow.close()`, and `appWindow.onResized()` maximize state listener, with capabilities configured in `src-tauri/capabilities/default.json` and safe browser fallbacks) — **DONE**
 - `[2.8]` Build `Titlebar` — vibrancy / blur effect (`src/components/Titlebar.tsx`: Added `vibrant` glass mode via `bg-bg-surface-glass` and `backdrop-blur-vibrant` with tokens `--bg-surface-glass` and `--backdrop-blur: 16px`) — **DONE**
-- `[2.9]` Build `Sidebar` layout shell (Left sidebar 200px: nav icons + labels, collapse toggle, keyboard shortcut hint) — **NEXT**
+- `[2.9]` Build `Sidebar` layout shell (`src/components/Sidebar.tsx`: 200px collapsible sidebar with 32px nav rows, badges, Ctrl+B keyboard shortcut listener, icon-only 48px collapse mode, integrated into `src/App.tsx`) — **DONE**
+- `[2.10]` Build `MainPanel` layout shell (Right content area, flex grow, overflow-y auto with custom scrollbar) — **NEXT**
