@@ -8,6 +8,7 @@ import {
   Layers,
   Monitor,
   Settings,
+  Sparkles,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -24,6 +25,7 @@ export const DEFAULT_NAV_ITEMS: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, badge: "14", shortcut: "Alt+1" },
   { id: "workspaces", label: "Workspaces", icon: Layers, badge: "3", shortcut: "Alt+2" },
   { id: "minimap", label: "Spatial Minimap", icon: Monitor, shortcut: "Alt+3" },
+  { id: "gallery", label: "Component QA", icon: Sparkles, badge: "DEV", shortcut: "Alt+4" },
   { id: "settings", label: "Settings", icon: Settings, shortcut: "Alt+," },
 ];
 

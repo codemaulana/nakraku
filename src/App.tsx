@@ -3,9 +3,7 @@ import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
 import { MainPanel } from "./components/MainPanel";
 import { StatusBar } from "./components/StatusBar";
-import { Row } from "./components/Row";
 import { Badge } from "./components/Badge";
-import { Icon } from "./components/Icon";
 import { Tooltip } from "./components/Tooltip";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
@@ -16,59 +14,13 @@ import { EmptyState } from "./components/EmptyState";
 import { Divider } from "./components/Divider";
 import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
+import { Gallery } from "./dev/Gallery";
+import { ProcessList } from "./components/ProcessList";
 import {
   SAMPLE_PROCESSES,
   createProcessMenuItems,
   type ProcessItem,
 } from "./data/sampleProcesses";
-
-interface ProcessListProps {
-  items: ProcessItem[];
-  selectedId: string;
-  onSelect: (id: string) => void;
-  onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
-}
-
-const ProcessList: React.FC<ProcessListProps> = ({
-  items,
-  selectedId,
-  onSelect,
-  onContextMenu,
-}) => (
-  <div className="flex flex-col w-full divide-y divide-border-subtle/50">
-    {items.map((item) => (
-      <Row
-        key={item.id}
-        icon={<Icon name={item.iconName} size="sm" className={item.iconColor} />}
-        label={item.title}
-        description={item.desc}
-        selected={selectedId === item.id}
-        onClick={() => onSelect(item.id)}
-        onContextMenu={(e) => onContextMenu(e, item)}
-        actions={
-          <Tooltip content={`Pin ${item.title}`} shortcut="Alt+P" position="left">
-            <Button
-              variant="ghost"
-              iconOnly
-              size="sm"
-              icon="pin"
-              aria-label={`Pin ${item.title}`}
-            />
-          </Tooltip>
-        }
-        meta={
-          <div className="flex items-center gap-xs">
-            <Badge variant={item.status} size="sm" dot={item.status !== "neutral"}>
-              {item.statusText}
-            </Badge>
-            <span className="text-text-disabled">{item.pid}</span>
-            <span className="text-text-mono">{item.ram}</span>
-          </div>
-        }
-      />
-    ))}
-  </div>
-);
 
 interface ActionToolbarProps {
   onOpenStashModal: () => void;
@@ -271,17 +223,21 @@ export const App: React.FC = () => {
       <Titlebar badge="v0.1.0" />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar activeId={activeTab} onSelect={setActiveTab} />
-        <MainContent
-          activeTab={activeTab}
-          selectedProcess={selectedProcess}
-          searchQuery={searchQuery}
-          isLoading={isLoading}
-          onRefresh={handleRefresh}
-          onSearchChange={setSearchQuery}
-          onSelectProcess={setSelectedProcess}
-          onOpenStashModal={() => setIsStashModalOpen(true)}
-          onContextMenu={open}
-        />
+        {activeTab === "gallery" ? (
+          <Gallery onClose={() => setActiveTab("dashboard")} />
+        ) : (
+          <MainContent
+            activeTab={activeTab}
+            selectedProcess={selectedProcess}
+            searchQuery={searchQuery}
+            isLoading={isLoading}
+            onRefresh={handleRefresh}
+            onSearchChange={setSearchQuery}
+            onSelectProcess={setSelectedProcess}
+            onOpenStashModal={() => setIsStashModalOpen(true)}
+            onContextMenu={open}
+          />
+        )}
       </div>
       <StatusBar ramSaved="1.8 GB" />
       <ContextMenu items={menuItems} position={position} onClose={close} />
