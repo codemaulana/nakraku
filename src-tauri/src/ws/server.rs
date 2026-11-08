@@ -173,7 +173,11 @@ where
         }
         "STASH_TABS_ACK" => {
             if let Some(payload) = parsed.get("payload") {
-                if let Ok(tabs_payload) = serde_json::from_value::<WsTabsPayload>(payload.clone()) {
+                if let Ok(ack) = serde_json::from_value::<super::types::WsStashTabsAckPayload>(payload.clone()) {
+                    if let Ok(mut lock) = server.inner.lock() {
+                        lock.last_stashed_tabs = ack.tabs;
+                    }
+                } else if let Ok(tabs_payload) = serde_json::from_value::<WsTabsPayload>(payload.clone()) {
                     if let Ok(mut lock) = server.inner.lock() {
                         lock.last_stashed_tabs = tabs_payload.tabs;
                     }

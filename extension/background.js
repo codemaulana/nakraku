@@ -18,6 +18,18 @@ const formatTab = (tab) => ({
   index: tab.index,
 });
 
+const isInternalUrl = (url) => {
+  if (!url) return true;
+  return (
+    url.startsWith("chrome://") ||
+    url.startsWith("edge://") ||
+    url.startsWith("brave://") ||
+    url.startsWith("about:") ||
+    url.startsWith("chrome-extension://") ||
+    url.startsWith("extension://")
+  );
+};
+
 const sendWsEnvelope = (type, requestId, payload) => {
   if (!socket || socket.readyState !== WebSocket.OPEN) return;
   const envelope = {
@@ -31,23 +43,29 @@ const sendWsEnvelope = (type, requestId, payload) => {
 
 const handleGetTabs = async (requestId) => {
   const tabs = await chrome.tabs.query({});
-  const filtered = tabs
-    .filter((t) => t.url && !t.url.startsWith("chrome://newtab"))
-    .map(formatTab);
+  const filtered = tabs.filter((t) => !isInternalUrl(t.url)).map(formatTab);
   sendWsEnvelope("TABS_LIST", requestId, { tabs: filtered });
 };
 
 const handleStashTabs = async (requestId) => {
   const tabs = await chrome.tabs.query({ currentWindow: true });
-  const actionable = tabs.filter((t) => t.url && !t.url.startsWith("chrome://"));
+  const actionable = tabs.filter((t) => !isInternalUrl(t.url));
   const formatted = actionable.map(formatTab);
+
+  if (formatted.length === 0) {
+    sendWsEnvelope("STASH_TABS_ACK", requestId, {
+      stashedCount: 0,
+      tabs: [],
+    });
+    return;
+  }
 
   await chrome.storage.local.set({
     nakraku_last_stashed: formatted,
     nakraku_last_stashed_at: Date.now(),
   });
 
-  await chrome.tabs.create({ url: "chrome://newtab" });
+  await chrome.tabs.create({});
 
   const idsToRemove = actionable.map((t) => t.id).filter(Boolean);
   if (idsToRemove.length > 0) {
@@ -178,6 +196,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   if (message.type === "MANUAL_STASH") {
     handleStashTabs(`manual-${Date.now()}`).then(() => sendResponse({ ok: true }));
+    return true;
+  }
+
+  if (message.type === "MANUAL_SYNC") {
+    handleGetTabs(`manual-sync-${Date.now()}`).then(() => sendResponse({ ok: true }));
     return true;
   }
 

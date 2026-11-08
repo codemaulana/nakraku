@@ -14,6 +14,8 @@ function filterActionableTabs(
     if (t.url.startsWith("edge://")) return false;
     if (t.url.startsWith("brave://")) return false;
     if (t.url.startsWith("about:")) return false;
+    if (t.url.startsWith("chrome-extension://")) return false;
+    if (t.url.startsWith("extension://")) return false;
     return true;
   });
 }

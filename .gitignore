@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-extension/
+dist-extension.zip
 src-tauri/target/
 src-tauri/gen/schemas/
 *.log

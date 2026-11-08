@@ -97,4 +97,61 @@ mod tests {
 
         Ok(())
     }
+
+    #[tokio::test]
+    async fn test_ws_stash_tabs_roundtrip() -> Result<(), Box<dyn std::error::Error>> {
+        let server = WsServer::new();
+        let test_addr = "127.0.0.1:48197";
+        let server_clone = server.clone();
+
+        tokio::spawn(async move {
+            let _ = run_ws_server(server_clone, test_addr).await;
+        });
+
+        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+
+        let url = format!("ws://{}", test_addr);
+        let (ws_stream, _) = connect_async(&url).await?;
+        let (mut write, mut read) = ws_stream.split();
+
+        server.trigger_stash_tabs()?;
+
+        if let Some(Ok(Message::Text(incoming))) = read.next().await {
+            let parsed: serde_json::Value = serde_json::from_str(&incoming)?;
+            assert_eq!(parsed["type"], "STASH_TABS");
+
+            let stashed_tabs = vec![WsTabItem {
+                id: Some(42),
+                window_id: Some(1),
+                url: "https://tauri.app".into(),
+                title: "Tauri Studio".into(),
+                fav_icon_url: None,
+                active: Some(true),
+                index: Some(0),
+            }];
+
+            let ack_env = WsMessageEnvelope::new(
+                "STASH_TABS_ACK",
+                "req-stash-ack-1",
+                Some(types::WsStashTabsAckPayload {
+                    stashed_count: 1,
+                    tabs: stashed_tabs,
+                }),
+            );
+
+            let ack_json = serde_json::to_string(&ack_env)?;
+            write.send(Message::Text(ack_json.into())).await?;
+        } else {
+            panic!("Expected STASH_TABS message from server");
+        }
+
+        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+
+        let stashed = server.get_last_stashed()?;
+        assert_eq!(stashed.len(), 1);
+        assert_eq!(stashed[0].url, "https://tauri.app");
+        assert_eq!(stashed[0].title, "Tauri Studio");
+
+        Ok(())
+    }
 }

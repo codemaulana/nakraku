@@ -13,6 +13,7 @@ import { SettingsView } from "./views/SettingsView";
 import { AboutView } from "./views/AboutView";
 import { Gallery } from "./dev/Gallery";
 import { useAppShortcuts } from "./hooks/useAppShortcuts";
+import { useWsBridgeStatus } from "./hooks/useWsBridgeStatus";
 import {
   createProcessMenuItems,
   type ProcessItem,
@@ -122,6 +123,7 @@ const useAppShellState = (navigate: (r: AppRoute) => void) => {
 const AppShell: React.FC = () => {
   const { currentRoute, navigate } = useRouter();
   const s = useAppShellState(navigate);
+  const { connected: bridgeConnected, port: bridgePort } = useWsBridgeStatus();
   const { position, data, open, close } = useContextMenu<ProcessItem>();
   const menuItems = createProcessMenuItems(data, close);
 
@@ -144,7 +146,11 @@ const AppShell: React.FC = () => {
         <Sidebar activeId={currentRoute} onSelect={(id) => navigate(id as AppRoute)} />
         {renderActiveView(currentRoute, navigate, viewState)}
       </div>
-      <StatusBar ramSaved="1.8 GB" />
+      <StatusBar
+        ramSaved="1.8 GB"
+        bridgeConnected={bridgeConnected}
+        bridgePort={bridgePort}
+      />
       <ContextMenu items={menuItems} position={position} onClose={close} />
       <StashModal
         isOpen={s.isStashModalOpen}

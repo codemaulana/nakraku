@@ -5,6 +5,7 @@ const retryCount = document.getElementById("retry-count");
 const cacheMeta = document.getElementById("cache-meta");
 const cacheList = document.getElementById("cache-list");
 const btnStash = document.getElementById("btn-stash");
+const btnSync = document.getElementById("btn-sync");
 const btnRestore = document.getElementById("btn-restore");
 const btnReconnect = document.getElementById("btn-reconnect");
 
@@ -64,6 +65,16 @@ btnStash?.addEventListener("click", () => {
       btnStash.textContent = "Stash Active Tabs";
       refreshStatus();
     }, 400);
+  });
+});
+
+btnSync?.addEventListener("click", () => {
+  btnSync.disabled = true;
+  chrome.runtime.sendMessage({ type: "MANUAL_SYNC" }, () => {
+    setTimeout(() => {
+      btnSync.disabled = false;
+      refreshStatus();
+    }, 300);
   });
 });
 

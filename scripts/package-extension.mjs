@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -7,6 +8,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 const extDir = path.resolve(rootDir, "extension");
 const distDir = path.resolve(rootDir, "dist-extension");
+const zipPath = path.resolve(rootDir, "dist-extension.zip");
 
 function validateManifest(manifestPath) {
   if (!fs.existsSync(manifestPath)) {
@@ -66,6 +68,22 @@ function computeDirectoryStats(dir) {
   return { fileCount, totalBytes };
 }
 
+function createZipArchive(srcDir, destZip) {
+  if (fs.existsSync(destZip)) {
+    fs.rmSync(destZip, { force: true });
+  }
+
+  try {
+    if (process.platform === "win32") {
+      execSync(`powershell -NoProfile -Command "Compress-Archive -Path '${srcDir}/*' -DestinationPath '${destZip}' -Force"`);
+    } else {
+      execSync(`zip -r "${destZip}" .`, { cwd: srcDir });
+    }
+  } catch (err) {
+    console.warn("Notice: Zip packaging fallback triggered:", err.message);
+  }
+}
+
 function main() {
   const manifestPath = path.join(extDir, "manifest.json");
   const manifest = validateManifest(manifestPath);
@@ -75,11 +93,15 @@ function main() {
   }
 
   copyDirectoryRecursive(extDir, distDir);
+  createZipArchive(distDir, zipPath);
 
   const stats = computeDirectoryStats(distDir);
   console.log(`Successfully packaged ${manifest.name} v${manifest.version}`);
-  console.log(`Output: ${distDir}`);
-  console.log(`Total files: ${stats.fileCount}, Size: ${stats.totalBytes} bytes`);
+  console.log(`Unpacked: ${distDir} (${stats.fileCount} files, ${stats.totalBytes} bytes)`);
+  if (fs.existsSync(zipPath)) {
+    const zipBytes = fs.statSync(zipPath).size;
+    console.log(`Zip Bundle: ${zipPath} (${zipBytes} bytes)`);
+  }
 }
 
 main();

@@ -10,6 +10,9 @@
   "host_permissions": [
     "<all_urls>"
   ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src ws://127.0.0.1:48123 http://127.0.0.1:48123;"
+  },
   "background": {
     "service_worker": "background.js",
     "type": "module"
