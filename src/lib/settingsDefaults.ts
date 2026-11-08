@@ -19,6 +19,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   license_tier: "free",
   license_key: "",
   machine_id: "SHA256-D0E1-99B4-48FA",
+  send_anonymous_crash_reports: false,
 };
 
 export const parseBooleanSetting = (

@@ -21,6 +21,7 @@ export interface UseSettingsReturn {
   successMessage: string | null;
   dbPath: string;
   backupPath: string | null;
+  logPath: string;
   updateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => Promise<void>;
   activateLicense: (key: string) => Promise<boolean>;
   backupDatabaseAction: () => Promise<string | null>;
@@ -35,7 +36,7 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
   const [
     autostart, minToTray, closeToTray, lang,
     interval, conflict, minOnStash, bridge,
-    stashTabs, tier, licenseKey, mid,
+    stashTabs, tier, licenseKey, mid, crashReports,
   ] = await Promise.all([
     api.getSetting("autostart_on_boot"),
     api.getSetting("minimize_to_tray"),
@@ -49,6 +50,7 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
     api.getSetting("license_tier"),
     api.getSetting("license_key"),
     api.getMachineId().catch(() => DEFAULT_SETTINGS.machine_id),
+    api.getSetting("send_anonymous_crash_reports"),
   ]);
 
   return {
@@ -64,6 +66,10 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
     license_tier: parseLicenseTierSetting(tier, DEFAULT_SETTINGS.license_tier),
     license_key: licenseKey ?? DEFAULT_SETTINGS.license_key,
     machine_id: mid ?? DEFAULT_SETTINGS.machine_id,
+    send_anonymous_crash_reports: parseBooleanSetting(
+      crashReports,
+      DEFAULT_SETTINGS.send_anonymous_crash_reports
+    ),
   };
 };
 
@@ -80,6 +86,7 @@ const persistAllSettings = async (settings: AppSettings): Promise<void> => {
     ["auto_stash_tabs", String(settings.auto_stash_tabs)],
     ["license_tier", settings.license_tier],
     ["license_key", settings.license_key],
+    ["send_anonymous_crash_reports", String(settings.send_anonymous_crash_reports)],
   ];
 
   await Promise.all(entries.map(([k, v]) => api.setSetting(k, v)));
@@ -92,6 +99,7 @@ const useSettingsState = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [dbPath, setDbPath] = useState<string>("%APPDATA%\\com.nakraku.stash\\stash.db");
   const [backupPath, setBackupPath] = useState<string | null>(null);
+  const [logPath, setLogPath] = useState<string>("%APPDATA%\\com.nakraku.stash\\logs\\app.log");
 
   return {
     settings, setSettings,
@@ -100,6 +108,7 @@ const useSettingsState = () => {
     successMessage, setSuccessMessage,
     dbPath, setDbPath,
     backupPath, setBackupPath,
+    logPath, setLogPath,
   };
 };
 
@@ -227,9 +236,14 @@ export const useSettings = (): UseSettingsReturn => {
   const load = useCallback(async () => {
     try {
       s.setIsLoading(true);
-      const [loaded, path] = await Promise.all([loadAllSettingsFromDb(), api.getDatabasePath()]);
+      const [loaded, path, logP] = await Promise.all([
+        loadAllSettingsFromDb(),
+        api.getDatabasePath(),
+        api.getLogPath().catch(() => "%APPDATA%\\com.nakraku.stash\\logs\\app.log"),
+      ]);
       s.setSettings(loaded);
       s.setDbPath(path);
+      s.setLogPath(logP);
       s.setError(null);
     } catch (err) {
       s.setError(err instanceof Error ? err.message : String(err));

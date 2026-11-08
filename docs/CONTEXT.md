@@ -88,8 +88,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 9** | Frontend — Settings View | 9 | **COMPLETED (9/9)** |
 | **Phase 10**| Browser Extension (MV3) | 16 | **COMPLETED (16/16)** |
 | **Phase 11**| Licensing & Monetization | 15 | **COMPLETED (15/15)** |
-| **Phase 12**| Error Handling & Telemetry | 10 | **ACTIVE (In Progress)** |
-| **Phase 13**| Performance & Optimization | 10 | Queued |
+| **Phase 12**| Error Handling & Telemetry | 10 | **COMPLETED (10/10)** |
+| **Phase 13**| Performance & Optimization | 10 | **ACTIVE (In Progress)** |
 | **Phase 14**| Testing Suite | 20 | Queued |
 | **Phase 15**| Security Audit | 10 | Queued |
 | **Phase 16**| Installer & Distribution | 12 | Queued |
@@ -338,13 +338,27 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 17. Phase 12 Task Log (Error Handling & Telemetry)
-- `[12.1]` Define `AppError` enum in Rust (`src-tauri/src/error.rs`) — **ACTIVE**
-- `[12.2]` Define `AppError` type in TypeScript — **QUEUED**
-- `[12.3]` Write global ErrorBoundary in React — **QUEUED**
-- `[12.4]` Write Tauri error event handler (`app://error`) — **QUEUED**
-- `[12.5]` Build high-density `Toast` notification component — **QUEUED**
-- `[12.6]` Error logging to file (`$APPDATA/Nakraku/logs/app.log`) — **QUEUED**
-- `[12.7]` Add `tracing` / `tracing-subscriber` in Rust — **QUEUED**
-- `[12.8]` Frontend error reporting UI ("Copy Error Log") — **QUEUED**
-- `[12.9]` Add opt-in crash report toggle — **QUEUED**
-- `[12.10]` Write crash reporter panic hook utility — **QUEUED**
+- `[12.1]` Define `AppError` enum in Rust (`src-tauri/src/error.rs`: variants `Db`, `Os`, `Core`, `License`, `Ws`, `Validation`, `Internal`, `From` implementations) — **DONE**
+- `[12.2]` Define `AppError` type in TypeScript (`src/lib/appError.ts`: typed class, `AppErrorPayloadSchema`, static `fromUnknown`) — **DONE**
+- `[12.3]` Write global ErrorBoundary in React (`src/components/ErrorBoundary.tsx`: Obsidian dark card, error recovery, stack view, copy details) — **DONE**
+- `[12.4]` Write Tauri error event handler (`src/hooks/useAppErrorListener.ts`: subscribes to `app://error` events, displays auto-dismissing toasts) — **DONE**
+- `[12.5]` Build high-density `Toast` notification component (`src/components/Toast.tsx`, `src/context/ToastContext.tsx`: 32px rows, 4s auto-dismiss, variants `success`/`warning`/`error`/`info`) — **DONE**
+- `[12.6]` Error logging to file (`src-tauri/src/logging.rs`: rolling log at `%APPDATA%/Nakraku/logs/app.log`, 5 MB max file size via `tauri-plugin-log`) — **DONE**
+- `[12.7]` Structured logging in Rust backend (`src-tauri/src/logging.rs`: stdout and rotating file targets, log levels configured) — **DONE**
+- `[12.8]` Frontend error reporting UI (`src/components/settings/StorageSection.tsx`, `src/lib/loggingApi.ts`: log file path telemetry, 1-click "Copy Log Path" button) — **DONE**
+- `[12.9]` Add opt-in crash report toggle (`src/lib/schemas.ts`, `src/lib/settingsDefaults.ts`, `src/components/settings/GeneralSettingsSection.tsx`: `send_anonymous_crash_reports` privacy-first toggle) — **DONE**
+- `[12.10]` Write crash reporter panic hook utility (`src-tauri/src/logging.rs`: `setup_panic_hook` writes backtrace and thread panic payload to `crash-{timestamp}.log`) — **DONE**
+
+---
+
+## 18. Phase 13 Task Log (Performance & Optimization)
+- `[13.1]` Frontend bundle size analysis (`rollup-plugin-visualizer` / bundle inspector) — **ACTIVE**
+- `[13.2]` Code splitting & dynamic imports for views — **QUEUED**
+- `[13.3]` List virtualization for window list (>100 windows) — **QUEUED**
+- `[13.4]` SQLite WAL mode tuning (`pragma synchronous=NORMAL`, `pragma cache_size=2000`) — **QUEUED**
+- `[13.5]` Cold start optimization (<400ms target) — **QUEUED**
+- `[13.6]` Stash latency benchmark (<300ms target) — **QUEUED**
+- `[13.7]` Restore latency benchmark (<500ms target) — **QUEUED**
+- `[13.8]` React render optimization (memoization audit, profiler) — **QUEUED**
+- `[13.9]` Memory leak check (Heap snapshot audit via DevTools) — **QUEUED**
+- `[13.10]` End-to-end performance test harness (`tests/perf.test.ts`) — **QUEUED**

@@ -65,6 +65,12 @@ export const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
       enabled={settings.close_to_tray}
       onToggle={() => onUpdate("close_to_tray", !settings.close_to_tray)}
     />
+    <SettingToggleRow
+      label="Send Anonymous Crash Reports"
+      description="Capture local panic reports and stack traces to assist bug resolution"
+      enabled={settings.send_anonymous_crash_reports}
+      onToggle={() => onUpdate("send_anonymous_crash_reports", !settings.send_anonymous_crash_reports)}
+    />
     <LanguageSelectorRow language={settings.language} />
   </div>
 );

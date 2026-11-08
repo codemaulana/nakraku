@@ -281,3 +281,4 @@ export const getLastStashedWsTabs = async (): Promise<WsTabItem[]> => {
 };
 
 export * from "./licenseApi";
+export * from "./loggingApi";

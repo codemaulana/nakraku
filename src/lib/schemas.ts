@@ -219,6 +219,7 @@ export const AppSettingsSchema = z.object({
   license_tier: LicenseTierSchema,
   license_key: z.string(),
   machine_id: z.string(),
+  send_anonymous_crash_reports: z.boolean().default(false),
 });
 
 export const ExportDataSchema = z.object({
@@ -283,3 +284,5 @@ export type QuickSwitchResult = z.infer<typeof QuickSwitchResultSchema>;
 export type WindowMoveDiff = z.infer<typeof WindowMoveDiffSchema>;
 export type SessionDiff = z.infer<typeof SessionDiffSchema>;
 export type UndoItem = z.infer<typeof UndoItemSchema>;
+
+export * from "./appError";

@@ -72,6 +72,7 @@ export const SettingsView: React.FC = () => {
         <StorageSection
           dbPath={s.dbPath}
           backupPath={s.backupPath}
+          logPath={s.logPath}
           onBackup={s.backupDatabaseAction}
         />
         <ShortcutsSection />

@@ -13,7 +13,7 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 12 — Error Handling & Telemetry
+* **Active Phase**: Phase 13 — Performance & Optimization
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
@@ -27,7 +27,8 @@
   * **Phase 9: Frontend — Settings View (Tasks 9.1 – 9.9)** — **100% COMPLETE** (General section, stash behavior, browser extension bridge status, storage DB backup & path telemetry, shortcut registry, Ed25519 offline license activation with machine ID, danger zone with session purge & JSON export/import, optimistic save hook, Zod validation, 74 Vitest tests, 12 Rust tests)
   * **Phase 10: Browser Extension (MV3) (Tasks 10.1 – 10.16)** — **100% COMPLETE** (Manifest v3, `background.js` service worker, exponential backoff reconnect, `tokio-tungstenite` WS server on port 48123, WS protocol specification, GET/STASH/RESTORE commands, 10s keepalive ping/pong, 320x400 popup UI, Obsidian dark theme, multi-browser support, `chrome.storage.local` caching, 14 Rust tests, 82 Vitest tests, packaging script)
   * **Phase 11: Licensing & Monetization (Tasks 11.1 – 11.15)** — **100% COMPLETE** (Offline Ed25519 signature verification, hardware machine ID fingerprinting, Windows Credential Manager keyring storage, free-tier gate slot #4, Lemon Squeezy / Polar.sh webhook handler, 20 Rust tests, 89 Vitest tests)
-* **Next Immediate Task**: Task 12.1 — Define `AppError` enum in Rust (`src-tauri/src/error.rs`)
+  * **Phase 12: Error Handling & Telemetry (Tasks 12.1 – 12.10)** — **100% COMPLETE** (Typed `AppError` in Rust and TypeScript, React `ErrorBoundary` with Obsidian fallback, 32px `Toast` notification system, Tauri `app://error` event listener, rolling log rotation at `%APPDATA%/Nakraku/logs/app.log` max 5 MB, panic hook writing `crash-{timestamp}.log`, opt-in telemetry toggle, 25 Rust tests, 99 Vitest tests)
+* **Next Immediate Task**: Task 13.1 — Frontend bundle size analysis (`rollup-plugin-visualizer` / bundle inspector)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

@@ -1,6 +1,8 @@
 pub mod core;
 pub mod db;
+pub mod error;
 pub mod license;
+pub mod logging;
 pub mod os;
 pub mod ws;
 mod shortcuts;
@@ -18,13 +20,7 @@ pub fn run() {
             Some(vec!["--minimized"]),
         ))
         .setup(|app| {
-            if cfg!(debug_assertions) {
-                let _ = app.handle().plugin(
-                    tauri_plugin_log::Builder::default()
-                        .level(log::LevelFilter::Info)
-                        .build(),
-                );
-            }
+            let _ = logging::configure_logging(app);
 
             match db::setup_db(app.handle()) {
                 Ok(pool) => {
@@ -112,6 +108,8 @@ pub fn run() {
             license::commands::cmd_get_license_status,
             license::commands::cmd_activate_license,
             license::commands::cmd_deactivate_license,
+            logging::cmd_get_log_path,
+            logging::cmd_get_recent_logs,
         ])
         .run(tauri::generate_context!());
 

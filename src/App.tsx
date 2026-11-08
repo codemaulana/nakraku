@@ -14,6 +14,9 @@ import { AboutView } from "./views/AboutView";
 import { Gallery } from "./dev/Gallery";
 import { useAppShortcuts } from "./hooks/useAppShortcuts";
 import { useWsBridgeStatus } from "./hooks/useWsBridgeStatus";
+import { useAppErrorListener } from "./hooks/useAppErrorListener";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ToastProvider } from "./context/ToastContext";
 import {
   createProcessMenuItems,
   type ProcessItem,
@@ -124,6 +127,7 @@ const AppShell: React.FC = () => {
   const { currentRoute, navigate } = useRouter();
   const s = useAppShellState(navigate);
   const { connected: bridgeConnected, port: bridgePort } = useWsBridgeStatus();
+  useAppErrorListener();
   const { position, data, open, close } = useContextMenu<ProcessItem>();
   const menuItems = createProcessMenuItems(data, close);
 
@@ -144,7 +148,9 @@ const AppShell: React.FC = () => {
       <Titlebar badge="v0.1.0" />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar activeId={currentRoute} onSelect={(id) => navigate(id as AppRoute)} />
-        {renderActiveView(currentRoute, navigate, viewState)}
+        <ErrorBoundary>
+          {renderActiveView(currentRoute, navigate, viewState)}
+        </ErrorBoundary>
       </div>
       <StatusBar
         ramSaved="1.8 GB"
@@ -168,7 +174,9 @@ const AppShell: React.FC = () => {
 };
 
 export const App: React.FC = () => (
-  <RouterProvider>
-    <AppShell />
-  </RouterProvider>
+  <ToastProvider>
+    <RouterProvider>
+      <AppShell />
+    </RouterProvider>
+  </ToastProvider>
 );
