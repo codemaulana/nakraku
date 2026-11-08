@@ -34,7 +34,8 @@
   * **Task 2.15: Build `Tooltip` component** — **100% COMPLETE** (Authored `src/components/Tooltip.tsx` 200ms delay, 12px font `--text-sm`, dark surface `bg-bg-elevated`, no arrow, keyboard accessibility, shortcut keycaps hint support, positionable top/bottom/left/right, integrated into `src/App.tsx`)
   * **Task 2.16: Build `ContextMenu` component** — **100% COMPLETE** (Authored `src/components/ContextMenu.tsx` and `src/hooks/useContextMenu.ts` right-click menu, viewport edge clamping, keyboard navigation, sub-menu cascading, integrated into `Row.tsx` and `App.tsx`)
   * **Task 2.17: Build `Modal` component** — **100% COMPLETE** (Authored `src/components/Modal.tsx` and `src/hooks/useFocusTrap.ts` dialog overlay, keyboard focus trap, Escape key dismiss, aria-modal, aria-labelledby, integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.18 — Build `Button` component variants (`primary`, `ghost`, `danger`, `icon-only` — all 32px height, no padding inflation)
+  * **Task 2.18: Build `Button` component variants** — **100% COMPLETE** (Authored `src/components/Button.tsx` high-density 32px height buttons with `primary`, `secondary`, `ghost`, and `danger` variants, equal-aspect `icon-only` square mode, loading spinner state, keyboard accessibility, integrated into `src/App.tsx`)
+* **Next Immediate Task**: Task 2.19 — Build `Input` component (32px height, monospace text, focus ring, error state, label above)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

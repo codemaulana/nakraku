@@ -7,6 +7,7 @@ import { Row } from "./components/Row";
 import { Badge, type BadgeVariant } from "./components/Badge";
 import { Icon, type IconName } from "./components/Icon";
 import { Tooltip } from "./components/Tooltip";
+import { Button } from "./components/Button";
 import {
   ContextMenu,
   useContextMenu,
@@ -105,12 +106,13 @@ const ProcessList: React.FC<ProcessListProps> = ({
         onContextMenu={(e) => onContextMenu(e, item)}
         actions={
           <Tooltip content={`Pin ${item.title}`} shortcut="Alt+P" position="left">
-            <button
-              type="button"
-              className="p-1 rounded-xs hover:bg-bg-hover text-text-disabled hover:text-text-primary transition-colors"
-            >
-              <Icon name="pin" size={12} />
-            </button>
+            <Button
+              variant="ghost"
+              iconOnly
+              size="sm"
+              icon="pin"
+              aria-label={`Pin ${item.title}`}
+            />
           </Tooltip>
         }
         meta={
@@ -134,37 +136,33 @@ interface ActionToolbarProps {
 const ActionToolbar: React.FC<ActionToolbarProps> = ({ onOpenStashModal }) => (
   <div className="flex items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
     <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">
-      Actions:
+      Buttons:
     </span>
     <Tooltip content="Stash All Windows" shortcut="Ctrl+S" position="bottom">
-      <button
-        type="button"
-        onClick={onOpenStashModal}
-        className="flex items-center gap-1.5 px-2 py-1 rounded-xs bg-accent-emerald text-bg-base font-medium text-xs hover:bg-accent-emerald-hover transition-colors"
-      >
-        <Icon name="stash" size={13} strokeWidth={2} />
-        <span>Stash Now</span>
-      </button>
+      <Button variant="primary" icon="stash" onClick={onOpenStashModal}>
+        Stash Now
+      </Button>
     </Tooltip>
 
     <Tooltip content="Restore Previous Session" shortcut="Ctrl+R" position="bottom">
-      <button
-        type="button"
-        className="flex items-center gap-1.5 px-2 py-1 rounded-xs bg-bg-elevated text-text-primary border border-border-subtle hover:bg-bg-hover transition-colors text-xs"
-      >
-        <Icon name="restore" size={13} />
-        <span>Restore</span>
-      </button>
+      <Button variant="secondary" icon="restore">
+        Restore
+      </Button>
     </Tooltip>
 
     <Tooltip content="Filter Active Windows" shortcut="Ctrl+F" position="bottom">
-      <button
-        type="button"
-        className="p-1.5 rounded-xs bg-bg-elevated text-text-secondary hover:text-text-primary border border-border-subtle hover:bg-bg-hover transition-colors"
-      >
-        <Icon name="filter" size={13} />
-      </button>
+      <Button variant="secondary" iconOnly icon="filter" aria-label="Filter windows" />
     </Tooltip>
+
+    <Tooltip content="Emergency purge" position="bottom">
+      <Button variant="danger" icon="trash">
+        Purge
+      </Button>
+    </Tooltip>
+
+    <Button variant="ghost">
+      Ghost
+    </Button>
   </div>
 );
 
@@ -180,20 +178,12 @@ const StashModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     size="md"
     footer={
       <>
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-sm py-1 rounded-xs bg-bg-elevated hover:bg-bg-hover text-text-secondary hover:text-text-primary text-xs border border-border-subtle transition-colors"
-        >
+        <Button variant="ghost" onClick={onClose}>
           Cancel
-        </button>
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-sm py-1 rounded-xs bg-accent-emerald hover:bg-accent-emerald-hover text-bg-base font-medium text-xs transition-colors"
-        >
+        </Button>
+        <Button variant="primary" onClick={onClose}>
           Confirm Stash
-        </button>
+        </Button>
       </>
     }
   >
@@ -251,7 +241,7 @@ const MainContent: React.FC<MainContentProps> = ({
     <div className="p-base flex flex-col gap-sm">
       <ActionToolbar onOpenStashModal={onOpenStashModal} />
       <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-        Task 2.17: Modal (Focus Trap, Escape Closes, A11y Dialog)
+        Task 2.18: Button System (Primary, Secondary, Ghost, Danger, Icon-Only)
       </div>
       <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
         <ProcessList
