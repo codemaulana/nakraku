@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "./Badge";
+import { Kbd } from "./Kbd";
 import {
   LayoutDashboard,
   Layers,
@@ -128,11 +129,7 @@ const SidebarFooter: React.FC<SidebarFooterProps> = ({ collapsed, onToggle }) =>
           Collapse
         </span>
       )}
-      {!collapsed && (
-        <kbd className="text-2xs font-mono text-text-disabled bg-bg-elevated px-1 py-0.5 rounded-xs border border-border-subtle">
-          Ctrl+B
-        </kbd>
-      )}
+      {!collapsed && <Kbd size="xs" variant="elevated" shortcut="Ctrl+B" />}
     </button>
   </div>
 );

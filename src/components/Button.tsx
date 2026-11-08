@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon, type IconName, type IconSize, resolveIconPixelSize } from "./Icon";
+import { Kbd } from "./Kbd";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -126,9 +127,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {!iconOnly && children && <span className="truncate">{children}</span>}
         {!loading && !iconOnly && rightIcon && renderIconSlot(rightIcon, iconSize)}
         {!iconOnly && shortcut && (
-          <kbd className="ml-auto pl-1 font-mono text-2xs text-text-disabled">
-            {shortcut}
-          </kbd>
+          <Kbd size="xs" variant="ghost" shortcut={shortcut} className="ml-auto pl-1" />
         )}
       </button>
     );

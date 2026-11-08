@@ -1,4 +1,5 @@
 import React, { useId, useRef, useState, useEffect, useCallback } from "react";
+import { Kbd } from "./Kbd";
 
 export type TooltipPosition = "top" | "bottom" | "left" | "right";
 
@@ -81,11 +82,7 @@ const TooltipContent: React.FC<TooltipContentProps> = ({
       className={`absolute ${positionClass} z-50 pointer-events-none select-none whitespace-nowrap bg-bg-elevated border border-border-subtle shadow-md rounded-xs px-2 py-1 text-sm text-text-primary leading-tight flex items-center gap-1.5`}
     >
       <span>{content}</span>
-      {shortcut && (
-        <kbd className="px-1 py-0.5 bg-bg-surface border border-border-subtle rounded-xs font-mono text-2xs text-text-secondary">
-          {shortcut}
-        </kbd>
-      )}
+      {shortcut && <Kbd size="xs" variant="default" shortcut={shortcut} />}
     </div>
   );
 };

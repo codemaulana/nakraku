@@ -9,6 +9,7 @@ import { Icon, type IconName } from "./components/Icon";
 import { Tooltip } from "./components/Tooltip";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
+import { Kbd } from "./components/Kbd";
 import {
   ContextMenu,
   useContextMenu,
@@ -216,8 +217,14 @@ const MainContent: React.FC<MainContentProps> = ({
           clearable
           onClear={() => onSearchChange("")}
         />
-        <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-          Task 2.19: Input (32px Density, Monospace Text, Label Above)
+        <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
+          <span>Task 2.20: Kbd & Input Components</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-text-disabled">Keys:</span>
+            <Kbd shortcut="Ctrl+B" size="xs" variant="elevated" />
+            <Kbd shortcut="Ctrl+K" size="xs" variant="default" splitKeys />
+            <Kbd shortcut="Esc" size="xs" variant="default" />
+          </div>
         </div>
         <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
           <ProcessList

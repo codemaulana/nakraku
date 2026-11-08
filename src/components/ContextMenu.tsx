@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Icon, type IconName } from "./Icon";
+import { Kbd } from "./Kbd";
 
 export { useContextMenu } from "../hooks/useContextMenu";
 
@@ -98,9 +99,7 @@ const ItemContent: React.FC<{
     )}
     <span className="truncate flex-1">{label}</span>
     {shortcut && (
-      <span className="ml-auto pl-sm font-mono text-2xs text-text-disabled">
-        {shortcut}
-      </span>
+      <Kbd size="xs" variant="ghost" shortcut={shortcut} className="ml-auto pl-sm" />
     )}
     {hasSub && <Icon name="chevron-right" size={12} className="ml-auto text-text-secondary" />}
   </>

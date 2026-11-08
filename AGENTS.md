@@ -36,7 +36,8 @@
   * **Task 2.17: Build `Modal` component** — **100% COMPLETE** (Authored `src/components/Modal.tsx` and `src/hooks/useFocusTrap.ts` dialog overlay, keyboard focus trap, Escape key dismiss, aria-modal, aria-labelledby, integrated into `src/App.tsx`)
   * **Task 2.18: Build `Button` component variants** — **100% COMPLETE** (Authored `src/components/Button.tsx` high-density 32px height buttons with `primary`, `secondary`, `ghost`, and `danger` variants, equal-aspect `icon-only` square mode, loading spinner state, keyboard accessibility, integrated into `src/App.tsx`)
   * **Task 2.19: Build `Input` component** — **100% COMPLETE** (Authored `src/components/Input.tsx` high-density 32px/28px input with monospace text, focus ring, error state, label above, icon slots, clear button, and shortcut badge, plus extracted `src/components/StashModal.tsx`, integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.20 — Build `Kbd` component (Keyboard shortcut display — `<kbd>` styled, used in Tooltip, menus, and footer hints)
+  * **Task 2.20: Build `Kbd` component** — **100% COMPLETE** (Authored `src/components/Kbd.tsx` keyboard shortcut display with sizes `xs`/`sm`/`md`, variants `default`/`elevated`/`outline`/`ghost`, multi-key splitting `splitKeys`, and accessible ARIA labeling; integrated into `Tooltip.tsx`, `Input.tsx`, `Sidebar.tsx`, `Button.tsx`, `ContextMenu.tsx`, and `App.tsx`)
+* **Next Immediate Task**: Task 2.21 — Build `Spinner` / `SkeletonRow` loading states (32px skeleton row for async list loading)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

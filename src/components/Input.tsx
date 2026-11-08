@@ -1,5 +1,6 @@
 import React, { useId } from "react";
 import { Icon, type IconName } from "./Icon";
+import { Kbd } from "./Kbd";
 
 export type InputSize = "sm" | "md";
 
@@ -103,11 +104,7 @@ const InputTrailingSlots: React.FC<TrailingSlotsProps> = ({
   return (
     <>
       {rightIcon && <span className="shrink-0">{renderIconSlot(rightIcon)}</span>}
-      {shortcut && (
-        <kbd className="px-1 py-0.5 bg-bg-surface border border-border-subtle rounded-xs font-mono text-2xs text-text-disabled shrink-0 select-none">
-          {shortcut}
-        </kbd>
-      )}
+      {shortcut && <Kbd size="xs" variant="default" shortcut={shortcut} />}
     </>
   );
 };
