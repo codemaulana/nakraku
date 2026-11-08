@@ -9,6 +9,7 @@
     "check": "tsc --noEmit",
     "lint": "oxlint",
     "audit:a11y": "node scripts/a11y-audit.mjs",
+    "audit:keyboard": "node scripts/keyboard-audit.mjs",
     "prepare": "lefthook install",
     "tauri": "tauri"
   },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AtomicsSection } from "./sections/AtomicsSection";
 import { InputsSection } from "./sections/InputsSection";
 import { LayoutsSection } from "./sections/LayoutsSection";
@@ -72,6 +72,18 @@ const renderActiveSection = (tab: GalleryTab) => {
 
 export const Gallery: React.FC<GalleryProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<GalleryTab>("atomics");
+
+  useEffect(() => {
+    if (!onClose) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   return (
     <MainPanel

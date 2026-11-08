@@ -1,240 +1,77 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
-import { MainPanel } from "./components/MainPanel";
 import { StatusBar } from "./components/StatusBar";
-import { Badge } from "./components/Badge";
-import { Tooltip } from "./components/Tooltip";
-import { Button } from "./components/Button";
-import { Input } from "./components/Input";
-import { Kbd } from "./components/Kbd";
-import { Spinner } from "./components/Spinner";
-import { SkeletonList } from "./components/SkeletonRow";
-import { EmptyState } from "./components/EmptyState";
-import { Divider } from "./components/Divider";
 import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
 import { Gallery } from "./dev/Gallery";
-import { ProcessList } from "./components/ProcessList";
+import { MainContent } from "./components/MainContent";
+import { useAppShortcuts } from "./hooks/useAppShortcuts";
 import {
-  SAMPLE_PROCESSES,
   createProcessMenuItems,
   type ProcessItem,
 } from "./data/sampleProcesses";
 
-interface ActionToolbarProps {
-  onOpenStashModal: () => void;
-  isLoading: boolean;
-  onRefresh: () => void;
-}
-
-const ActionToolbar: React.FC<ActionToolbarProps> = ({
-  onOpenStashModal,
-  isLoading,
-  onRefresh,
-}) => (
-  <div className="flex items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
-    <Tooltip content="Stash All Windows" shortcut="Ctrl+S" position="bottom">
-      <Button variant="primary" icon="stash" onClick={onOpenStashModal}>
-        Stash Now
-      </Button>
-    </Tooltip>
-
-    <Tooltip content="Scan Desktop Windows" shortcut="Ctrl+R" position="bottom">
-      <Button
-        variant="secondary"
-        icon={isLoading ? undefined : "restore"}
-        loading={isLoading}
-        onClick={onRefresh}
-      >
-        Scan
-      </Button>
-    </Tooltip>
-
-    <Divider orientation="vertical" spacing="xs" className="h-5 my-auto" />
-
-    <Tooltip content="Emergency purge" position="bottom">
-      <Button variant="danger" icon="trash">
-        Purge
-      </Button>
-    </Tooltip>
-  </div>
-);
-
-const MainPanelHeader: React.FC<{ activeTab: string }> = ({ activeTab }) => (
-  <div className="flex items-center justify-between h-row px-base">
-    <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
-      {activeTab}
-    </span>
-    <Tooltip content="System IPC healthy (48123)" position="left">
-      <Badge variant="active" dot pulse size="sm">
-        SYSTEM OK
-      </Badge>
-    </Tooltip>
-  </div>
-);
-
-interface MainContentProps {
-  activeTab: string;
-  selectedProcess: string;
-  searchQuery: string;
-  isLoading: boolean;
-  onRefresh: () => void;
-  onSearchChange: (val: string) => void;
-  onSelectProcess: (id: string) => void;
-  onOpenStashModal: () => void;
-  onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
-}
-
-const TaskStatusHeader: React.FC<{ isLoading: boolean }> = ({ isLoading }) => (
-  <div className="flex flex-col gap-1.5 w-full">
-    <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
-      <div className="flex items-center gap-1.5">
-        <span>Task 2.26: WCAG 2.1 AA A11y Audit</span>
-        {isLoading && <Spinner size="xs" variant="accent" />}
-      </div>
-      <div className="flex items-center gap-1.5">
-        <span className="text-text-disabled">Keys:</span>
-        <Kbd shortcut="Ctrl+B" size="xs" variant="elevated" />
-        <Kbd shortcut="Ctrl+K" size="xs" variant="default" splitKeys />
-      </div>
-    </div>
-    <Divider label="Active Processes" labelAlign="left" spacing="none" />
-  </div>
-);
-
-interface TableContainerProps {
-  isLoading: boolean;
-  filtered: ProcessItem[];
-  selectedId: string;
-  onClearFilter: () => void;
-  onSelect: (id: string) => void;
-  onContextMenu: (e: React.MouseEvent, item: ProcessItem) => void;
-}
-
-const ProcessTableContainer: React.FC<TableContainerProps> = ({
-  isLoading,
-  filtered,
-  selectedId,
-  onClearFilter,
-  onSelect,
-  onContextMenu,
-}) => {
-  if (isLoading) {
-    return (
-      <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-        <SkeletonList count={4} />
-      </div>
-    );
-  }
-
-  if (filtered.length === 0) {
-    return (
-      <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-        <EmptyState
-          preset="search"
-          action={
-            <Button size="sm" variant="secondary" onClick={onClearFilter}>
-              Clear Filter
-            </Button>
-          }
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-      <ProcessList
-        items={filtered}
-        selectedId={selectedId}
-        onSelect={onSelect}
-        onContextMenu={onContextMenu}
-      />
-    </div>
-  );
-};
-
-const MainContent: React.FC<MainContentProps> = ({
-  activeTab,
-  selectedProcess,
-  searchQuery,
-  isLoading,
-  onRefresh,
-  onSearchChange,
-  onSelectProcess,
-  onOpenStashModal,
-  onContextMenu,
-}) => {
-  const filtered = SAMPLE_PROCESSES.filter(
-    (p) =>
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.pid.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return (
-    <MainPanel header={<MainPanelHeader activeTab={activeTab} />}>
-      <div className="p-base flex flex-col gap-sm">
-        <ActionToolbar
-          onOpenStashModal={onOpenStashModal}
-          isLoading={isLoading}
-          onRefresh={onRefresh}
-        />
-        <Input
-          leftIcon="search"
-          shortcut="Ctrl+F"
-          placeholder="Filter windows by name or PID..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          clearable
-          onClear={() => onSearchChange("")}
-        />
-        <TaskStatusHeader isLoading={isLoading} />
-        <ProcessTableContainer
-          isLoading={isLoading}
-          filtered={filtered}
-          selectedId={selectedProcess}
-          onClearFilter={() => onSearchChange("")}
-          onSelect={onSelectProcess}
-          onContextMenu={onContextMenu}
-        />
-      </div>
-    </MainPanel>
-  );
-};
-
-export const App: React.FC = () => {
+const useAppState = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [selectedProcess, setSelectedProcess] = useState<string>("p1");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
-  const { position, data, open, close } = useContextMenu<ProcessItem>();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const handleRefresh = () => {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 1200);
   };
 
+  useAppShortcuts({
+    onOpenStash: () => setIsStashModalOpen(true),
+    onFocusSearch: () => {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+    },
+    onSelectTab: setActiveTab,
+  });
+
+  return {
+    activeTab,
+    setActiveTab,
+    selectedProcess,
+    setSelectedProcess,
+    searchQuery,
+    setSearchQuery,
+    isLoading,
+    isStashModalOpen,
+    setIsStashModalOpen,
+    searchInputRef,
+    handleRefresh,
+  };
+};
+
+export const App: React.FC = () => {
+  const s = useAppState();
+  const { position, data, open, close } = useContextMenu<ProcessItem>();
   const menuItems = createProcessMenuItems(data, close);
 
   return (
     <div className="flex flex-col h-screen bg-bg-base text-text-primary font-ui overflow-hidden select-none">
       <Titlebar badge="v0.1.0" />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar activeId={activeTab} onSelect={setActiveTab} />
-        {activeTab === "gallery" ? (
-          <Gallery onClose={() => setActiveTab("dashboard")} />
+        <Sidebar activeId={s.activeTab} onSelect={s.setActiveTab} />
+        {s.activeTab === "gallery" ? (
+          <Gallery onClose={() => s.setActiveTab("dashboard")} />
         ) : (
           <MainContent
-            activeTab={activeTab}
-            selectedProcess={selectedProcess}
-            searchQuery={searchQuery}
-            isLoading={isLoading}
-            onRefresh={handleRefresh}
-            onSearchChange={setSearchQuery}
-            onSelectProcess={setSelectedProcess}
-            onOpenStashModal={() => setIsStashModalOpen(true)}
+            activeTab={s.activeTab}
+            selectedProcess={s.selectedProcess}
+            searchQuery={s.searchQuery}
+            isLoading={s.isLoading}
+            searchRef={s.searchInputRef}
+            onRefresh={s.handleRefresh}
+            onSearchChange={s.setSearchQuery}
+            onSelectProcess={s.setSelectedProcess}
+            onOpenStashModal={() => s.setIsStashModalOpen(true)}
             onContextMenu={open}
           />
         )}
@@ -242,8 +79,8 @@ export const App: React.FC = () => {
       <StatusBar ramSaved="1.8 GB" />
       <ContextMenu items={menuItems} position={position} onClose={close} />
       <StashModal
-        isOpen={isStashModalOpen}
-        onClose={() => setIsStashModalOpen(false)}
+        isOpen={s.isStashModalOpen}
+        onClose={() => s.setIsStashModalOpen(false)}
       />
     </div>
   );

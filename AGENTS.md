@@ -43,7 +43,8 @@
   * **Task 2.24: Build `ScrollArea` component** — **100% COMPLETE** (Authored `src/components/ScrollArea.tsx` custom 4px/6px thin scrollbar with idle auto-hiding hook `useScrollIdle`, integrated into `MainPanel.tsx`, `Sidebar.tsx`, `Modal.tsx`, and `App.tsx`)
   * **Task 2.25: Write Storybook / component gallery (dev-only)** — **100% COMPLETE** (Authored `src/dev/Gallery.tsx` and modular sections `AtomicsSection.tsx`, `InputsSection.tsx`, `LayoutsSection.tsx`, wired into `Sidebar.tsx` and `App.tsx`)
   * **Task 2.26: Accessibility audit — components** — **100% COMPLETE** (Authored `scripts/a11y-audit.mjs` verifying 32/32 token pairings ≥ 4.5:1, updated tokens for danger/disabled/frozen text contrast, and audited visible emerald focus rings across all interactive components)
-* **Next Immediate Task**: Task 2.27 — Keyboard navigation audit — components (Tab order correct, all interactions reachable by keyboard alone)
+  * **Task 2.27: Keyboard navigation audit — components** — **100% COMPLETE** (Authored `scripts/keyboard-audit.mjs` verifying 27/27 keyboard invariants, added `useAppShortcuts.ts` with Ctrl+F/Ctrl+S/Alt+1..4, Escape dismissals in Input and Gallery, extracted `MainContent.tsx`, verified with build & guardrails)
+* **Next Immediate Task**: Task 2.28 — Snapshot tests — design tokens (Vitest snapshot test ensuring tokens.css values don't drift silently)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

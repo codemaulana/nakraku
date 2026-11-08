@@ -167,28 +167,39 @@ const InputField: React.FC<InputFieldProps> = ({
   className,
   inputProps,
   inputRef,
-}) => (
-  <div
-    className={`flex items-center px-sm gap-xs border rounded-xs transition-colors duration-100 ease-out ${heightClass} ${borderClasses} ${stateClasses}`}
-  >
-    {leftIcon && <span className="shrink-0">{renderIconSlot(leftIcon)}</span>}
-    <input
-      ref={inputRef}
-      id={inputId}
-      disabled={disabled}
-      aria-invalid={hasError}
-      aria-describedby={descId}
-      className={`w-full h-full bg-transparent text-xs text-text-primary placeholder:text-text-disabled outline-none leading-none select-text ${fontClass} ${className}`}
-      {...inputProps}
-    />
-    <InputTrailingSlots
-      showClearButton={showClear}
-      onClear={onClear}
-      rightIcon={rightIcon}
-      shortcut={shortcut}
-    />
-  </div>
-);
+}) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape" && showClear && onClear) {
+      e.preventDefault();
+      onClear();
+    }
+    inputProps.onKeyDown?.(e);
+  };
+
+  return (
+    <div
+      className={`flex items-center px-sm gap-xs border rounded-xs transition-colors duration-100 ease-out ${heightClass} ${borderClasses} ${stateClasses}`}
+    >
+      {leftIcon && <span className="shrink-0">{renderIconSlot(leftIcon)}</span>}
+      <input
+        ref={inputRef}
+        id={inputId}
+        disabled={disabled}
+        aria-invalid={hasError}
+        aria-describedby={descId}
+        className={`w-full h-full bg-transparent text-xs text-text-primary placeholder:text-text-disabled outline-none leading-none select-text ${fontClass} ${className}`}
+        {...inputProps}
+        onKeyDown={handleKeyDown}
+      />
+      <InputTrailingSlots
+        showClearButton={showClear}
+        onClear={onClear}
+        rightIcon={rightIcon}
+        shortcut={shortcut}
+      />
+    </div>
+  );
+};
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
