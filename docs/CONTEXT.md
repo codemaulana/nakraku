@@ -144,4 +144,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.7]` Build `Titlebar` — window control logic (`src/hooks/useWindowControls.ts`: Wired Tauri v2 `appWindow.minimize()`, `appWindow.toggleMaximize()`, `appWindow.close()`, and `appWindow.onResized()` maximize state listener, with capabilities configured in `src-tauri/capabilities/default.json` and safe browser fallbacks) — **DONE**
 - `[2.8]` Build `Titlebar` — vibrancy / blur effect (`src/components/Titlebar.tsx`: Added `vibrant` glass mode via `bg-bg-surface-glass` and `backdrop-blur-vibrant` with tokens `--bg-surface-glass` and `--backdrop-blur: 16px`) — **DONE**
 - `[2.9]` Build `Sidebar` layout shell (`src/components/Sidebar.tsx`: 200px collapsible sidebar with 32px nav rows, badges, Ctrl+B keyboard shortcut listener, icon-only 48px collapse mode, integrated into `src/App.tsx`) — **DONE**
-- `[2.10]` Build `MainPanel` layout shell (Right content area, flex grow, overflow-y auto with custom scrollbar) — **NEXT**
+- `[2.10]` Build `MainPanel` layout shell (`src/components/MainPanel.tsx`: Right content area with flex-1 grow, fixed optional header/footer slots, overflow-y auto with thin `.custom-scrollbar`, integrated into `src/App.tsx`) — **DONE**
+- `[2.11]` Build `StatusBar` component (Bottom bar 24px: RAM usage label, process count, connection indicator, clock) — **NEXT**

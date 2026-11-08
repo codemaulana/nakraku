@@ -26,7 +26,8 @@
   * **Task 2.7: Build `Titlebar` — window control logic** — **100% COMPLETE** (Authored `src/hooks/useWindowControls.ts` wiring Tauri v2 `window.minimize()`, `window.toggleMaximize()`, `window.close()`, and dynamic resize state sync with granular Tauri permissions in `src-tauri/capabilities/default.json` and resilient browser fallbacks)
   * **Task 2.8: Build `Titlebar` — vibrancy / blur effect** — **100% COMPLETE** (Added vibrancy glass mode to `Titlebar.tsx` with `--bg-surface-glass: rgba(15,19,25,0.75)` and `backdrop-blur-vibrant` 16px saturation filter, verified with build & guardrails)
   * **Task 2.9: Build `Sidebar` layout shell** — **100% COMPLETE** (Authored `src/components/Sidebar.tsx` 200px collapsible sidebar with 32px nav rows, badges, Ctrl+B keyboard shortcut toggle, icon-only 48px collapse mode, integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.10 — Build `MainPanel` layout shell (Right content area, flex grow, overflow-y auto with custom scrollbar)
+  * **Task 2.10: Build `MainPanel` layout shell** — **100% COMPLETE** (Authored `src/components/MainPanel.tsx` right content area with flex-1 grow, fixed header/footer slots, overflow-y auto with custom 6px thin scrollbar, integrated into `src/App.tsx`)
+* **Next Immediate Task**: Task 2.11 — Build `StatusBar` component (Bottom bar 24px: RAM usage label, process count, connection indicator, clock)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
