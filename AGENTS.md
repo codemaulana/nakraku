@@ -35,7 +35,8 @@
   * **Task 2.16: Build `ContextMenu` component** — **100% COMPLETE** (Authored `src/components/ContextMenu.tsx` and `src/hooks/useContextMenu.ts` right-click menu, viewport edge clamping, keyboard navigation, sub-menu cascading, integrated into `Row.tsx` and `App.tsx`)
   * **Task 2.17: Build `Modal` component** — **100% COMPLETE** (Authored `src/components/Modal.tsx` and `src/hooks/useFocusTrap.ts` dialog overlay, keyboard focus trap, Escape key dismiss, aria-modal, aria-labelledby, integrated into `src/App.tsx`)
   * **Task 2.18: Build `Button` component variants** — **100% COMPLETE** (Authored `src/components/Button.tsx` high-density 32px height buttons with `primary`, `secondary`, `ghost`, and `danger` variants, equal-aspect `icon-only` square mode, loading spinner state, keyboard accessibility, integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.19 — Build `Input` component (32px height, monospace text, focus ring, error state, label above)
+  * **Task 2.19: Build `Input` component** — **100% COMPLETE** (Authored `src/components/Input.tsx` high-density 32px/28px input with monospace text, focus ring, error state, label above, icon slots, clear button, and shortcut badge, plus extracted `src/components/StashModal.tsx`, integrated into `src/App.tsx`)
+* **Next Immediate Task**: Task 2.20 — Build `Kbd` component (Keyboard shortcut display — `<kbd>` styled, used in Tooltip, menus, and footer hints)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

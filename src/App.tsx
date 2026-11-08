@@ -8,12 +8,13 @@ import { Badge, type BadgeVariant } from "./components/Badge";
 import { Icon, type IconName } from "./components/Icon";
 import { Tooltip } from "./components/Tooltip";
 import { Button } from "./components/Button";
+import { Input } from "./components/Input";
 import {
   ContextMenu,
   useContextMenu,
   type ContextMenuItem,
 } from "./components/ContextMenu";
-import { Modal } from "./components/Modal";
+import { StashModal } from "./components/StashModal";
 
 interface ProcessItem {
   id: string;
@@ -84,18 +85,20 @@ const createProcessMenuItems = (
 ];
 
 interface ProcessListProps {
+  items: ProcessItem[];
   selectedId: string;
   onSelect: (id: string) => void;
   onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
 }
 
 const ProcessList: React.FC<ProcessListProps> = ({
+  items,
   selectedId,
   onSelect,
   onContextMenu,
 }) => (
   <div className="flex flex-col w-full divide-y divide-border-subtle/50">
-    {SAMPLE_PROCESSES.map((item) => (
+    {items.map((item) => (
       <Row
         key={item.id}
         icon={<Icon name={item.iconName} size="sm" className={item.iconColor} />}
@@ -150,10 +153,6 @@ const ActionToolbar: React.FC<ActionToolbarProps> = ({ onOpenStashModal }) => (
       </Button>
     </Tooltip>
 
-    <Tooltip content="Filter Active Windows" shortcut="Ctrl+F" position="bottom">
-      <Button variant="secondary" iconOnly icon="filter" aria-label="Filter windows" />
-    </Tooltip>
-
     <Tooltip content="Emergency purge" position="bottom">
       <Button variant="danger" icon="trash">
         Purge
@@ -166,52 +165,24 @@ const ActionToolbar: React.FC<ActionToolbarProps> = ({ onOpenStashModal }) => (
   </div>
 );
 
-const StashModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose,
-}) => (
-  <Modal
-    isOpen={isOpen}
-    onClose={onClose}
-    title="Stash Current Workspace"
-    description="Freeze 14 windows to free up approximately 1.8 GB of system RAM."
-    size="md"
-    footer={
-      <>
-        <Button variant="ghost" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button variant="primary" onClick={onClose}>
-          Confirm Stash
-        </Button>
-      </>
-    }
-  >
-    <div className="flex flex-col gap-xs">
-      <p className="text-xs text-text-secondary">
-        Windows will be minimized to taskbar, processes frozen via Windows API, and workspace coordinates saved into SQLite.
-      </p>
-      <div className="border border-border-subtle rounded-xs bg-bg-elevated p-xs font-mono text-2xs space-y-1">
-        <div className="flex justify-between text-text-secondary">
-          <span>Target Workspace:</span>
-          <span className="text-accent-emerald">Dev Core</span>
-        </div>
-        <div className="flex justify-between text-text-secondary">
-          <span>Processes to Freeze:</span>
-          <span className="text-text-primary">14 active</span>
-        </div>
-        <div className="flex justify-between text-text-secondary">
-          <span>Estimated Memory Reclaim:</span>
-          <span className="text-accent-emerald">~1,842 MB</span>
-        </div>
-      </div>
-    </div>
-  </Modal>
+const MainPanelHeader: React.FC<{ activeTab: string }> = ({ activeTab }) => (
+  <div className="flex items-center justify-between h-row px-base">
+    <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
+      {activeTab}
+    </span>
+    <Tooltip content="System IPC healthy (48123)" position="left">
+      <Badge variant="active" dot pulse size="sm">
+        SYSTEM OK
+      </Badge>
+    </Tooltip>
+  </div>
 );
 
 interface MainContentProps {
   activeTab: string;
   selectedProcess: string;
+  searchQuery: string;
+  onSearchChange: (val: string) => void;
   onSelectProcess: (id: string) => void;
   onOpenStashModal: () => void;
   onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
@@ -220,43 +191,51 @@ interface MainContentProps {
 const MainContent: React.FC<MainContentProps> = ({
   activeTab,
   selectedProcess,
+  searchQuery,
+  onSearchChange,
   onSelectProcess,
   onOpenStashModal,
   onContextMenu,
-}) => (
-  <MainPanel
-    header={
-      <div className="flex items-center justify-between h-row px-base">
-        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
-          {activeTab}
-        </span>
-        <Tooltip content="System IPC healthy (48123)" position="left">
-          <Badge variant="active" dot pulse size="sm">
-            SYSTEM OK
-          </Badge>
-        </Tooltip>
-      </div>
-    }
-  >
-    <div className="p-base flex flex-col gap-sm">
-      <ActionToolbar onOpenStashModal={onOpenStashModal} />
-      <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-        Task 2.18: Button System (Primary, Secondary, Ghost, Danger, Icon-Only)
-      </div>
-      <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-        <ProcessList
-          selectedId={selectedProcess}
-          onSelect={onSelectProcess}
-          onContextMenu={onContextMenu}
+}) => {
+  const filtered = SAMPLE_PROCESSES.filter(
+    (p) =>
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.pid.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <MainPanel header={<MainPanelHeader activeTab={activeTab} />}>
+      <div className="p-base flex flex-col gap-sm">
+        <ActionToolbar onOpenStashModal={onOpenStashModal} />
+        <Input
+          leftIcon="search"
+          shortcut="Ctrl+F"
+          placeholder="Filter windows by name or PID..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          clearable
+          onClear={() => onSearchChange("")}
         />
+        <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
+          Task 2.19: Input (32px Density, Monospace Text, Label Above)
+        </div>
+        <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
+          <ProcessList
+            items={filtered}
+            selectedId={selectedProcess}
+            onSelect={onSelectProcess}
+            onContextMenu={onContextMenu}
+          />
+        </div>
       </div>
-    </div>
-  </MainPanel>
-);
+    </MainPanel>
+  );
+};
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [selectedProcess, setSelectedProcess] = useState<string>("p1");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
   const { position, data, open, close } = useContextMenu<ProcessItem>();
 
@@ -270,6 +249,8 @@ export const App: React.FC = () => {
         <MainContent
           activeTab={activeTab}
           selectedProcess={selectedProcess}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
           onSelectProcess={setSelectedProcess}
           onOpenStashModal={() => setIsStashModalOpen(true)}
           onContextMenu={open}
