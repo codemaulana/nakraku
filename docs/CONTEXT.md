@@ -137,4 +137,5 @@ Audit executed via `scripts/check-env.ps1`:
 ## 7. Phase 2 Task Log (React Design System & Component Library)
 - `[2.1]` Define design tokens — color palette (`src/styles/tokens.css`: `--bg-base`, `--bg-surface`, `--bg-elevated`, `--bg-hover`, `--border-subtle`, `--accent-emerald`, text hierarchy, status indicators, imported in `src/main.tsx`) — **DONE**
 - `[2.2]` Define design tokens — typography (`src/styles/tokens.css`: `--font-mono`, `--font-ui`, `--text-2xs` through `--text-lg`, line heights `--leading-none` to `--leading-normal`, tracking, font weights, and body/code element defaults) — **DONE**
-- `[2.3]` Define design tokens — spacing & density (`--row-height: 32px`, `--row-height-lg: 36px`, `--titlebar-height: 38px`, `--gap-xs` through `--gap-lg`) — **NEXT**
+- `[2.3]` Define design tokens — spacing & density (`src/styles/tokens.css`: `--titlebar-height: 38px`, `--statusbar-height: 24px`, `--sidebar-width: 200px`, `--row-height: 32px`, `--row-height-lg: 36px`, micro-gaps `--gap-3xs` to `--gap-lg`, and padding scale `--pad-3xs` to `--pad-lg`) — **DONE**
+- `[2.4]` Define design tokens — border & radius (`--radius-sm`, `--radius-md`, `--border-width`, semantic border color vars) — **NEXT**

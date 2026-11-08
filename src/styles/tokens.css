@@ -50,6 +50,31 @@
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
+
+  --titlebar-height: 38px;
+  --statusbar-height: 24px;
+  --sidebar-width: 200px;
+  --sidebar-collapsed-width: 48px;
+
+  --row-height-sm: 28px;
+  --row-height: 32px;
+  --row-height-lg: 36px;
+
+  --gap-3xs: 2px;
+  --gap-2xs: 4px;
+  --gap-xs: 6px;
+  --gap-sm: 8px;
+  --gap-md: 10px;
+  --gap-base: 12px;
+  --gap-lg: 16px;
+
+  --pad-3xs: 2px;
+  --pad-2xs: 4px;
+  --pad-xs: 6px;
+  --pad-sm: 8px;
+  --pad-md: 10px;
+  --pad-base: 12px;
+  --pad-lg: 16px;
 }
 
 body {
