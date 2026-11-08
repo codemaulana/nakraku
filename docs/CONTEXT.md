@@ -129,7 +129,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[1.6]` Spatial Monitor Minimap (designed multi-display layout visualizer with 2 monitors, live window boxes, HWND coordinate inspector, verified 1850x600 PNG render) — **DONE**
 - `[1.7]` Workspace Cards & Quick Switcher (designed 900x600 Workspaces view frame at x:2000, 3 x 42px workspace rows, drag handles, color tags, Free Tier 3/3 banner, verified 2800x600 PNG render) — **DONE**
 - `[1.8]` Command Palette (Ctrl+K) Overlay (designed 900x600 dim overlay frame at x:100,y:750 with 560px modal, search input, active windows fuzzy list, workspaces, and system action accelerators, verified 2800x1250 PNG render) — **DONE**
-- `[1.9]` Settings & Danger Zone Frames (design general, stash behavior, browser extension, license) — **NEXT**
-- `[1.8]` Command Palette (Ctrl+K) Overlay (design search modal with fuzzy results & kbd pills) — **PENDING**
-- `[1.9]` Settings & Danger Zone Frames (design general, stash behavior, browser extension, license) — **PENDING**
-- `[1.10]` Render PNG Visual Review & Code-Connect (export canvas PNG to `docs/previews/` & map nodes) — **PENDING**
+- `[1.9]` Settings & Danger Zone Frames (designed 900x600 Settings frame at x:1050,y:750 with 200px sidebar, General startup toggles, MV3 WebSocket loopback card, Ed25519 license activation with hardware machine ID, auto-snapshot interval and global hotkey, and isolated Danger Zone card with red #EF4444 destructive actions) — **DONE**
+- `[1.10]` Render PNG Visual Review & Code-Connect (export canvas PNG to `docs/previews/` & map nodes) — **NEXT**
