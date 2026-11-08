@@ -5,6 +5,7 @@ import { Sidebar } from "./components/Sidebar";
 import { MainPanel } from "./components/MainPanel";
 import { StatusBar } from "./components/StatusBar";
 import { Row } from "./components/Row";
+import { Badge, type BadgeVariant } from "./components/Badge";
 
 interface ProcessItem {
   id: string;
@@ -13,6 +14,8 @@ interface ProcessItem {
   icon: React.ReactNode;
   pid: string;
   ram: string;
+  status: BadgeVariant;
+  statusText: string;
 }
 
 const SAMPLE_PROCESSES: ProcessItem[] = [
@@ -23,6 +26,8 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
     icon: <AppWindow className="w-3.5 h-3.5 text-accent-emerald" />,
     pid: "PID 18420",
     ram: "142.4 MB",
+    status: "active",
+    statusText: "RUNNING",
   },
   {
     id: "p2",
@@ -31,6 +36,8 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
     icon: <Globe className="w-3.5 h-3.5 text-status-frozen" />,
     pid: "PID 9424",
     ram: "624.1 MB",
+    status: "frozen",
+    statusText: "FROZEN",
   },
   {
     id: "p3",
@@ -39,6 +46,8 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
     icon: <Terminal className="w-3.5 h-3.5 text-text-secondary" />,
     pid: "PID 3112",
     ram: "28.5 MB",
+    status: "neutral",
+    statusText: "IDLE",
   },
 ];
 
@@ -57,12 +66,28 @@ const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void
         onClick={() => onSelect(item.id)}
         meta={
           <div className="flex items-center gap-xs">
+            <Badge variant={item.status} size="sm" dot={item.status !== "neutral"}>
+              {item.statusText}
+            </Badge>
             <span className="text-text-disabled">{item.pid}</span>
             <span className="text-text-mono">{item.ram}</span>
           </div>
         }
       />
     ))}
+  </div>
+);
+
+const BadgeShowcase: React.FC = () => (
+  <div className="flex flex-wrap items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
+    <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">Badges:</span>
+    <Badge variant="active" dot pulse>ACTIVE</Badge>
+    <Badge variant="frozen" dot>FROZEN</Badge>
+    <Badge variant="warning" dot>HIGH RAM</Badge>
+    <Badge variant="danger" dot>CRITICAL</Badge>
+    <Badge variant="accent">PRO</Badge>
+    <Badge variant="count">14</Badge>
+    <Badge variant="neutral">READY</Badge>
   </div>
 );
 
@@ -81,15 +106,16 @@ export const App: React.FC = () => {
               <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
                 {activeTab}
               </span>
-              <span className="text-2xs font-mono text-accent-emerald bg-bg-elevated px-1.5 py-0.5 rounded-xs border border-border-subtle">
-                READY
-              </span>
+              <Badge variant="active" dot pulse size="sm">
+                SYSTEM OK
+              </Badge>
             </div>
           }
         >
           <div className="p-base flex flex-col gap-sm">
+            <BadgeShowcase />
             <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-              Task 2.12: Live Windows (32px Base Row Component)
+              Task 2.13: Live Windows & Badges
             </div>
             <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
               <ProcessList

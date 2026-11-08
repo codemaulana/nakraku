@@ -37,9 +37,13 @@ const config: Config = {
       },
       status: {
         active: "var(--status-active)",
+        "active-muted": "var(--status-active-muted)",
         frozen: "var(--status-frozen)",
+        "frozen-muted": "var(--status-frozen-muted)",
         warning: "var(--status-warning)",
+        "warning-muted": "var(--status-warning-muted)",
         danger: "var(--status-danger)",
+        "danger-muted": "var(--status-danger-muted)",
       },
       danger: {
         DEFAULT: "var(--danger)",

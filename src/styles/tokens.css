@@ -41,9 +41,13 @@
   --text-mono: #E5E7EB;
 
   --status-active: #10B981;
+  --status-active-muted: rgba(16, 185, 129, 0.15);
   --status-frozen: #3B82F6;
+  --status-frozen-muted: rgba(59, 130, 246, 0.15);
   --status-warning: #F59E0B;
+  --status-warning-muted: rgba(245, 158, 11, 0.15);
   --status-danger: #EF4444;
+  --status-danger-muted: rgba(239, 68, 68, 0.15);
 
   --danger: #EF4444;
   --danger-muted: rgba(239, 68, 68, 0.15);

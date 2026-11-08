@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import { Badge } from "./Badge";
 import {
   LayoutDashboard,
   Layers,
@@ -67,9 +68,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         <>
           <span className="flex-1 text-left truncate">{item.label}</span>
           {item.badge !== undefined && (
-            <span className="text-2xs font-mono text-text-secondary bg-bg-elevated px-1 py-0.5 rounded-xs border border-border-subtle">
+            <Badge variant="count" size="sm">
               {item.badge}
-            </span>
+            </Badge>
           )}
         </>
       )}

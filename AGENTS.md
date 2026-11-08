@@ -29,7 +29,8 @@
   * **Task 2.10: Build `MainPanel` layout shell** — **100% COMPLETE** (Authored `src/components/MainPanel.tsx` right content area with flex-1 grow, fixed header/footer slots, overflow-y auto with custom 6px thin scrollbar, integrated into `src/App.tsx`)
   * **Task 2.11: Build `StatusBar` component** — **100% COMPLETE** (Authored `src/components/StatusBar.tsx` 24px bottom bar with WebSocket bridge status `WS:48123`, process and window counters, monospace RAM usage and saved metrics, live 24h clock, integrated into `src/App.tsx`)
   * **Task 2.12: Build `Row` base component** — **100% COMPLETE** (Authored `src/components/Row.tsx` 32px standard desktop row with `h-row`/`h-row-sm`/`h-row-lg`, selected border accent, hover state, text truncation, slots for icon, label, description, meta, actions, and keyboard accessibility, integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.13 — Build `Badge` component (Compact pill: count badge, status badge (active/frozen/warning/danger))
+  * **Task 2.13: Build `Badge` component** — **100% COMPLETE** (Authored `src/components/Badge.tsx` compact pill/micro-tag with `active`/`frozen`/`warning`/`danger`/`count`/`accent`/`neutral` variants, dot indicators, pulse animation, and monospace metrics, integrated into `Sidebar.tsx`, `Row.tsx`, and `App.tsx`)
+* **Next Immediate Task**: Task 2.14 — Build `Icon` system (Thin-line SVG icon set (lucide-react subset) at 14px/16px with consistent stroke)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
