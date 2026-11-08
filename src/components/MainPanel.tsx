@@ -4,6 +4,7 @@ import { ScrollArea } from "./ScrollArea";
 export interface MainPanelProps {
   header?: React.ReactNode;
   children: React.ReactNode;
+  aside?: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
   contentClassName?: string;
@@ -13,6 +14,7 @@ export interface MainPanelProps {
 export const MainPanel: React.FC<MainPanelProps> = ({
   header,
   children,
+  aside,
   footer,
   className = "",
   contentClassName = "",
@@ -30,13 +32,17 @@ export const MainPanel: React.FC<MainPanelProps> = ({
         </header>
       )}
 
-      <ScrollArea
-        scrollbarSize="thin"
-        autoHide
-        className={`flex-1 ${paddingClass} ${contentClassName}`}
-      >
-        {children}
-      </ScrollArea>
+      <div className="flex flex-1 overflow-hidden min-h-0">
+        <ScrollArea
+          scrollbarSize="thin"
+          autoHide
+          className={`flex-1 ${paddingClass} ${contentClassName}`}
+        >
+          {children}
+        </ScrollArea>
+
+        {aside}
+      </div>
 
       {footer && (
         <footer className="shrink-0 border-t border-border-subtle bg-bg-surface select-none">

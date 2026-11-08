@@ -3,88 +3,120 @@ import { MainPanel } from "../components/MainPanel";
 import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
 import { Divider } from "../components/Divider";
+import { useViewport } from "../context/ViewportContext";
+import { Terminal, Shield, Database, Cpu, Layout, Radio } from "lucide-react";
 
 const AboutHeader: React.FC = () => (
   <div className="flex items-center justify-between h-row px-base">
     <div className="flex items-center gap-xs">
       <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
-        About Nakraku Stash
+        System Specification & Diagnostics
       </span>
       <Badge variant="active" size="sm">
-        v0.1.0-alpha
+        v0.1.0-RELEASE
       </Badge>
+    </div>
+    <div className="flex items-center gap-2xs font-mono text-2xs text-text-disabled">
+      <span className="w-1.5 h-1.5 rounded-full bg-accent-phosphor animate-pulse" />
+      <span>OS KERNEL ACTIVE</span>
     </div>
   </div>
 );
 
-interface TechItemProps {
+interface SpecMetricProps {
+  icon: React.ReactNode;
   label: string;
   value: string;
+  highlight?: boolean;
 }
 
-const TechItem: React.FC<TechItemProps> = ({ label, value }) => (
-  <div className="flex items-center justify-between p-xs bg-bg-surface border border-border-subtle rounded-sm font-mono text-2xs">
-    <span className="text-text-secondary">{label}</span>
-    <span className="text-text-primary font-medium">{value}</span>
+const SpecMetric: React.FC<SpecMetricProps> = ({ icon, label, value, highlight }) => (
+  <div className="flex items-center justify-between p-xs bg-bg-surface border border-border-hairline rounded-sm font-mono text-2xs tactical-border">
+    <div className="flex items-center gap-1.5 text-text-secondary">
+      {icon}
+      <span>{label}</span>
+    </div>
+    <span className={`font-semibold ${highlight ? "text-accent-phosphor" : "text-text-primary"}`}>
+      {value}
+    </span>
   </div>
 );
 
-const AppInfoCard: React.FC = () => (
-  <div className="p-base bg-bg-surface border border-border-subtle rounded-sm flex flex-col gap-xs">
+const TacticalHeroCard: React.FC = () => (
+  <div className="p-base bg-bg-surface border border-border-hairline rounded-sm flex flex-col gap-xs tactical-border">
     <div className="flex items-center justify-between">
       <div className="flex flex-col">
-        <span className="text-sm font-bold text-accent-emerald tracking-wide">
-          NAKRAKU STASH
+        <span className="text-sm font-bold text-accent-phosphor tracking-wider font-mono">
+          NAKRAKU STASH // TACTICAL UTILITY
         </span>
-        <span className="text-2xs text-text-secondary">
-          Open-Source High-Density Session Manager & RAM-Freeze Utility
+        <span className="text-2xs text-text-secondary font-mono">
+          Zero-Cloud Desktop Workspace Orchestration & RAM-Freeze Subsystem
         </span>
       </div>
       <Badge variant="neutral" size="sm">
-        MIT LICENSE
+        MIT PERMISSIVE
       </Badge>
     </div>
     <Divider spacing="xs" />
-    <p className="text-xs text-text-secondary leading-compact">
-      Built for developers and power users who keep hundreds of tabs and heavy IDE windows open.
-      Saves gigabytes of RAM by orchestrating OS-level freeze states and local WebSocket tab hibernation.
+    <p className="text-xs text-text-secondary leading-compact font-ui">
+      Engineered for extreme performance, high window density, and instant recovery.
+      Freeze memory-hungry IDEs, browsers, and terminals into local SQLite Write-Ahead Logging
+      storage, and atomically resurrect multi-monitor coordinates in milliseconds.
     </p>
   </div>
 );
 
-const DiagnosticsGrid: React.FC = () => (
+const DiagnosticsGrid: React.FC<{ isFullscreen: boolean }> = ({ isFullscreen }) => (
   <div className="flex flex-col gap-xs">
-    <Divider label="Runtime Diagnostics & Architecture" labelAlign="left" spacing="none" />
-    <div className="grid grid-cols-2 gap-xs">
-      <TechItem label="Framework Core" value="Tauri v2.12.4" />
-      <TechItem label="Engine Surface" value="Rust 1.99 + Win32 FFI" />
-      <TechItem label="UI Presentation" value="React 18.3 + TypeScript" />
-      <TechItem label="Database Engine" value="SQLite 3 (WAL Mode)" />
-      <TechItem label="Architecture Target" value="x86_64 Windows 10/11" />
-      <TechItem label="Memory Trim Engine" value="VirtualAlloc + WorkingSet" />
+    <Divider label="Native Architecture Invariants" labelAlign="left" spacing="none" />
+    <div className={`grid gap-xs ${isFullscreen ? "grid-cols-3" : "grid-cols-2"}`}>
+      <SpecMetric icon={<Terminal size={12} className="text-accent-phosphor" />} label="FFI Subsystem" value="Win32 windows-sys v0.59" highlight />
+      <SpecMetric icon={<Cpu size={12} className="text-accent-cyan" />} label="Desktop Engine" value="Rust 1.99 + Tauri v2.12" />
+      <SpecMetric icon={<Database size={12} className="text-accent-emerald" />} label="Local Storage" value="SQLite 3 (WAL + 256MB mmap)" />
+      <SpecMetric icon={<Radio size={12} className="text-status-warning" />} label="Extension Bridge" value="ws://127.0.0.1:48123" />
+      <SpecMetric icon={<Shield size={12} className="text-accent-phosphor" />} label="Offline Crypto" value="Ed25519 HWID-Keyring" highlight />
+      <SpecMetric icon={<Layout size={12} className="text-accent-cyan" />} label="Design System" value="Tactical Monolith (32px)" />
+    </div>
+  </div>
+);
+
+const ExternalLinksBar: React.FC = () => (
+  <div className="flex items-center justify-between p-sm bg-bg-surface border border-border-subtle rounded-sm font-mono text-2xs">
+    <div className="flex items-center gap-1.5 text-text-secondary">
+      <span className="w-1.5 h-1.5 rounded-full bg-accent-phosphor" />
+      <span>Clean Architecture • Zero AI Slop Invariant</span>
+    </div>
+    <div className="flex items-center gap-xs">
+      <Button
+        size="sm"
+        variant="secondary"
+        icon="info"
+        onClick={() => window.open("https://github.com/nakraku/stash", "_blank")}
+      >
+        Documentation
+      </Button>
+      <Button
+        size="sm"
+        variant="primary"
+        icon="window"
+        onClick={() => window.open("https://github.com/nakraku/stash", "_blank")}
+      >
+        GitHub Source
+      </Button>
     </div>
   </div>
 );
 
 export const AboutView: React.FC = () => {
+  const { mode } = useViewport();
+  const isFullscreen = mode === "fullscreen";
+
   return (
     <MainPanel header={<AboutHeader />}>
       <div className="p-base flex flex-col gap-md">
-        <AppInfoCard />
-        <DiagnosticsGrid />
-        <div className="flex items-center justify-between p-sm bg-bg-surface border border-border-subtle rounded-sm">
-          <span className="text-2xs text-text-secondary font-mono">
-            Designed with FigCraft MCP Vector Canvas
-          </span>
-          <div className="flex items-center gap-xs">
-            <Button size="sm" variant="secondary" icon="info">
-              Release Notes
-            </Button>
-            <Button size="sm" variant="primary" icon="window">
-              GitHub Repo
-            </Button>
-          </div>
-        </div>
+        <TacticalHeroCard />
+        <DiagnosticsGrid isFullscreen={isFullscreen} />
+        <ExternalLinksBar />
       </div>
     </MainPanel>
   );

@@ -26,6 +26,7 @@ import { useWsBridgeStatus } from "./hooks/useWsBridgeStatus";
 import { useAppErrorListener } from "./hooks/useAppErrorListener";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ToastProvider } from "./context/ToastContext";
+import { ViewportProvider, useViewport } from "./context/ViewportContext";
 import {
   createProcessMenuItems,
   type ProcessItem,
@@ -185,9 +186,32 @@ const createViewState = (
   onContextMenu: openContextMenu,
 });
 
+const AppShellMain: React.FC<{
+  currentRoute: AppRoute;
+  navigate: (r: AppRoute) => void;
+  isSidebarCollapsed: boolean;
+  toggleSidebar: () => void;
+  viewState: DashboardState;
+}> = ({ currentRoute, navigate, isSidebarCollapsed, toggleSidebar, viewState }) => (
+  <div className="flex flex-1 overflow-hidden">
+    <Sidebar
+      activeId={currentRoute}
+      collapsed={isSidebarCollapsed}
+      onToggleCollapse={toggleSidebar}
+      onSelect={(id) => navigate(id as AppRoute)}
+    />
+    <ErrorBoundary>
+      <React.Suspense fallback={<ViewLoadingSkeleton />}>
+        {renderActiveView(currentRoute, navigate, viewState)}
+      </React.Suspense>
+    </ErrorBoundary>
+  </div>
+);
+
 const AppShell: React.FC = () => {
   const { currentRoute, navigate } = useRouter();
   const s = useAppShellState(navigate);
+  const { mode: viewportMode, isSidebarCollapsed, toggleSidebar, setMode } = useViewport();
   const { connected: bridgeConnected, port: bridgePort } = useWsBridgeStatus();
   useAppErrorListener();
   const { position, data, open, close } = useContextMenu<ProcessItem>();
@@ -196,19 +220,23 @@ const AppShell: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen bg-bg-base text-text-primary font-ui overflow-hidden select-none">
-      <Titlebar badge="v0.1.0" />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar activeId={currentRoute} onSelect={(id) => navigate(id as AppRoute)} />
-        <ErrorBoundary>
-          <React.Suspense fallback={<ViewLoadingSkeleton />}>
-            {renderActiveView(currentRoute, navigate, viewState)}
-          </React.Suspense>
-        </ErrorBoundary>
-      </div>
+      <Titlebar
+        badge="v0.1.0"
+        viewportMode={viewportMode}
+        onViewportModeChange={setMode}
+      />
+      <AppShellMain
+        currentRoute={currentRoute}
+        navigate={navigate}
+        isSidebarCollapsed={isSidebarCollapsed}
+        toggleSidebar={toggleSidebar}
+        viewState={viewState}
+      />
       <StatusBar
         ramSaved="1.8 GB"
         bridgeConnected={bridgeConnected}
         bridgePort={bridgePort}
+        viewportMode={viewportMode}
       />
       <AppShellOverlays
         menuItems={menuItems}
@@ -229,7 +257,9 @@ const AppShell: React.FC = () => {
 export const App: React.FC = () => (
   <ToastProvider>
     <RouterProvider>
-      <AppShell />
+      <ViewportProvider>
+        <AppShell />
+      </ViewportProvider>
     </RouterProvider>
   </ToastProvider>
 );

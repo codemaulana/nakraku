@@ -76,6 +76,7 @@ The project utilizes specialized skills in `.agents/skills/`:
 * `context-memory-sync`: Synchronizes progress, session state, and known bugs into `docs/CONTEXT.md` and `docs/BUGS.md`.
 * `win32-desktop-engine`: Domain-specific guide for Tauri v2, Rust Win32 FFI, process memory, and local WebSocket IPC.
 * `high-density-design-system`: Specifications and tokens for high-density native desktop interfaces.
+* `unique-desktop-design-system`: Tactical monolith aesthetic, phosphor jade accents, bespoke typography, multi-viewport layout modes (fullscreen/standard/compact), and anti-slop refactoring engine.
 * `repo-hygiene-harness`: Automated pre-commit scripts, linters, and verification test harnesses.
 
 ---

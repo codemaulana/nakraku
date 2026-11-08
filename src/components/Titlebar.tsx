@@ -6,6 +6,8 @@ export interface TitlebarProps {
   badge?: string;
   vibrant?: boolean;
   isMaximized?: boolean;
+  viewportMode?: "compact" | "standard" | "fullscreen";
+  onViewportModeChange?: (mode: "compact" | "standard" | "fullscreen") => void;
   updateAvailable?: {
     version: string;
     onClick?: () => void;
@@ -99,11 +101,41 @@ const TitlebarBrand: React.FC<{
   </div>
 );
 
+const ViewportModeSelector: React.FC<{
+  mode?: "compact" | "standard" | "fullscreen";
+  onChange?: (mode: "compact" | "standard" | "fullscreen") => void;
+}> = ({ mode, onChange }) => {
+  if (!onChange) return null;
+  return (
+    <div className="flex items-center bg-bg-elevated/70 border border-border-hairline rounded-sm p-0.5 text-2xs font-mono select-none">
+      {(["compact", "standard", "fullscreen"] as const).map((m) => {
+        const active = mode === m;
+        return (
+          <button
+            key={m}
+            type="button"
+            onClick={() => onChange(m)}
+            className={`px-1.5 py-0.5 rounded-xs uppercase tracking-wider transition-colors ${
+              active
+                ? "bg-accent-emerald/20 text-accent-emerald font-semibold"
+                : "text-text-disabled hover:text-text-secondary"
+            }`}
+          >
+            {m === "fullscreen" ? "Full" : m}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
 export const Titlebar: React.FC<TitlebarProps> = ({
   title = "NAKRAKU STASH",
   badge,
   vibrant = true,
   isMaximized: controlledMaximized,
+  viewportMode,
+  onViewportModeChange,
   updateAvailable,
   onMinimize,
   onMaximize,
@@ -122,7 +154,9 @@ export const Titlebar: React.FC<TitlebarProps> = ({
       className={`flex items-center justify-between h-titlebar w-full border-b border-border-subtle select-none px-sm transition-colors ${bgStyle}`}
     >
       <TitlebarBrand title={title} badge={badge} updateAvailable={updateAvailable} />
-      <div data-tauri-drag-region className="flex-1 h-full" />
+      <div data-tauri-drag-region className="flex-1 h-full flex items-center justify-center">
+        <ViewportModeSelector mode={viewportMode} onChange={onViewportModeChange} />
+      </div>
       <WindowControls
         isMaximized={isMaximized}
         onMinimize={onMinimize ?? controls.minimize}

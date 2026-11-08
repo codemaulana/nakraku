@@ -470,3 +470,15 @@ Audit executed via `scripts/check-env.ps1`:
 - `[20.5]` Changelog section (`landing/index.html`: v0.1.0 initial public release notes highlighting Win32 engine, loopback bridge, 71.3% bundle optimization, and MSI/NSIS distribution) — **DONE**
 - `[20.6]` Download section (`landing/index.html`: direct download cards for NSIS `.exe`, Enterprise `.msi`, and MV3 extension `.zip`, complete with SHA-256 copy helpers and Windows 10/11 system requirements) — **DONE**
 - `[20.7]` Analytics (`landing/index.html` + `landing/main.js`: privacy-first, cookie-less Plausible analytics script with `data-domain="nakraku.app"` and client-side `isDoNotTrackEnabled()` compliance check, tested via `tests/landing.test.ts`) — **DONE**
+
+---
+
+## 26. Design System Refactor & Multi-Viewport Architecture (Tactical Monolith)
+- `[DS.1]` Author Tactical Monolith Design System Skill (`.agents/skills/unique-desktop-design-system/SKILL.md`: deep obsidian void `#07090D`, phosphor jade `#00F29E`, tactical cyan `#00E5FF`, Space Grotesk / Plus Jakarta Sans / JetBrains Mono typography hierarchy, anti-slop rules) — **DONE**
+- `[DS.2]` Register Skill (`AGENTS.md`: registered `unique-desktop-design-system` into Section 4 Skills Registry) — **DONE**
+- `[DS.3]` Responsive Viewport Context (`src/context/ViewportContext.tsx`: tracks `compact`, `standard`, and `fullscreen` viewports with user override and auto-sidebar collapse for compact mode) — **DONE**
+- `[DS.4]` Tactical Workstation Components (`src/components/dashboard/TacticalInspectorPanel.tsx`: dual-monitor spatial visualizer, live RAM utilization gauge, 1-click workspace dock) — **DONE**
+- `[DS.5]` UI Shell Refactor (`src/App.tsx`, `src/components/Titlebar.tsx`, `src/components/StatusBar.tsx`, `src/components/MainPanel.tsx`: 3-mode segmented control, live viewport badge, frameless window controls, flexible workstation dual-pane layout) — **DONE**
+- `[DS.6]` Views Refactor (`src/views/DashboardView.tsx`, `src/views/ActiveSessionView.tsx`, `src/views/AboutView.tsx`: tactical cards, display geometry inspector, native architectural invariant telemetry grid) — **DONE**
+- `[DS.7]` Design Tokens & Fonts (`src/styles/tokens.css`, `tailwind.config.ts`, `index.html`, `src-tauri/tauri.conf.json`: typography `@font-face` links, CSP whitelist for Google Fonts, tactical utility classes) — **DONE**
+- `[DS.8]` Verification & Build (`npm run lint`, `npm run check`, `npm run perf:gate`, `npm run test:all`, `npm run tauri:build:app`: 0 Oxlint warnings, 0 TS errors, 0 guardrail violations, 190 Vitest tests + 27 Rust tests passing, standalone release binary compiled) — **DONE**

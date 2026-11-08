@@ -54,8 +54,19 @@
   --warning: #F59E0B;
   --warning-muted: rgba(245, 158, 11, 0.15);
 
-  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-ui: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+
+  --accent-phosphor: #00F29E;
+  --accent-phosphor-hover: #05FFA1;
+  --accent-phosphor-glow: rgba(0, 242, 158, 0.25);
+  --accent-phosphor-muted: rgba(0, 242, 158, 0.12);
+  --accent-cyan: #06B6D4;
+  --accent-cyan-dim: rgba(6, 182, 212, 0.12);
+  --bg-void: #07090D;
+  --bg-card: #131822;
+  --border-hairline: #1B2230;
 
   --text-2xs: 10px;
   --text-xs: 11px;
@@ -181,4 +192,28 @@ code, kbd, samp, pre {
 .scrollarea-autohide:hover,
 .scrollarea-autohide.is-scrolling {
   scrollbar-color: var(--border-subtle) transparent;
+}
+
+.tactical-border {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tactical-border:hover {
+  border-color: rgba(0, 242, 158, 0.3);
+}
+
+.tactical-glow {
+  box-shadow: 0 0 14px rgba(0, 242, 158, 0.12);
+}
+
+.tactical-grid {
+  background-image: radial-gradient(rgba(27, 34, 48, 0.4) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "zero";
 }

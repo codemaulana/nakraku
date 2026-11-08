@@ -14,6 +14,8 @@ import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Badge } from "../components/Badge";
 import { useLiveDashboard, type UseLiveDashboardReturn } from "../hooks/useLiveDashboard";
+import { useViewport } from "../context/ViewportContext";
+import { TacticalInspectorPanel } from "../components/dashboard/TacticalInspectorPanel";
 import type { RawWindow } from "../lib/schemas";
 
 export interface DashboardViewProps {
@@ -158,6 +160,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onContextMenu,
 }) => {
   const d = useLiveDashboard();
+  const { mode: viewportMode } = useViewport();
 
   const estimatedRam = useMemo(() => {
     return d.windows
@@ -169,8 +172,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     return new Set(d.windows.map((w) => w.process_name)).size;
   }, [d.windows]);
 
+  const isFullscreen = viewportMode === "fullscreen";
+
   return (
-    <MainPanel header={<DashboardHeader windowCount={d.windows.length} isLoading={d.isLoading} />}>
+    <MainPanel
+      header={<DashboardHeader windowCount={d.windows.length} isLoading={d.isLoading} />}
+      aside={
+        isFullscreen ? (
+          <TacticalInspectorPanel
+            windows={d.windows}
+            memoryStats={d.memoryStats}
+            selectedCount={d.selectedHwnds.size}
+            onQuickStashWorkspace={() => d.executeStash()}
+          />
+        ) : undefined
+      }
+    >
       <DashboardBody
         d={d}
         estimatedRam={estimatedRam}

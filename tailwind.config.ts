@@ -28,6 +28,12 @@ const config: Config = {
         emerald: "var(--accent-emerald)",
         "emerald-hover": "var(--accent-emerald-hover)",
         "emerald-muted": "var(--accent-emerald-muted)",
+        phosphor: "var(--accent-phosphor)",
+        "phosphor-hover": "var(--accent-phosphor-hover)",
+        "phosphor-glow": "var(--accent-phosphor-glow)",
+        "phosphor-muted": "var(--accent-phosphor-muted)",
+        cyan: "var(--accent-cyan)",
+        "cyan-dim": "var(--accent-cyan-dim)",
       },
       text: {
         primary: "var(--text-primary)",
@@ -56,6 +62,7 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
+        display: ["var(--font-display)"],
         ui: ["var(--font-ui)"],
         mono: ["var(--font-mono)"],
       },
