@@ -2,6 +2,7 @@ pub mod commands;
 pub mod error;
 pub mod events;
 pub mod filter;
+pub mod icon;
 pub mod process_info;
 pub mod process_launch;
 pub mod types;

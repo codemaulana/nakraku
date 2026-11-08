@@ -5,6 +5,7 @@ import { Button } from "../components/Button";
 import { Row } from "../components/Row";
 import { Divider } from "../components/Divider";
 import { Tooltip } from "../components/Tooltip";
+import { AppIcon } from "../components/AppIcon";
 import { useViewport } from "../context/ViewportContext";
 import { Activity, Clock, ShieldCheck, Monitor } from "lucide-react";
 
@@ -52,9 +53,9 @@ const ActiveSessionHeader: React.FC<{
   onSnapshot: () => void;
   onRestoreAll: () => void;
 }> = ({ processCount, onSnapshot, onRestoreAll }) => (
-  <div className="flex items-center justify-between h-row px-base">
-    <div className="flex items-center gap-xs">
-      <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
+  <div className="flex items-center justify-between h-row px-base bg-bg-surface/90 border-b border-border-hairline">
+    <div className="flex items-center gap-2">
+      <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono font-display">
         Active Session Orchestration
       </span>
       <Badge variant="active" dot pulse size="sm">
@@ -77,12 +78,12 @@ const ActiveSessionHeader: React.FC<{
 );
 
 const SessionStatsCard: React.FC = () => (
-  <div className="p-xs bg-bg-surface border border-border-hairline rounded-sm flex items-center justify-between text-2xs text-text-secondary font-mono tactical-border">
+  <div className="p-3 bg-bg-surface/90 border border-border-hairline rounded-sm flex items-center justify-between text-2xs text-text-secondary font-mono tactical-border shadow-sm">
     <span className="flex items-center gap-1.5">
-      <Clock size={12} className="text-accent-phosphor" />
+      <Clock size={12} className="text-emerald-400" />
       <span>Session Uptime: 03:42:15</span>
     </span>
-    <span className="text-accent-phosphor font-semibold flex items-center gap-1">
+    <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
       <Activity size={12} />
       <span>Active RAM Frozen: 1.09 GB</span>
     </span>
@@ -97,16 +98,36 @@ const SessionWindowRow: React.FC<{
   <Row
     key={proc.hwnd}
     size="md"
-    icon={<span className="font-mono text-2xs text-text-disabled">{proc.hwnd}</span>}
-    label={proc.title}
-    description={`${proc.name} • ${proc.hwnd}`}
+    icon={
+      <AppIcon
+        processName={proc.name}
+        title={proc.title}
+        size="sm"
+      />
+    }
+    label={
+      <span className="truncate text-text-primary font-medium tracking-tight">
+        {proc.title}
+      </span>
+    }
+    description={
+      <span className="font-mono text-3xs text-text-disabled flex items-center gap-1.5">
+        <span className="text-text-secondary font-semibold">{proc.name}</span>
+        <span>•</span>
+        <span className="px-1 py-0.2 rounded-2xs bg-bg-elevated border border-border-hairline text-accent-cyan font-mono text-3xs">
+          {proc.hwnd}
+        </span>
+      </span>
+    }
     meta={
-      <div className="flex items-center gap-xs font-mono">
-        <span className="text-2xs text-text-secondary">{proc.ramUsage}</span>
+      <div className="flex items-center gap-2 font-mono">
+        <span className="text-2xs font-mono px-1.5 py-0.5 rounded-xs bg-bg-elevated border border-border-hairline text-text-primary font-semibold tabular-nums">
+          {proc.ramUsage}
+        </span>
         <button
           type="button"
           onClick={() => onToggleStatus(proc.hwnd)}
-          className="cursor-pointer"
+          className="cursor-pointer transition-transform active:scale-95"
         >
           <Badge
             variant={proc.status === "frozen" ? "frozen" : "active"}
@@ -122,48 +143,50 @@ const SessionWindowRow: React.FC<{
 );
 
 const SessionAsideInspector: React.FC<{ windows: SessionProcess[] }> = ({ windows }) => (
-  <aside className="w-80 shrink-0 border-l border-border-subtle bg-bg-surface/50 p-sm flex flex-col gap-sm font-mono text-2xs select-none">
-    <div className="flex items-center justify-between pb-xs border-b border-border-subtle uppercase tracking-wider text-text-secondary">
-      <span className="font-semibold text-text-primary">Topology Inspector</span>
+  <aside className="w-80 shrink-0 border-l border-border-hairline bg-bg-surface/60 backdrop-blur-md p-sm flex flex-col gap-sm font-mono text-2xs select-none">
+    <div className="flex items-center justify-between pb-xs border-b border-border-hairline uppercase tracking-wider text-text-secondary">
+      <span className="font-bold text-text-primary font-display">Topology Inspector</span>
       <Badge variant="neutral" size="sm">
         Display Clamped
       </Badge>
     </div>
 
-    <div className="flex flex-col gap-xs p-xs bg-bg-surface border border-border-hairline rounded-sm tactical-border">
-      <span className="text-text-disabled flex items-center gap-1">
-        <Monitor size={12} className="text-accent-phosphor" />
-        <span>Multi-Monitor Coordinate Alignment</span>
+    <div className="flex flex-col gap-xs p-3 bg-bg-surface border border-border-hairline rounded-sm tactical-border shadow-xs">
+      <span className="text-text-disabled flex items-center gap-1.5 font-semibold">
+        <Monitor size={12} className="text-emerald-400" />
+        <span>Multi-Monitor Alignment</span>
       </span>
-      <div className="grid grid-cols-2 gap-xs pt-1">
-        <div className="p-xs bg-bg-elevated/70 border border-border-hairline rounded-xs flex flex-col">
-          <span className="text-text-disabled text-[10px]">Primary Screen</span>
-          <span className="text-text-primary font-semibold">1920 × 1080 (0,0)</span>
+      <div className="grid grid-cols-2 gap-xs pt-1.5">
+        <div className="p-2 bg-bg-elevated/70 border border-emerald-500/20 rounded-xs flex flex-col gap-0.5">
+          <span className="text-text-disabled text-[10px] uppercase font-bold">Display 1</span>
+          <span className="text-text-primary font-semibold text-xs">1920 × 1080</span>
+          <span className="text-accent-emerald text-[9px]">(0, 0) Primary</span>
         </div>
-        <div className="p-xs bg-bg-elevated/70 border border-border-hairline rounded-xs flex flex-col">
-          <span className="text-text-disabled text-[10px]">Secondary Screen</span>
-          <span className="text-text-primary font-semibold">1920 × 1080 (+1920)</span>
+        <div className="p-2 bg-bg-elevated/70 border border-border-hairline rounded-xs flex flex-col gap-0.5">
+          <span className="text-text-disabled text-[10px] uppercase font-bold">Display 2</span>
+          <span className="text-text-primary font-semibold text-xs">1920 × 1080</span>
+          <span className="text-text-disabled text-[9px]">(+1920, 0) Extended</span>
         </div>
       </div>
     </div>
 
-    <div className="flex flex-col gap-xs p-xs bg-bg-surface border border-border-hairline rounded-sm tactical-border">
-      <span className="text-text-disabled flex items-center gap-1">
-        <ShieldCheck size={12} className="text-accent-emerald" />
+    <div className="flex flex-col gap-xs p-3 bg-bg-surface border border-border-hairline rounded-sm tactical-border shadow-xs">
+      <span className="text-text-disabled flex items-center gap-1.5 font-semibold">
+        <ShieldCheck size={12} className="text-emerald-400" />
         <span>Subsystem Status</span>
       </span>
-      <div className="flex flex-col gap-1 text-[11px] pt-1">
-        <div className="flex justify-between">
+      <div className="flex flex-col gap-1.5 text-[11px] pt-1">
+        <div className="flex justify-between items-center">
           <span className="text-text-secondary">Hook Listener:</span>
-          <span className="text-accent-phosphor">SetWinEventHook (Live)</span>
+          <span className="text-emerald-400 font-semibold">SetWinEventHook (Live)</span>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <span className="text-text-secondary">Tracked HWNDs:</span>
-          <span className="text-text-primary font-semibold">{windows.length}</span>
+          <span className="text-text-primary font-semibold font-mono">{windows.length}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <span className="text-text-secondary">Auto-Prune:</span>
-          <span className="text-text-disabled">30m Bounded</span>
+          <span className="text-text-disabled font-mono">30m Bounded</span>
         </div>
       </div>
     </div>
@@ -197,7 +220,7 @@ export const ActiveSessionView: React.FC = () => {
       <div className="p-base flex flex-col gap-sm">
         <SessionStatsCard />
         <Divider label="Active Window Hierarchy & Coordinates" labelAlign="left" spacing="none" />
-        <div className="border border-border-hairline rounded-sm bg-bg-surface overflow-hidden tactical-border">
+        <div className="border border-border-hairline rounded-sm bg-bg-surface/90 overflow-hidden tactical-border shadow-sm">
           {windows.map((proc) => (
             <SessionWindowRow
               key={proc.hwnd}

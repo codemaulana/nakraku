@@ -28,9 +28,9 @@ const DashboardHeader: React.FC<{ windowCount: number; isLoading: boolean }> = (
   windowCount,
   isLoading,
 }) => (
-  <div className="flex items-center justify-between h-row px-base">
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
+  <div className="flex items-center justify-between h-row px-base bg-bg-surface/90 border-b border-border-hairline">
+    <div className="flex items-center gap-2 font-mono">
+      <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-display">
         Dashboard & Live View
       </span>
       <Badge variant="neutral" size="sm">
@@ -48,7 +48,7 @@ const DashboardControls: React.FC<{
   estimatedRam: number;
   uniqueProcesses: number;
 }> = ({ d, estimatedRam, uniqueProcesses }) => (
-  <div className="flex items-center justify-between gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
+  <div className="flex items-center justify-between gap-xs p-2.5 bg-bg-surface/90 border border-border-hairline rounded-sm tactical-border shadow-xs">
     <div className="flex items-center gap-2">
       <StashButton
         windowCount={d.selectedHwnds.size}

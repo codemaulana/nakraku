@@ -13,6 +13,8 @@ const EXCLUDED_CLASSES: &[&str] = &[
     "#32768",
     "IME",
     "Windows.UI.Core.CoreWindow",
+    "CEF-OSC-WIDGET",
+    "NVIDIA GeForce Overlay DT",
 ];
 
 const EXCLUDED_PROCESSES: &[&str] = &[
@@ -23,6 +25,12 @@ const EXCLUDED_PROCESSES: &[&str] = &[
     "lockapp.exe",
     "systemsettings.exe",
     "applicationframehost.exe",
+    "nvidia overlay.exe",
+    "nvcontainer.exe",
+    "nvspcaps64.exe",
+    "geforceexperience.exe",
+    "geforceshare.exe",
+    "discordhookhelper64.exe",
 ];
 
 pub fn is_cloaked(hwnd: HWND) -> bool {

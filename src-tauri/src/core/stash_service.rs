@@ -144,6 +144,7 @@ pub fn restore_workspace(
                     ram_bytes: w.ram_bytes as u64,
                     is_elevated: false,
                     z_order: w.z_order,
+                    icon_base64: None,
                 }
             })
             .collect();

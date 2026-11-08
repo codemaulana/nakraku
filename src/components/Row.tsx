@@ -92,7 +92,7 @@ const RowContent: React.FC<RowContentProps> = ({
   return (
     <>
       {icon && (
-        <div className="flex items-center justify-center shrink-0 w-4 h-4 text-text-secondary group-hover:text-text-primary">
+        <div className="flex items-center justify-center shrink-0 min-w-4 text-text-secondary group-hover:text-text-primary">
           {icon}
         </div>
       )}

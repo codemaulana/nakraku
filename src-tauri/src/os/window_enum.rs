@@ -92,6 +92,8 @@ unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL 
 
     let (is_minimized, is_maximized) = get_window_state(hwnd);
 
+    let icon_base64 = super::icon::get_window_icon(hwnd, proc_info.exe_path.as_deref());
+
     ctx.current_z_order += 1;
     ctx.windows.push(RawWindow {
         hwnd: format!("{:#x}", hwnd as usize),
@@ -108,6 +110,7 @@ unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL 
         ram_bytes: proc_info.ram_bytes,
         is_elevated: proc_info.is_elevated,
         z_order: ctx.current_z_order,
+        icon_base64,
     });
 
     1

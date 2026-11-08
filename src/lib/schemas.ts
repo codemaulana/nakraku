@@ -124,6 +124,7 @@ export const RawWindowSchema = z.object({
   ram_bytes: z.number().int(),
   is_elevated: z.boolean(),
   z_order: z.number().int(),
+  icon_base64: z.string().nullable().optional(),
 });
 
 export const ProcessInfoSchema = z.object({

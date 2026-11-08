@@ -1,10 +1,9 @@
 import React, { useMemo } from "react";
 import { useVirtualList } from "../hooks/useVirtualList";
 import { Row } from "./Row";
-import { Icon } from "./Icon";
 import { Badge } from "./Badge";
+import { AppIcon } from "./AppIcon";
 import { formatBytes } from "./MemoryMeter";
-import { resolveProcessIcon } from "../lib/processIcons";
 import type { RawWindow } from "../lib/schemas";
 
 export type WindowSortOption = "memory" | "title" | "process" | "zorder";
@@ -57,7 +56,7 @@ const WindowListHeader: React.FC<{
   onToggleSelectAll,
   onSortChange,
 }) => (
-  <div className="flex items-center justify-between px-base py-1 bg-bg-surface border-b border-border-subtle text-3xs font-mono uppercase text-text-secondary select-none">
+  <div className="flex items-center justify-between px-base py-1.5 bg-bg-surface/90 border-b border-border-hairline text-3xs font-mono uppercase text-text-secondary select-none">
     <div className="flex items-center gap-2">
       <input
         type="checkbox"
@@ -66,26 +65,26 @@ const WindowListHeader: React.FC<{
           if (el) el.indeterminate = someSelected && !allSelected;
         }}
         onChange={onToggleSelectAll}
-        className="w-3.5 h-3.5 rounded bg-bg-base border-border-subtle accent-accent-emerald cursor-pointer"
+        className="w-3.5 h-3.5 rounded-2xs bg-bg-base border-border-hairline accent-emerald-400 cursor-pointer"
         aria-label="Select all windows"
       />
-      <span>
+      <span className="font-bold tracking-wider text-text-primary">
         {selectedCount}/{totalCount} SELECTED
       </span>
     </div>
 
-    <div className="flex items-center gap-2">
-      <span>Sort:</span>
+    <div className="flex items-center gap-1.5">
+      <span className="text-text-disabled uppercase">Sort:</span>
       {(["memory", "title", "process", "zorder"] as WindowSortOption[]).map(
         (opt) => (
           <button
             key={opt}
             type="button"
             onClick={() => onSortChange(opt)}
-            className={`px-1.5 py-0.5 rounded ${
+            className={`px-2 py-0.5 rounded-xs transition-colors ${
               sortBy === opt
-                ? "bg-bg-elevated text-accent-emerald font-semibold"
-                : "hover:text-text-primary text-text-disabled"
+                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold"
+                : "text-text-disabled hover:text-text-secondary border border-transparent"
             }`}
           >
             {opt}
@@ -96,30 +95,31 @@ const WindowListHeader: React.FC<{
   </div>
 );
 
-const WindowRowIcon: React.FC<{
+const WindowRowControls: React.FC<{
   win: RawWindow;
   isChecked: boolean;
   onToggle: () => void;
 }> = ({ win, isChecked, onToggle }) => (
-  <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2.5 shrink-0">
     <input
       type="checkbox"
       checked={isChecked}
       onChange={onToggle}
       onClick={(e) => e.stopPropagation()}
-      className="w-3.5 h-3.5 rounded bg-bg-base border-border-subtle accent-accent-emerald cursor-pointer"
+      className="w-3.5 h-3.5 rounded-2xs bg-bg-surface border-border-hairline accent-emerald-400 cursor-pointer"
       aria-label={`Select window ${win.title}`}
     />
-    <Icon
-      name={resolveProcessIcon(win.process_name)}
+    <AppIcon
+      iconBase64={win.icon_base64}
+      processName={win.process_name}
+      title={win.title}
       size="sm"
-      className="text-text-secondary"
     />
   </div>
 );
 
 const WindowRowMeta: React.FC<{ win: RawWindow }> = ({ win }) => (
-  <div className="flex items-center gap-1.5 font-mono">
+  <div className="flex items-center gap-2 font-mono">
     {win.is_elevated && (
       <Badge variant="warning" size="sm">
         ADMIN
@@ -130,7 +130,7 @@ const WindowRowMeta: React.FC<{ win: RawWindow }> = ({ win }) => (
         MIN
       </Badge>
     )}
-    <span className="text-2xs text-text-secondary font-mono">
+    <span className="text-2xs font-mono px-1.5 py-0.5 rounded-xs bg-bg-surface border border-border-hairline text-emerald-400 font-semibold tabular-nums">
       {formatBytes(win.ram_bytes)}
     </span>
   </div>
@@ -150,20 +150,22 @@ const LiveWindowRow = React.memo<{
     onClick={() => onToggle(win.hwnd)}
     onContextMenu={(e) => onContextMenu?.(e, win)}
     icon={
-      <WindowRowIcon
+      <WindowRowControls
         win={win}
         isChecked={isChecked}
         onToggle={() => onToggle(win.hwnd)}
       />
     }
     label={
-      <span className="truncate text-text-primary font-medium">
+      <span className="truncate text-text-primary font-medium tracking-tight">
         {win.title}
       </span>
     }
     description={
-      <span className="font-mono text-3xs text-text-disabled">
-        {win.process_name} • PID:{win.process_id}
+      <span className="font-mono text-3xs text-text-disabled flex items-center gap-1.5">
+        <span className="text-text-secondary">{win.process_name}</span>
+        <span>•</span>
+        <span>PID:{win.process_id}</span>
       </span>
     }
     meta={<WindowRowMeta win={win} />}

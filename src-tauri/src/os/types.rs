@@ -24,6 +24,7 @@ pub struct RawWindow {
     pub ram_bytes: u64,
     pub is_elevated: bool,
     pub z_order: i32,
+    pub icon_base64: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -65,6 +65,7 @@ mod tests {
             ram_bytes: 1000000,
             is_elevated: false,
             z_order: 1,
+            icon_base64: None,
         }
     }
 
