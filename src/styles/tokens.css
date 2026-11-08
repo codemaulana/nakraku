@@ -21,7 +21,7 @@
   --border-color-subtle: #1F2633;
   --border-color-muted: #151A23;
   --border-color-focus: #10B981;
-  --border-color-danger: #EF4444;
+  --border-color-danger: #F87171;
   --border-color-warning: #F59E0B;
 
   --radius-none: 0;
@@ -37,20 +37,20 @@
 
   --text-primary: #F3F4F6;
   --text-secondary: #9CA3AF;
-  --text-disabled: #4B5563;
+  --text-disabled: #7E8B9B;
   --text-mono: #E5E7EB;
 
   --status-active: #10B981;
   --status-active-muted: rgba(16, 185, 129, 0.15);
-  --status-frozen: #3B82F6;
-  --status-frozen-muted: rgba(59, 130, 246, 0.15);
+  --status-frozen: #60A5FA;
+  --status-frozen-muted: rgba(96, 165, 250, 0.15);
   --status-warning: #F59E0B;
   --status-warning-muted: rgba(245, 158, 11, 0.15);
-  --status-danger: #EF4444;
-  --status-danger-muted: rgba(239, 68, 68, 0.15);
+  --status-danger: #F87171;
+  --status-danger-muted: rgba(248, 113, 113, 0.15);
 
-  --danger: #EF4444;
-  --danger-muted: rgba(239, 68, 68, 0.15);
+  --danger: #F87171;
+  --danger-muted: rgba(248, 113, 113, 0.15);
   --warning: #F59E0B;
   --warning-muted: rgba(245, 158, 11, 0.15);
 

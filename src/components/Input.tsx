@@ -95,7 +95,7 @@ const InputTrailingSlots: React.FC<TrailingSlotsProps> = ({
         type="button"
         onClick={onClear}
         aria-label="Clear input"
-        className="p-0.5 rounded-xs text-text-disabled hover:text-text-primary hover:bg-bg-hover transition-colors shrink-0"
+        className="p-0.5 rounded-xs text-text-disabled hover:text-text-primary hover:bg-bg-hover transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald"
       >
         <Icon name="close" size={11} />
       </button>

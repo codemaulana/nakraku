@@ -83,7 +83,7 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({
       type="button"
       onClick={onClose}
       aria-label="Close dialog"
-      className="p-1 rounded-xs text-text-disabled hover:text-text-primary hover:bg-bg-hover transition-colors shrink-0"
+      className="p-1 rounded-xs text-text-disabled hover:text-text-primary hover:bg-bg-hover transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald"
     >
       <Icon name="close" size={13} />
     </button>

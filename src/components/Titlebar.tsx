@@ -28,7 +28,7 @@ const WindowControls: React.FC<WindowControlsProps> = ({
     <button
       type="button"
       onClick={onMinimize}
-      className="flex items-center justify-center w-[44px] h-full text-text-secondary hover:text-text-primary hover:bg-bg-hover active:bg-bg-active transition-colors"
+      className="flex items-center justify-center w-[44px] h-full text-text-secondary hover:text-text-primary hover:bg-bg-hover active:bg-bg-active transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald focus-visible:z-10"
       aria-label="Minimize Window"
     >
       <svg width="10" height="1" viewBox="0 0 10 1" fill="none">
@@ -39,7 +39,7 @@ const WindowControls: React.FC<WindowControlsProps> = ({
     <button
       type="button"
       onClick={onMaximize}
-      className="flex items-center justify-center w-[44px] h-full text-text-secondary hover:text-text-primary hover:bg-bg-hover active:bg-bg-active transition-colors"
+      className="flex items-center justify-center w-[44px] h-full text-text-secondary hover:text-text-primary hover:bg-bg-hover active:bg-bg-active transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald focus-visible:z-10"
       aria-label={isMaximized ? "Restore Window" : "Maximize Window"}
     >
       {isMaximized ? (
@@ -56,7 +56,7 @@ const WindowControls: React.FC<WindowControlsProps> = ({
     <button
       type="button"
       onClick={onClose}
-      className="flex items-center justify-center w-[46px] h-full text-text-secondary hover:text-text-primary hover:bg-status-danger active:bg-[#DC2626] transition-colors"
+      className="flex items-center justify-center w-[46px] h-full text-text-secondary hover:text-text-primary hover:bg-status-danger active:bg-[#DC2626] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald focus-visible:z-10"
       aria-label="Close Window"
     >
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">

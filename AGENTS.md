@@ -42,7 +42,8 @@
   * **Task 2.23: Build `Divider` component** — **100% COMPLETE** (Authored `src/components/Divider.tsx` 1px horizontal and vertical separator respecting `--border-subtle`, variants `subtle`/`muted`/`accent`/`danger`, spacing scales, and horizontal labeled dividers; integrated into `ContextMenu.tsx` and `App.tsx`)
   * **Task 2.24: Build `ScrollArea` component** — **100% COMPLETE** (Authored `src/components/ScrollArea.tsx` custom 4px/6px thin scrollbar with idle auto-hiding hook `useScrollIdle`, integrated into `MainPanel.tsx`, `Sidebar.tsx`, `Modal.tsx`, and `App.tsx`)
   * **Task 2.25: Write Storybook / component gallery (dev-only)** — **100% COMPLETE** (Authored `src/dev/Gallery.tsx` and modular sections `AtomicsSection.tsx`, `InputsSection.tsx`, `LayoutsSection.tsx`, wired into `Sidebar.tsx` and `App.tsx`)
-* **Next Immediate Task**: Task 2.26 — Accessibility audit — components (WCAG 2.1 AA: contrast ratios ≥ 4.5:1 on all text, focus visible on all interactive elements)
+  * **Task 2.26: Accessibility audit — components** — **100% COMPLETE** (Authored `scripts/a11y-audit.mjs` verifying 32/32 token pairings ≥ 4.5:1, updated tokens for danger/disabled/frozen text contrast, and audited visible emerald focus rings across all interactive components)
+* **Next Immediate Task**: Task 2.27 — Keyboard navigation audit — components (Tab order correct, all interactions reachable by keyboard alone)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

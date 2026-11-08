@@ -53,7 +53,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   const Icon = item.icon;
 
   const baseStyle =
-    "flex items-center h-row w-full rounded-sm text-xs transition-colors select-none";
+    "flex items-center h-row w-full rounded-sm text-xs transition-colors select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald";
   const stateStyle = isActive
     ? "bg-accent-emerald-muted text-accent-emerald font-medium"
     : "text-text-secondary hover:text-text-primary hover:bg-bg-hover";
@@ -123,7 +123,7 @@ const SidebarFooter: React.FC<SidebarFooterProps> = ({ collapsed, onToggle }) =>
     <button
       type="button"
       onClick={onToggle}
-      className="flex items-center justify-center h-row w-full rounded-sm text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-colors"
+      className="flex items-center justify-center h-row w-full rounded-sm text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-emerald"
       aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
     >
       {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
