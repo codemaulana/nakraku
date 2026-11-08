@@ -130,4 +130,10 @@ Audit executed via `scripts/check-env.ps1`:
 - `[1.7]` Workspace Cards & Quick Switcher (designed 900x600 Workspaces view frame at x:2000, 3 x 42px workspace rows, drag handles, color tags, Free Tier 3/3 banner, verified 2800x600 PNG render) — **DONE**
 - `[1.8]` Command Palette (Ctrl+K) Overlay (designed 900x600 dim overlay frame at x:100,y:750 with 560px modal, search input, active windows fuzzy list, workspaces, and system action accelerators, verified 2800x1250 PNG render) — **DONE**
 - `[1.9]` Settings & Danger Zone Frames (designed 900x600 Settings frame at x:1050,y:750 with 200px sidebar, General startup toggles, MV3 WebSocket loopback card, Ed25519 license activation with hardware machine ID, auto-snapshot interval and global hotkey, and isolated Danger Zone card with red #EF4444 destructive actions) — **DONE**
-- `[1.10]` Render PNG Visual Review & Code-Connect (export canvas PNG to `docs/previews/` & map nodes) — **NEXT**
+- `[1.10]` Render PNG Visual Review & Code-Connect — **SKIPPED** (Bypassed per user directive to build directly in React design system)
+
+---
+
+## 7. Phase 2 Task Log (React Design System & Component Library)
+- `[2.1]` Define design tokens — color palette (`src/styles/tokens.css`: `--bg-base`, `--bg-surface`, `--bg-elevated`, `--bg-hover`, `--border-subtle`, `--accent-emerald`, text hierarchy, status indicators, imported in `src/main.tsx`) — **DONE**
+- `[2.2]` Define design tokens — typography (`--font-mono`, `--font-ui`, `--text-xs` through `--text-base`, `--leading-compact`) — **NEXT**

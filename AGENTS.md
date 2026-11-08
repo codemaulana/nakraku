@@ -13,19 +13,12 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 1 — FigCraft UI/UX Design & Vibe Coding (MCP)
+* **Active Phase**: Phase 2 — React Design System & Component Library
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
-  * **Task 1.1: FigCraft MCP & CLI bridge setup** — **100% COMPLETE** (Verified live MCP connection in IDE, set page background to `#080A0E`, synchronized with `NakrakuUI.figcraft`, CLI verified via `figcraft-cli info`)
-  * **Task 1.2: Design Tokens in FigCraft** — **100% COMPLETE** (Populated 28 variables: 16 Obsidian colors, 12 spacing/metrics; 24 styles: 8 typography, 16 paints in `NakrakuUI.figcraft`)
-  * **Task 1.3: Canvas Artboard & 38px Titlebar** — **100% COMPLETE** (Created 900x600 Desktop Window frame, 38px frameless titlebar with window controls, verified PNG render)
-  * **Task 1.4: Sidebar Navigation Frame** — **100% COMPLETE** (Designed 200px collapsible sidebar with 32px nav rows, badges, RAM freeze telemetry, verified PNG render)
-  * **Task 1.5: Dashboard & Live Window Table** — **100% COMPLETE** (Designed 32px row window list, PID/RAM monospace metrics, RAM meter bar, 28px Stash CTA, verified PNG render)
-  * **Task 1.6: Spatial Monitor Minimap** — **100% COMPLETE** (Designed multi-display layout visualizer with 2 monitors, live window boxes, HWND coordinate inspector, verified 1850x600 PNG render)
-  * **Task 1.7: Workspace Cards & Quick Switcher** — **100% COMPLETE** (Designed 900x600 Workspaces view frame at x:2000, 3 x 42px workspace rows, drag handles, color tags, Free Tier 3/3 banner, verified 2800x600 PNG render)
-  * **Task 1.8: Command Palette (Ctrl+K) Overlay** — **100% COMPLETE** (Designed 900x600 dim overlay frame at x:100,y:750 with 560px modal, search input, active windows fuzzy list, workspaces, and system action accelerators, verified 2800x1250 PNG render)
-  * **Task 1.9: Settings & Danger Zone Frames** — **100% COMPLETE** (Designed 900x600 Settings frame at x:1050,y:750 with 200px sidebar, General startup toggles, MV3 WebSocket loopback card, Ed25519 license activation with hardware machine ID, auto-snapshot interval and global hotkey, and isolated Danger Zone card with red #EF4444 destructive actions, verified 2800x1250 PNG render)
-* **Next Immediate Task**: Task 1.10 — Render PNG Visual Review & Code-Connect (export canvas PNG to `docs/previews/` & map nodes)
+  * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
+  * **Task 2.1: Define design tokens — color palette** — **100% COMPLETE** (Authored `src/styles/tokens.css` with Obsidian dark palette: `--bg-base`, `--bg-surface`, `--bg-elevated`, `--bg-hover`, `--border-subtle`, `--accent-emerald`, text hierarchy, and status indicators; imported in `src/main.tsx`, verified with build & guardrails)
+* **Next Immediate Task**: Task 2.2 — Define design tokens — typography (`--font-mono`, `--font-ui`, `--text-xs` through `--text-base`, `--leading-compact`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
