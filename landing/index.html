@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nakraku Stash — High-Density Window Stashing Engine for Windows</title>
+  <meta name="description" content="Ultra-compact, high-density desktop workspace & window stashing engine for Windows 10/11. Built with Tauri v2, Rust, and React 19. Freeze workspaces in 145ms.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2310B981'/><text x='8' y='22' font-family='monospace' font-weight='bold' font-size='18' fill='%23080A0E'>N</text></svg>">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Plausible Analytics (Privacy-First, Cookie-less, Respects DNT) -->
+  <script defer data-domain="nakraku.app" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="#" class="brand-logo">
+        <span class="logo-icon">N</span>
+        <span class="brand-name">NAKRAKU STASH</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#changelog">Changelog</a>
+        <a href="#download" class="nav-cta">Download v0.1.0</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="version-pill">
+        <span class="pill-dot"></span>
+        <span>v0.1.0 Released — Windows 10 & 11 (x64)</span>
+      </div>
+      <h1 class="hero-title">Freeze Cluttered Workspaces.<br><span class="text-emerald">Reclaim RAM. Restore in Milliseconds.</span></h1>
+      <p class="hero-subtitle">
+        Nakraku Stash is an ultra-compact, high-density desktop window stashing utility for Windows.
+        Snapshot running application coordinates and browser tabs with one hotkey. Restore pixel-perfect layouts instantly.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#download" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Installer (.exe)
+        </a>
+        <a href="https://github.com/nakraku/stash" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Source (GitHub)
+        </a>
+      </div>
+
+      <!-- Live Performance Ticker -->
+      <div class="metrics-ticker">
+        <div class="ticker-item"><span class="ticker-val">145 ms</span> Stash Latency</div>
+        <div class="ticker-sep">/</div>
+        <div class="ticker-item"><span class="ticker-val">418 ms</span> Restore Time</div>
+        <div class="ticker-sep">/</div>
+        <div class="ticker-item"><span class="ticker-val">113.8 kB</span> Core JS Bundle</div>
+        <div class="ticker-sep">/</div>
+        <div class="ticker-item"><span class="ticker-val">22 MB</span> Native Idle RAM</div>
+        <div class="ticker-sep">/</div>
+        <div class="ticker-item"><span class="ticker-val">0</span> Cloud Telemetry</div>
+      </div>
+
+      <!-- Hero Demo Preview (Animated SVG) -->
+      <div class="hero-preview-frame">
+        <div class="preview-titlebar">
+          <div class="titlebar-dots">
+            <span class="dot dot-close"></span>
+            <span class="dot dot-min"></span>
+            <span class="dot dot-max"></span>
+          </div>
+          <span class="preview-title">Nakraku Stash — Desktop Interactive Session Preview</span>
+          <span class="preview-badge">LIVE DEMO</span>
+        </div>
+        <div class="preview-body">
+          <img src="../docs/previews/stash-restore-flow.svg" alt="Nakraku Stash Active Workflow Animation" class="preview-image" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section features-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Engineered for Desktop Utility</h2>
+        <p class="section-subtitle">No bloated SaaS fluff. Only high-density metrics, zero-elevation Win32 FFI, and local persistence.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-name">Win32 Zero-Elevation Engine</h3>
+          <p class="feature-desc">Enumerates top-level windows via DWM and User32 without requiring UAC admin prompts for standard desktop applications.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🖥️</div>
+          <h3 class="feature-name">Multi-Monitor Clamping</h3>
+          <p class="feature-desc">Preserves pixel-perfect coordinates across negative screen bounds, virtual displays, and high-DPI scaling configurations.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-name">Loopback Extension Bridge</h3>
+          <p class="feature-desc">Companion MV3 extension for Chrome, Edge, and Brave synchronizes open tabs over a sandboxed loopback WebSocket (<code>127.0.0.1:48123</code>).</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <h3 class="feature-name">Offline Ed25519 Licensing</h3>
+          <p class="feature-desc">100% offline asymmetric cryptographic verification against hardware fingerprints stored in Windows Credential Manager.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3 class="feature-name">Embedded SQLite WAL Mode</h3>
+          <p class="feature-desc">Sessions and settings persist in SQLite with Write-Ahead Logging and 256 MB memory-mapped I/O for instant reads and zero crash corruption.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-name">High-Density 32px UI</h3>
+          <p class="feature-desc">Obsidian dark theme, 38px custom frameless titlebar, monospace metrics, and 60 FPS table virtualization for 150+ open windows.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="section how-it-works-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">The Three-Step Stash Cycle</h2>
+        <p class="section-subtitle">Declutter your desktop in milliseconds without losing your workflow context.</p>
+      </div>
+
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Snapshot &amp; Stash</h3>
+          <p class="step-desc">Press <kbd>Ctrl+Shift+N</kbd>. Nakraku snapshots all visible windows, memory usage, and browser tabs, minimizing them in ~145 ms.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Work with Clean RAM</h3>
+          <p class="step-desc">Reclaim gigabytes of system memory. Switch tasks, join meetings, or game on a totally clear desktop without background noise.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Instant Restore</h3>
+          <p class="step-desc">Press <kbd>Ctrl+Shift+R</kbd>. Closed apps relaunch, windows snap back to their exact monitors, and browser tabs reopen in ~418 ms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Comparison Section -->
+  <section id="pricing" class="section pricing-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Transparent, Local-First Pricing</h2>
+        <p class="section-subtitle">Start free with core capabilities. Upgrade to Pro for unlimited workspaces with zero subscriptions.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Tier Card -->
+        <div class="pricing-card">
+          <div class="pricing-badge">COMMUNITY</div>
+          <h3 class="pricing-tier">Free Tier</h3>
+          <div class="pricing-price">$0 <span class="pricing-period">forever</span></div>
+          <p class="pricing-summary">Perfect for focused individual task stashing.</p>
+          <ul class="pricing-features">
+            <li>✓ Up to 3 active workspaces</li>
+            <li>✓ Unlimited window stashes &amp; restores</li>
+            <li>✓ Win32 DWM zero-elevation engine</li>
+            <li>✓ MV3 browser extension tab sync</li>
+            <li>✓ Local SQLite WAL storage</li>
+            <li>✓ 100% offline, zero telemetry</li>
+          </ul>
+          <a href="#download" class="btn btn-secondary btn-block">Download Free</a>
+        </div>
+
+        <!-- Pro Tier Card -->
+        <div class="pricing-card pricing-card-pro">
+          <div class="pricing-badge badge-pro">MOST POPULAR</div>
+          <h3 class="pricing-tier">Pro Perpetual</h3>
+          <div class="pricing-price">$29 <span class="pricing-period">one-time payment</span></div>
+          <p class="pricing-summary">For power users, developers, and multi-monitor setups.</p>
+          <ul class="pricing-features">
+            <li>✓ <strong>Unlimited workspaces</strong></li>
+            <li>✓ <strong>Everything in Free tier</strong></li>
+            <li>✓ Automated background snapshot schedules</li>
+            <li>✓ 5-slot bounded undo/redo stack</li>
+            <li>✓ Multi-machine offline Ed25519 key</li>
+            <li>✓ Priority bug triage &amp; feature roadmap input</li>
+          </ul>
+          <a href="#download" class="btn btn-primary btn-block">Get Pro License</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Changelog Section -->
+  <section id="changelog" class="section changelog-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Latest Release Notes</h2>
+        <p class="section-subtitle">Track the newest engine updates, optimizations, and features.</p>
+      </div>
+
+      <div class="changelog-card">
+        <div class="changelog-header">
+          <span class="changelog-version">v0.1.0</span>
+          <span class="changelog-date">November 8, 2026</span>
+          <span class="changelog-tag">INITIAL RELEASE</span>
+        </div>
+        <div class="changelog-body">
+          <h4 class="changelog-section-title">Highlights:</h4>
+          <ul class="changelog-list">
+            <li><strong>Win32 Engine</strong>: Safe window enumeration, PID working set telemetry, and multi-monitor clamping.</li>
+            <li><strong>Browser Extension</strong>: RFC 6455 loopback WebSocket bridge with keepalive heartbeat and origin validation.</li>
+            <li><strong>Performance Optimization</strong>: 71.3% bundle reduction (113.8 kB core JS) and SQLite 256 MB memory-mapped I/O.</li>
+            <li><strong>Distribution</strong>: Non-admin NSIS installer, enterprise MSI packager, and dual-timestamped code signing.</li>
+          </ul>
+        </div>
+        <div class="changelog-footer">
+          <a href="https://github.com/nakraku/stash/blob/master/CHANGELOG.md" target="_blank" rel="noopener noreferrer" class="link-emerald">View Complete Changelog &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Section -->
+  <section id="download" class="section download-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Download Nakraku Stash</h2>
+        <p class="section-subtitle">Runs on Windows 10 (Build 19041+) and Windows 11 (x64).</p>
+      </div>
+
+      <div class="download-grid">
+        <div class="download-card">
+          <div class="download-icon">📦</div>
+          <h3 class="download-name">Standard Installer (NSIS)</h3>
+          <p class="download-desc">Installs per-user into LocalAppData without requiring Administrator privileges. Includes automatic background updates.</p>
+          <a href="https://github.com/nakraku/stash/releases/download/v0.1.0/Nakraku-Stash-Setup-x64.exe" class="btn btn-primary btn-block">Download .exe (Setup)</a>
+          <div class="checksum-hint">SHA-256: <code>sha256sums.txt</code> on GitHub</div>
+        </div>
+
+        <div class="download-card">
+          <div class="download-icon">🏢</div>
+          <h3 class="download-name">Enterprise Package (MSI)</h3>
+          <p class="download-desc">WiX-based MSI installer with RFC 4122 GUID for automated enterprise deployment via Group Policy (GPO) and Microsoft Intune.</p>
+          <a href="https://github.com/nakraku/stash/releases/download/v0.1.0/Nakraku-Stash-x64.msi" class="btn btn-secondary btn-block">Download .msi (Enterprise)</a>
+          <div class="checksum-hint">Command: <code>msiexec /i Nakraku-Stash-x64.msi /quiet</code></div>
+        </div>
+
+        <div class="download-card">
+          <div class="download-icon">🧩</div>
+          <h3 class="download-name">Browser Extension (MV3)</h3>
+          <p class="download-desc">Companion extension for Google Chrome, Microsoft Edge, and Brave. Connects locally over loopback WebSocket.</p>
+          <a href="https://github.com/nakraku/stash/releases/download/v0.1.0/dist-extension.zip" class="btn btn-secondary btn-block">Download Extension (.zip)</a>
+          <div class="checksum-hint">Load unpacked in Developer Mode</div>
+        </div>
+      </div>
+
+      <div class="requirements-box">
+        <h4 class="req-title">System Requirements:</h4>
+        <div class="req-items">
+          <span>✓ Windows 10 (Build 19041+) or Windows 11 x64</span>
+          <span>✓ Microsoft Edge WebView2 Runtime (Pre-installed)</span>
+          <span>✓ 50 MB Free Disk Space</span>
+          <span>✓ Under 25 MB RAM Consumption</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-left">
+        <div class="footer-brand">NAKRAKU STASH</div>
+        <p class="footer-desc">Open source desktop window stashing engine. Released under the MIT License.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <span class="footer-heading">Documentation</span>
+          <a href="https://github.com/nakraku/stash/blob/master/README.md">README</a>
+          <a href="https://github.com/nakraku/stash/blob/master/docs/ARCHITECTURE.md">Architecture</a>
+          <a href="https://github.com/nakraku/stash/blob/master/docs/win32-api-surface.md">Win32 API Surface</a>
+          <a href="https://github.com/nakraku/stash/blob/master/docs/perf.md">Performance Report</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-heading">Community &amp; Safety</span>
+          <a href="https://github.com/nakraku/stash/blob/master/CONTRIBUTING.md">Contributing</a>
+          <a href="https://github.com/nakraku/stash/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a>
+          <a href="https://github.com/nakraku/stash/blob/master/docs/SECURITY.md">Security Model</a>
+          <a href="https://github.com/nakraku/stash/blob/master/TRIAGE.md">Triage SLA</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-heading">Project</span>
+          <a href="https://github.com/nakraku/stash">GitHub Repository</a>
+          <a href="https://github.com/nakraku/stash/releases">Releases</a>
+          <a href="https://github.com/nakraku/stash/discussions">Discussions</a>
+          <a href="https://github.com/nakraku/stash/blob/master/LICENSE">MIT License</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Nakraku Contributors. All rights reserved. Zero tracking. Zero cloud telemetry.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

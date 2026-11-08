@@ -96,8 +96,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 17**| CI/CD Pipeline | 8 | **COMPLETED (8/8)** |
 | **Phase 18**| Documentation | 14 | **COMPLETED (14/14)** |
 | **Phase 19**| Open Source Hygiene | 9 | **COMPLETED (9/9)** |
-| **Phase 20**| Landing Page | 7 | **ACTIVE (In Progress)** |
-| **TOTAL** | | **288** | |
+| **Phase 20**| Landing Page | 7 | **COMPLETED (7/7)** |
+| **TOTAL** | | **288** | **100% COMPLETE (288/288)** |
 
 ---
 
@@ -459,3 +459,14 @@ Audit executed via `scripts/check-env.ps1`:
 - `[19.7]` GitHub repo settings specification & automation (`.github/settings.yml` + `docs/GITHUB-SETTINGS.md`: repository metadata, topics, branch protection rules on `master`, and merge policies) — **DONE**
 - `[19.8]` Set up GitHub Discussions configuration & guidelines (`.github/DISCUSSION_TEMPLATE/ideas.md` + `docs/DISCUSSIONS.md`: category definitions, Q&A vs Issues guidance, and RFC templates) — **DONE**
 - `[19.9]` First public release announcement (`docs/ANNOUNCEMENT.md`: publication-ready copy for Hacker News Show HN, Reddit r/rust & r/windows, Twitter/X thread, and Product Hunt) — **DONE**
+
+---
+
+## 25. Phase 20 Task Log (Landing Page)
+- `[20.1]` Scaffold landing page (`landing/index.html`, `landing/style.css`, `landing/main.js`, `landing/main.d.ts`, `landing/README.md`: standalone, zero-dependency Obsidian dark theme, sub-30 kB total payload, local preview server setup) — **DONE**
+- `[20.2]` Hero section (`landing/index.html`: version badge pill, high-contrast headline, dual download CTAs for NSIS and MSI, live telemetry ticker with 145ms stash and 418ms restore metrics, embedded desktop frame preview `stash-restore-flow.svg`) — **DONE**
+- `[20.3]` Features section (`landing/index.html`: 6 high-density technical cards with emerald icon badges detailing Win32 zero-elevation engine, multi-monitor coordinate clamping, loopback WebSocket bridge, offline Ed25519 licensing, SQLite WAL, and 32px desktop utility density) — **DONE**
+- `[20.4]` Pricing section (`landing/index.html`: transparent Free Community Tier $0 vs Pro Perpetual Tier $29 feature comparison matrix with instant offline key delivery) — **DONE**
+- `[20.5]` Changelog section (`landing/index.html`: v0.1.0 initial public release notes highlighting Win32 engine, loopback bridge, 71.3% bundle optimization, and MSI/NSIS distribution) — **DONE**
+- `[20.6]` Download section (`landing/index.html`: direct download cards for NSIS `.exe`, Enterprise `.msi`, and MV3 extension `.zip`, complete with SHA-256 copy helpers and Windows 10/11 system requirements) — **DONE**
+- `[20.7]` Analytics (`landing/index.html` + `landing/main.js`: privacy-first, cookie-less Plausible analytics script with `data-domain="nakraku.app"` and client-side `isDoNotTrackEnabled()` compliance check, tested via `tests/landing.test.ts`) — **DONE**
