@@ -140,4 +140,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.3]` Define design tokens — spacing & density (`src/styles/tokens.css`: `--titlebar-height: 38px`, `--statusbar-height: 24px`, `--sidebar-width: 200px`, `--row-height: 32px`, `--row-height-lg: 36px`, micro-gaps `--gap-3xs` to `--gap-lg`, and padding scale `--pad-3xs` to `--pad-lg`) — **DONE**
 - `[2.4]` Define design tokens — border & radius (`src/styles/tokens.css`: `--border-width`, `--border-width-thick`, semantic border colors `--border-color-subtle` through `--border-color-warning`, and radius scale `--radius-none` to `--radius-full`) — **DONE**
 - `[2.5]` Configure Tailwind CSS (`tailwind.config.ts` consuming `tokens.css` with strict colors isolation, PostCSS configured, purge paths set, verified in `src/App.tsx`) — **DONE**
-- `[2.6]` Build `Titlebar` component (Frameless 38px bar: app icon, title text, minimize/maximize/close buttons — drag region via `data-tauri-drag-region`) — **NEXT**
+- `[2.6]` Build `Titlebar` component (`src/components/Titlebar.tsx`: Frameless 38px bar with status dot, title, badge, drag region `data-tauri-drag-region`, and pixel-perfect minimize/maximize/close buttons, integrated into `src/App.tsx`) — **DONE**
+- `[2.7]` Build `Titlebar` — window control logic (Wire Tauri v2 `window.minimize()`, `window.toggleMaximize()`, `window.close()`) — **NEXT**
