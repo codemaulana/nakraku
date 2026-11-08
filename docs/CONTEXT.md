@@ -83,9 +83,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 4** | Data Layer & Local Database | 17 | **COMPLETED (17/17)** |
 | **Phase 5** | Win32 OS Engine (Rust) | 21 | **COMPLETED (21/21)** |
 | **Phase 6** | Core Business Logic | 14 | **COMPLETED (14/14)** |
-| **Phase 7** | Frontend — Dashboard & Live View | 12 | **ACTIVE (In Progress)** |
-| **Phase 7** | Frontend — Dashboard & Live View | 12 | Queued |
-| **Phase 8** | Frontend — Workspaces View | 13 | Queued |
+| **Phase 7** | Frontend — Dashboard & Live View | 12 | **COMPLETED (12/12)** |
+| **Phase 8** | Frontend — Workspaces View | 13 | **ACTIVE (In Progress)** |
 | **Phase 9** | Frontend — Settings View | 9 | Queued |
 | **Phase 10**| Browser Extension (MV3) | 16 | Queued |
 | **Phase 11**| Licensing & Monetization | 15 | Queued |
@@ -254,6 +253,22 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 12. Phase 7 Task Log (Frontend — Dashboard & Live View)
-- `[7.1]` Build real-time live window table with 32px compact rows — **NEXT**
-- `[7.2]` Build live memory gauge meter component — **QUEUED**
-- `[7.3]` Wire 1-Click Stash CTA to `stashNow()` — **QUEUED**
+- `[7.1]` Build `LiveWindowList` component (`src/components/LiveWindowList.tsx`: 32px compact desktop rows with PID, process name, window title, memory usage, elevation and minimize badges) — **DONE**
+- `[7.2]` `LiveWindowList` process icon fetch & cache (`src/lib/processIcons.ts`: in-memory icon resolution caching mapping IDEs, browsers, terminals, file managers, and settings) — **DONE**
+- `[7.3]` `LiveWindowList` sorting engine (`src/components/LiveWindowList.tsx`: supports sorting by RAM memory descending, title ascending, process name, and z-order) — **DONE**
+- `[7.4]` `LiveWindowList` filtering (`src/hooks/useLiveDashboard.ts`: real-time search input filtering across window title, executable name, and PID) — **DONE**
+- `[7.5]` `LiveWindowList` multi-selection (`src/components/LiveWindowList.tsx`: individual checkboxes, indeterminate select-all header, and selected count tracker) — **DONE**
+- `[7.6]` Build `MemoryMeter` component (`src/components/MemoryMeter.tsx`: horizontal high-density bar showing used, available, total RAM and load percentage with emerald/warning/danger threshold color coding) — **DONE**
+- `[7.7]` Build `ProcessCount` indicator (`src/components/ProcessCount.tsx`: live monospace tags displaying window count, unique process count, and active selection count) — **DONE**
+- `[7.8]` Build `StashButton` primary CTA (`src/components/StashButton.tsx`: 36px high-density primary button with `Ctrl+Shift+N` shortcut hint, selection count badge, and loading state) — **DONE**
+- `[7.9]` Build `StashButton` confirmation tooltip (`src/components/StashButton.tsx`: hover reveals live summary of windows and estimated RAM to be saved) — **DONE**
+- `[7.10]` Wire Dashboard to live data (`src/hooks/useLiveDashboard.ts`: polling every 2.5s and real-time subscription to Tauri events `"os:foreground-changed"` and `"os:window-lifecycle"`) — **DONE**
+- `[7.11]` Dashboard empty state (`src/components/DashboardStates.tsx`: `DashboardEmptyState` providing high-density guidance on minimized/cloaked windows) — **DONE**
+- `[7.12]` Dashboard error state (`src/components/DashboardStates.tsx`: `DashboardErrorState` reporting OS subsystem errors and elevation requirements with retry button) — **DONE**
+
+---
+
+## 13. Phase 8 Task Log (Frontend — Workspaces View)
+- `[8.1]` Build `WorkspaceCard` component — **NEXT**
+- `[8.2]` Build `WorkspaceList` component — **QUEUED**
+- `[8.3]` Workspace — create flow — **QUEUED**

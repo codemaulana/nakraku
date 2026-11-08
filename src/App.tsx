@@ -52,15 +52,8 @@ const renderActiveView = (
     default:
       return (
         <DashboardView
-          selectedProcess={state.selectedProcess}
-          searchQuery={state.searchQuery}
-          isLoading={state.isLoading}
           searchRef={state.searchInputRef}
-          onRefresh={state.handleRefresh}
-          onSearchChange={state.setSearchQuery}
-          onSelectProcess={state.setSelectedProcess}
           onOpenStashModal={state.onOpenStashModal}
-          onContextMenu={state.onContextMenu}
         />
       );
   }
