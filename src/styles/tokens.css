@@ -9,6 +9,22 @@
   --border-muted: #151A23;
   --border-focus: #10B981;
 
+  --border-width: 1px;
+  --border-width-thick: 2px;
+
+  --border-color-subtle: #1F2633;
+  --border-color-muted: #151A23;
+  --border-color-focus: #10B981;
+  --border-color-danger: #EF4444;
+  --border-color-warning: #F59E0B;
+
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
   --accent-emerald: #10B981;
   --accent-emerald-hover: #059669;
   --accent-emerald-muted: rgba(16, 185, 129, 0.15);
