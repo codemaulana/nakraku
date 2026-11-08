@@ -81,8 +81,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 2** | React Design System & Component Library | 28 | **COMPLETED (28/28)** |
 | **Phase 3** | Application Shell & Navigation | 18 | **COMPLETED (18/18)** |
 | **Phase 4** | Data Layer & Local Database | 17 | **COMPLETED (17/17)** |
-| **Phase 5** | Win32 OS Engine (Rust) | 21 | **ACTIVE (In Progress)** |
-| **Phase 6** | Core Business Logic | 14 | Queued |
+| **Phase 5** | Win32 OS Engine (Rust) | 21 | **COMPLETED (21/21)** |
+| **Phase 6** | Core Business Logic | 14 | **ACTIVE (In Progress)** |
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | Queued |
 | **Phase 8** | Frontend — Workspaces View | 13 | Queued |
 | **Phase 9** | Frontend — Settings View | 9 | Queued |
@@ -210,6 +210,31 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 10. Phase 5 Task Log (Win32 OS Engine)
-- `[5.1]` Research Win32 API surface needed (`docs/win32-api-surface.md`) — **NEXT**
-- `[5.2]` Add `windows-sys` crate with required features — **QUEUED**
-- `[5.3]` Write `src-tauri/src/os/window_enum.rs` (`enumerate_windows()`) — **QUEUED**
+- `[5.1]` Research Win32 API surface needed (`docs/win32-api-surface.md`: comprehensive mapping of `EnumWindows`, `DwmGetWindowAttribute`, `GetWindowPlacement`, `SetWindowPos`, `OpenProcess`, `QueryFullProcessImageNameW`, `K32GetProcessMemoryInfo`, `GlobalMemoryStatusEx`, and `SetWinEventHook`) — **DONE**
+- `[5.2]` Add `windows-sys` crate with required features (`src-tauri/Cargo.toml`: features `Win32_Foundation`, `Win32_UI_WindowsAndMessaging`, `Win32_UI_Accessibility`, `Win32_Graphics_Dwm`, `Win32_System_Threading`, `Win32_System_ProcessStatus`, `Win32_System_SystemInformation`) — **DONE**
+- `[5.3]` Write window enumeration module (`src-tauri/src/os/window_enum.rs`: `enumerate_windows()`, `get_window_title()`, `get_window_class_name()`, `get_window_rect()`, `get_window_state()`) — **DONE**
+- `[5.4]` Write `RawWindow` struct & OS types (`src-tauri/src/os/types.rs`: `RawWindow`, `WindowRect`, `ProcessInfo`, `MemoryStats`, `SessionSnapshot`) — **DONE**
+- `[5.5]` Filter system/invisible windows (`src-tauri/src/os/filter.rs`: filters cloaked windows via `DWMWA_CLOAKED`, desktop shell classes, UWP system hosts, zero-sized windows, and self PID) — **DONE**
+- `[5.6]` Process info & memory telemetry (`src-tauri/src/os/process_info.rs`: `get_process_info()`, `query_process_path()`, `query_memory_bytes()`, and `get_system_memory_stats()`) — **DONE**
+- `[5.7]` Window snapshot module (`src-tauri/src/os/window_snapshot.rs`: `snapshot_session()` computing total RAM saved and attaching timestamps) — **DONE**
+- `[5.8]` Window restore engine (`src-tauri/src/os/window_restore.rs`: `restore_session_windows()` positioning HWNDs via `SetWindowPos` and relaunching closed processes) — **DONE**
+- `[5.9]` Window minimize logic (`src-tauri/src/os/window_restore.rs`: `minimize_all_windows()` batch minimizing active windows) — **DONE**
+- `[5.10]` Window restore from minimize (`src-tauri/src/os/window_restore.rs`: `restore_window()` via `SW_RESTORE` and `SW_SHOWMAXIMIZED`) — **DONE**
+- `[5.11]` Process launch logic (`src-tauri/src/os/process_launch.rs`: `launch_process()` using `std::process::Command` with existence and error checks) — **DONE**
+- `[5.12]` UAC / elevation handling (`src-tauri/src/os/process_info.rs`, `process_launch.rs`: falls back to `PROCESS_QUERY_LIMITED_INFORMATION`, flags `is_elevated`, surfaces `OsError::ElevationRequired`) — **DONE**
+- `[5.13]` Expose Tauri command `cmd_snapshot_session` (`src-tauri/src/os/commands.rs`) — **DONE**
+- `[5.14]` Expose Tauri command `cmd_restore_session` (`src-tauri/src/os/commands.rs`: bridges SQLite windows and restores positions) — **DONE**
+- `[5.15]` Expose Tauri command `cmd_minimize_all` (`src-tauri/src/os/commands.rs`) — **DONE**
+- `[5.16]` Expose Tauri command `cmd_get_live_windows` (`src-tauri/src/os/commands.rs`) — **DONE**
+- `[5.17]` Expose Tauri command `cmd_get_memory_stats` (`src-tauri/src/os/commands.rs`) — **DONE**
+- `[5.18]` OS event listener for active window change (`src-tauri/src/os/events.rs`: `SetWinEventHook` listening to `EVENT_SYSTEM_FOREGROUND`, emits `"os:foreground-changed"`) — **DONE**
+- `[5.19]` OS event listener for window lifecycle (`src-tauri/src/os/events.rs`: `SetWinEventHook` listening to `EVENT_OBJECT_CREATE` and `EVENT_OBJECT_DESTROY`, emits `"os:window-lifecycle"`) — **DONE**
+- `[5.20]` Unit and integration tests (`src-tauri/src/os/mod.rs`: 4 Rust integration tests; `tests/os.test.ts`: 9 Vitest frontend tests) — **DONE**
+- `[5.21]` Typed error taxonomy (`src-tauri/src/os/error.rs`: `OsError` enum covering all Win32 failure codes with `Display` and `Serialize`) — **DONE**
+
+---
+
+## 11. Phase 6 Task Log (Core Business Logic)
+- `[6.1]` Write `StashService` — `stash_now()` — **NEXT**
+- `[6.2]` Write `StashService` — `restore_workspace(id)` — **QUEUED**
+- `[6.3]` Write `StashService` — `quick_switch(from, to)` — **QUEUED**

@@ -1989,6 +1989,7 @@ dependencies = [
  "tauri-plugin-autostart",
  "tauri-plugin-global-shortcut",
  "tauri-plugin-log",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]

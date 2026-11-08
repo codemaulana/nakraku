@@ -9,6 +9,9 @@ import {
   InsertWindowInputSchema,
   TabSchema,
   InsertTabInputSchema,
+  SessionSnapshotSchema,
+  RawWindowSchema,
+  MemoryStatsSchema,
   type Workspace,
   type CreateWorkspaceInput,
   type Session,
@@ -17,6 +20,9 @@ import {
   type InsertWindowInput,
   type TabData,
   type InsertTabInput,
+  type SessionSnapshot,
+  type RawWindow,
+  type MemoryStats,
 } from "./schemas";
 
 export class ApiError extends Error {
@@ -136,4 +142,38 @@ export const setSetting = async (key: string, value: string): Promise<void> => {
 export const backupDatabase = async (): Promise<string> => {
   const raw = await safeInvoke<string>("backup_database");
   return String(raw);
+};
+
+export const snapshotSession = async (): Promise<SessionSnapshot> => {
+  const raw = await safeInvoke<unknown>("cmd_snapshot_session");
+  return SessionSnapshotSchema.parse(raw);
+};
+
+export const getLiveWindows = async (): Promise<RawWindow[]> => {
+  const raw = await safeInvoke<unknown>("cmd_get_live_windows");
+  return z.array(RawWindowSchema).parse(raw);
+};
+
+export const minimizeAllWindows = async (): Promise<number> => {
+  const raw = await safeInvoke<number>("cmd_minimize_all");
+  return Number(raw);
+};
+
+export const getMemoryStats = async (): Promise<MemoryStats> => {
+  const raw = await safeInvoke<unknown>("cmd_get_memory_stats");
+  return MemoryStatsSchema.parse(raw);
+};
+
+export const restoreWindow = async (
+  hwnd: string,
+  isMaximized: boolean
+): Promise<void> => {
+  await safeInvoke<void>("cmd_restore_window", { hwnd, isMaximized });
+};
+
+export const restoreSessionById = async (
+  sessionId: string
+): Promise<number> => {
+  const raw = await safeInvoke<number>("cmd_restore_session", { sessionId });
+  return Number(raw);
 };

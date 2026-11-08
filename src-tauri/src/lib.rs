@@ -1,4 +1,5 @@
 pub mod db;
+pub mod os;
 mod shortcuts;
 mod tray;
 mod window_state;
@@ -39,6 +40,10 @@ pub fn run() {
                 eprintln!("Warning: Failed to setup global shortcuts: {}", err);
             }
 
+            if let Err(err) = os::events::start_os_event_listener(app.handle().clone()) {
+                eprintln!("Warning: Failed to setup OS event listener: {}", err);
+            }
+
             if let Some(main_win) = app.get_webview_window("main") {
                 let _ = window_state::restore_window_state(&main_win);
 
@@ -76,6 +81,12 @@ pub fn run() {
             db::commands::get_setting,
             db::commands::set_setting,
             db::commands::backup_database,
+            os::commands::cmd_snapshot_session,
+            os::commands::cmd_get_live_windows,
+            os::commands::cmd_minimize_all,
+            os::commands::cmd_get_memory_stats,
+            os::commands::cmd_restore_window,
+            os::commands::cmd_restore_session,
         ])
         .run(tauri::generate_context!());
 

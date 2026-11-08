@@ -102,6 +102,62 @@ export const SettingSchema = z.object({
   updated_at: z.number().int(),
 });
 
+export const WindowRectSchema = z.object({
+  x: z.number().int(),
+  y: z.number().int(),
+  width: z.number().int(),
+  height: z.number().int(),
+});
+
+export const RawWindowSchema = z.object({
+  hwnd: z.string(),
+  hwnd_val: z.number().int(),
+  title: z.string(),
+  class_name: z.string(),
+  process_id: z.number().int(),
+  process_name: z.string(),
+  exe_path: z.string().nullable().optional(),
+  rect: WindowRectSchema,
+  is_visible: z.boolean(),
+  is_minimized: z.boolean(),
+  is_maximized: z.boolean(),
+  ram_bytes: z.number().int(),
+  is_elevated: z.boolean(),
+  z_order: z.number().int(),
+});
+
+export const ProcessInfoSchema = z.object({
+  pid: z.number().int(),
+  name: z.string(),
+  exe_path: z.string().nullable().optional(),
+  ram_bytes: z.number().int(),
+  is_elevated: z.boolean(),
+});
+
+export const MemoryStatsSchema = z.object({
+  total_ram_bytes: z.number().int(),
+  used_ram_bytes: z.number().int(),
+  available_ram_bytes: z.number().int(),
+  memory_load_percentage: z.number().int(),
+});
+
+export const SessionSnapshotSchema = z.object({
+  timestamp: z.number().int(),
+  windows: z.array(RawWindowSchema),
+  total_ram_saved_bytes: z.number().int(),
+});
+
+export const ForegroundChangedPayloadSchema = z.object({
+  hwnd: z.string(),
+  title: z.string(),
+  pid: z.number().int(),
+});
+
+export const WindowLifecyclePayloadSchema = z.object({
+  event_type: z.string(),
+  hwnd: z.string(),
+});
+
 export type Workspace = z.infer<typeof WorkspaceSchema>;
 export type CreateWorkspaceInput = z.infer<typeof CreateWorkspaceInputSchema>;
 export type Session = z.infer<typeof SessionSchema>;
@@ -111,3 +167,10 @@ export type InsertWindowInput = z.infer<typeof InsertWindowInputSchema>;
 export type TabData = z.infer<typeof TabSchema>;
 export type InsertTabInput = z.infer<typeof InsertTabInputSchema>;
 export type Setting = z.infer<typeof SettingSchema>;
+export type WindowRect = z.infer<typeof WindowRectSchema>;
+export type RawWindow = z.infer<typeof RawWindowSchema>;
+export type ProcessInfo = z.infer<typeof ProcessInfoSchema>;
+export type MemoryStats = z.infer<typeof MemoryStatsSchema>;
+export type SessionSnapshot = z.infer<typeof SessionSnapshotSchema>;
+export type ForegroundChangedPayload = z.infer<typeof ForegroundChangedPayloadSchema>;
+export type WindowLifecyclePayload = z.infer<typeof WindowLifecyclePayloadSchema>;
