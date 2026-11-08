@@ -1,37 +1,53 @@
 import { useEffect } from "react";
+import type { AppRoute } from "../lib/routes";
 
 interface AppShortcutsConfig {
   onOpenStash: () => void;
   onFocusSearch: () => void;
-  onSelectTab: (tab: string) => void;
+  onOpenPalette: () => void;
+  onSelectRoute: (route: AppRoute) => void;
 }
 
-const TABS = ["dashboard", "workspaces", "minimap", "gallery"] as const;
+const ROUTE_NUM_MAP: Record<string, AppRoute> = {
+  "1": "dashboard",
+  "2": "workspaces",
+  "3": "active-session",
+  "4": "minimap",
+};
 
 export const useAppShortcuts = ({
   onOpenStash,
   onFocusSearch,
-  onSelectTab,
+  onOpenPalette,
+  onSelectRoute,
 }: AppShortcutsConfig): void => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key.toLowerCase() === "f") {
+      if (e.ctrlKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        onOpenPalette();
+      } else if (e.ctrlKey && e.key.toLowerCase() === "f") {
         e.preventDefault();
         onFocusSearch();
       } else if (e.ctrlKey && e.key.toLowerCase() === "s") {
         e.preventDefault();
         onOpenStash();
       } else if (e.altKey && e.key >= "1" && e.key <= "4") {
-        const index = parseInt(e.key, 10) - 1;
-        const target = TABS[index];
-        if (target) {
-          e.preventDefault();
-          onSelectTab(target);
-        }
+        e.preventDefault();
+        onSelectRoute(ROUTE_NUM_MAP[e.key]);
+      } else if (e.altKey && e.key === ",") {
+        e.preventDefault();
+        onSelectRoute("settings");
+      } else if (e.altKey && e.key === "/") {
+        e.preventDefault();
+        onSelectRoute("about");
+      } else if (e.altKey && e.key.toLowerCase() === "g") {
+        e.preventDefault();
+        onSelectRoute("gallery");
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onOpenStash, onFocusSearch, onSelectTab]);
+  }, [onOpenStash, onFocusSearch, onOpenPalette, onSelectRoute]);
 };

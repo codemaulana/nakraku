@@ -79,8 +79,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 0** | Foundations & Toolchain | 15 | **COMPLETED (15/15) [Tag: v0.0.1-scaffold]** |
 | **Phase 1** | FigCraft UI/UX Design & Vibe Coding (MCP) | 10 | **COMPLETED (10/10)** |
 | **Phase 2** | React Design System & Component Library | 28 | **COMPLETED (28/28)** |
-| **Phase 3** | Application Shell & Navigation | 18 | **ACTIVE (In Progress)** |
-| **Phase 4** | Data Layer & Local Database | 17 | Queued |
+| **Phase 3** | Application Shell & Navigation | 18 | **COMPLETED (18/18)** |
+| **Phase 4** | Data Layer & Local Database | 17 | **ACTIVE (In Progress)** |
 | **Phase 5** | Win32 OS Engine (Rust) | 21 | Queued |
 | **Phase 6** | Core Business Logic | 14 | Queued |
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | Queued |
@@ -167,21 +167,28 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 8. Phase 3 Task Log (Application Shell & Navigation)
-- `[3.1]` Define app routes / view enum (`src/lib/routes.ts`: `Dashboard`, `Workspaces`, `ActiveSession`, `Settings`, `About`) — **NEXT**
-- `[3.2]` Build client-side router (`src/router/Router.tsx`: hash-based or in-memory router, zero bloated dependencies) — **QUEUED**
-- `[3.3]` Build `Dashboard` view skeleton — **QUEUED**
-- `[3.4]` Build `Workspaces` view skeleton — **QUEUED**
-- `[3.5]` Build `ActiveSession` view skeleton — **QUEUED**
-- `[3.6]` Build `Settings` view skeleton — **QUEUED**
-- `[3.7]` Build `About` view skeleton — **QUEUED**
-- `[3.8]` Build sidebar navigation with active state — **QUEUED**
-- `[3.9]` Persist last-open route across restarts — **QUEUED**
-- `[3.10]` Build `CommandPalette` (Ctrl+K) — **QUEUED**
-- `[3.11]` Global keyboard shortcut map (`src/lib/shortcuts.ts`) — **QUEUED**
-- `[3.12]` Register Tauri global shortcuts (`tauri-plugin-global-shortcut`) — **QUEUED**
-- `[3.13]` System tray integration (icon, tooltip, context menu) — **QUEUED**
-- `[3.14]` System tray — minimize to tray on close — **QUEUED**
-- `[3.15]` System tray — dynamic badge — **QUEUED**
-- `[3.16]` Auto-launch on Windows startup (`tauri-plugin-autostart`) — **QUEUED**
-- `[3.17]` Window state persistence (position, size) — **QUEUED**
-- `[3.18]` Multi-monitor support (screen bounds clamping) — **QUEUED**
+- `[3.1]` Define app routes / view enum (`src/lib/routes.ts`: `Dashboard`, `Workspaces`, `ActiveSession`, `Settings`, `About`, `Minimap`, `Gallery`) — **DONE**
+- `[3.2]` Build client-side router (`src/router/Router.tsx`: hash-based, route history stack, zero bloated dependencies) — **DONE**
+- `[3.3]` Build `Dashboard` view skeleton (`src/views/DashboardView.tsx`: Process table, action toolbar, filter input) — **DONE**
+- `[3.4]` Build `Workspaces` view skeleton (`src/views/WorkspacesView.tsx`: Workspace list, Free Tier 3/3 banner, color tags, RAM metrics) — **DONE**
+- `[3.5]` Build `ActiveSession` view skeleton (`src/views/ActiveSessionView.tsx`: Live process telemetry, window HWND tree, memory gauge) — **DONE**
+- `[3.6]` Build `Settings` view skeleton (`src/views/SettingsView.tsx`: General autostart, tray settings, extension bridge, hotkeys, licensing, danger zone) — **DONE**
+- `[3.7]` Build `About` view skeleton (`src/views/AboutView.tsx`: App version, build hash, MIT license, diagnostics grid) — **DONE**
+- `[3.8]` Build sidebar navigation with active state (`src/components/Sidebar.tsx`: wired to active route with keyboard accelerators) — **DONE**
+- `[3.9]` Persist last-open route across restarts (`src/router/Router.tsx`: localStorage `nakraku_last_route` synchronization) — **DONE**
+- `[3.10]` Build `CommandPalette` (Ctrl+K) (`src/components/CommandPalette.tsx`: 560px modal dialog, fuzzy search, arrow navigation) — **DONE**
+- `[3.11]` Global keyboard shortcut map (`src/lib/shortcuts.ts`: unified registry, fuzzy search algorithm) — **DONE**
+- `[3.12]` Register Tauri global shortcuts (`src-tauri/src/shortcuts.rs`: `tauri-plugin-global-shortcut` for `Ctrl+Shift+N` and `Ctrl+Shift+R`) — **DONE**
+- `[3.13]` System tray integration (`src-tauri/src/tray.rs`: Tray icon, tooltip, right-click menu with Show, Stash All, Quit) — **DONE**
+- `[3.14]` System tray — minimize to tray on close (`src-tauri/src/lib.rs`: `CloseRequested` interception, `api.prevent_close()`, hide window) — **DONE**
+- `[3.15]` System tray — dynamic badge (`src-tauri/src/tray.rs`: `update_tray_status` command for workspaces and RAM saved) — **DONE**
+- `[3.16]` Auto-launch on Windows startup (`src-tauri/src/lib.rs`: `tauri-plugin-autostart` with `--minimized` flag) — **DONE**
+- `[3.17]` Window state persistence (`src-tauri/src/window_state.rs`: saves/restores outer position and size in AppData JSON) — **DONE**
+- `[3.18]` Multi-monitor support (`src-tauri/src/window_state.rs`: `clamp_to_monitors` checking available monitors on restore) — **DONE**
+
+---
+
+## 9. Phase 4 Task Log (Data Layer & Local Database)
+- `[4.1]` Add `tauri-plugin-sql` dependency to Rust backend (`Cargo.toml`) — **NEXT**
+- `[4.2]` Configure SQLite database initialization with WAL journal mode — **QUEUED**
+- `[4.3]` Write initial SQL migration schema (`workspaces`, `sessions`, `windows`, `tabs`) — **QUEUED**

@@ -1,23 +1,93 @@
 import React, { useRef, useState } from "react";
+import { RouterProvider, useRouter } from "./router/Router";
 import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
 import { StatusBar } from "./components/StatusBar";
 import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
+import { CommandPalette } from "./components/CommandPalette";
+import { DashboardView } from "./views/DashboardView";
+import { WorkspacesView } from "./views/WorkspacesView";
+import { ActiveSessionView } from "./views/ActiveSessionView";
+import { SettingsView } from "./views/SettingsView";
+import { AboutView } from "./views/AboutView";
 import { Gallery } from "./dev/Gallery";
-import { MainContent } from "./components/MainContent";
 import { useAppShortcuts } from "./hooks/useAppShortcuts";
 import {
   createProcessMenuItems,
   type ProcessItem,
 } from "./data/sampleProcesses";
+import type { ShortcutItem } from "./lib/shortcuts";
+import type { AppRoute } from "./lib/routes";
 
-const useAppState = () => {
-  const [activeTab, setActiveTab] = useState<string>("dashboard");
+interface DashboardState {
+  selectedProcess: string;
+  setSelectedProcess: (id: string) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  isLoading: boolean;
+  searchInputRef: React.RefObject<HTMLInputElement>;
+  handleRefresh: () => void;
+  onOpenStashModal: () => void;
+  onContextMenu: (e: React.MouseEvent, item: ProcessItem) => void;
+}
+
+const renderActiveView = (
+  route: AppRoute,
+  navigate: (r: AppRoute) => void,
+  state: DashboardState
+) => {
+  switch (route) {
+    case "workspaces":
+      return <WorkspacesView />;
+    case "active-session":
+      return <ActiveSessionView />;
+    case "settings":
+      return <SettingsView />;
+    case "about":
+      return <AboutView />;
+    case "gallery":
+      return <Gallery onClose={() => navigate("dashboard")} />;
+    case "dashboard":
+    default:
+      return (
+        <DashboardView
+          selectedProcess={state.selectedProcess}
+          searchQuery={state.searchQuery}
+          isLoading={state.isLoading}
+          searchRef={state.searchInputRef}
+          onRefresh={state.handleRefresh}
+          onSearchChange={state.setSearchQuery}
+          onSelectProcess={state.setSelectedProcess}
+          onOpenStashModal={state.onOpenStashModal}
+          onContextMenu={state.onContextMenu}
+        />
+      );
+  }
+};
+
+const handleCommand = (
+  cmd: ShortcutItem,
+  navigate: (r: AppRoute) => void,
+  openStash: () => void,
+  focusSearch: () => void
+) => {
+  if (cmd.route) {
+    navigate(cmd.route);
+  } else if (cmd.actionId === "stash-all" || cmd.actionId === "global-stash") {
+    openStash();
+  } else if (cmd.actionId === "focus-search") {
+    navigate("dashboard");
+    setTimeout(focusSearch, 50);
+  }
+};
+
+const useAppShellState = (navigate: (r: AppRoute) => void) => {
+  const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
+  const [isPaletteOpen, setIsPaletteOpen] = useState<boolean>(false);
   const [selectedProcess, setSelectedProcess] = useState<string>("p1");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const handleRefresh = () => {
@@ -25,56 +95,61 @@ const useAppState = () => {
     setTimeout(() => setIsLoading(false), 1200);
   };
 
+  const focusSearch = () => {
+    searchInputRef.current?.focus();
+    searchInputRef.current?.select();
+  };
+
   useAppShortcuts({
     onOpenStash: () => setIsStashModalOpen(true),
     onFocusSearch: () => {
-      searchInputRef.current?.focus();
-      searchInputRef.current?.select();
+      navigate("dashboard");
+      setTimeout(focusSearch, 50);
     },
-    onSelectTab: setActiveTab,
+    onOpenPalette: () => setIsPaletteOpen(true),
+    onSelectRoute: (r) => navigate(r),
   });
 
   return {
-    activeTab,
-    setActiveTab,
+    isStashModalOpen,
+    setIsStashModalOpen,
+    isPaletteOpen,
+    setIsPaletteOpen,
     selectedProcess,
     setSelectedProcess,
     searchQuery,
     setSearchQuery,
     isLoading,
-    isStashModalOpen,
-    setIsStashModalOpen,
     searchInputRef,
     handleRefresh,
+    focusSearch,
   };
 };
 
-export const App: React.FC = () => {
-  const s = useAppState();
+const AppShell: React.FC = () => {
+  const { currentRoute, navigate } = useRouter();
+  const s = useAppShellState(navigate);
   const { position, data, open, close } = useContextMenu<ProcessItem>();
   const menuItems = createProcessMenuItems(data, close);
+
+  const viewState: DashboardState = {
+    selectedProcess: s.selectedProcess,
+    setSelectedProcess: s.setSelectedProcess,
+    searchQuery: s.searchQuery,
+    setSearchQuery: s.setSearchQuery,
+    isLoading: s.isLoading,
+    searchInputRef: s.searchInputRef,
+    handleRefresh: s.handleRefresh,
+    onOpenStashModal: () => s.setIsStashModalOpen(true),
+    onContextMenu: open,
+  };
 
   return (
     <div className="flex flex-col h-screen bg-bg-base text-text-primary font-ui overflow-hidden select-none">
       <Titlebar badge="v0.1.0" />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar activeId={s.activeTab} onSelect={s.setActiveTab} />
-        {s.activeTab === "gallery" ? (
-          <Gallery onClose={() => s.setActiveTab("dashboard")} />
-        ) : (
-          <MainContent
-            activeTab={s.activeTab}
-            selectedProcess={s.selectedProcess}
-            searchQuery={s.searchQuery}
-            isLoading={s.isLoading}
-            searchRef={s.searchInputRef}
-            onRefresh={s.handleRefresh}
-            onSearchChange={s.setSearchQuery}
-            onSelectProcess={s.setSelectedProcess}
-            onOpenStashModal={() => s.setIsStashModalOpen(true)}
-            onContextMenu={open}
-          />
-        )}
+        <Sidebar activeId={currentRoute} onSelect={(id) => navigate(id as AppRoute)} />
+        {renderActiveView(currentRoute, navigate, viewState)}
       </div>
       <StatusBar ramSaved="1.8 GB" />
       <ContextMenu items={menuItems} position={position} onClose={close} />
@@ -82,6 +157,19 @@ export const App: React.FC = () => {
         isOpen={s.isStashModalOpen}
         onClose={() => s.setIsStashModalOpen(false)}
       />
+      <CommandPalette
+        isOpen={s.isPaletteOpen}
+        onClose={() => s.setIsPaletteOpen(false)}
+        onSelectCommand={(cmd) =>
+          handleCommand(cmd, navigate, () => s.setIsStashModalOpen(true), s.focusSearch)
+        }
+      />
     </div>
   );
 };
+
+export const App: React.FC = () => (
+  <RouterProvider>
+    <AppShell />
+  </RouterProvider>
+);

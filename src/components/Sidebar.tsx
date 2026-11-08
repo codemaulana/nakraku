@@ -6,8 +6,10 @@ import { ScrollArea } from "./ScrollArea";
 import {
   LayoutDashboard,
   Layers,
+  History,
   Monitor,
   Settings,
+  Info,
   Sparkles,
   PanelLeftClose,
   PanelLeftOpen,
@@ -24,9 +26,11 @@ export interface NavItem {
 export const DEFAULT_NAV_ITEMS: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, badge: "14", shortcut: "Alt+1" },
   { id: "workspaces", label: "Workspaces", icon: Layers, badge: "3", shortcut: "Alt+2" },
-  { id: "minimap", label: "Spatial Minimap", icon: Monitor, shortcut: "Alt+3" },
-  { id: "gallery", label: "Component QA", icon: Sparkles, badge: "DEV", shortcut: "Alt+4" },
+  { id: "active-session", label: "Active Session", icon: History, shortcut: "Alt+3" },
+  { id: "minimap", label: "Spatial Minimap", icon: Monitor, shortcut: "Alt+4" },
   { id: "settings", label: "Settings", icon: Settings, shortcut: "Alt+," },
+  { id: "about", label: "About", icon: Info, shortcut: "Alt+/" },
+  { id: "gallery", label: "Component QA", icon: Sparkles, badge: "DEV", shortcut: "Alt+G" },
 ];
 
 export interface SidebarProps {

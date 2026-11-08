@@ -13,14 +13,13 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 3 — Application Shell & Navigation
+* **Active Phase**: Phase 4 — Data Layer & Local Database
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
   * **Phase 2: React Design System & Component Library (Tasks 2.1 – 2.28)** — **100% COMPLETE** (28 high-density desktop components, tokens.css, WCAG 2.1 AA a11y audit, keyboard audit, Vitest snapshots)
-  * **Task 2.27: Keyboard navigation audit — components** — **100% COMPLETE** (Authored `scripts/keyboard-audit.mjs` verifying 27/27 keyboard invariants, added `useAppShortcuts.ts` with Ctrl+F/Ctrl+S/Alt+1..4, Escape dismissals in Input and Gallery, extracted `MainContent.tsx`, verified with build & guardrails)
-  * **Task 2.28: Snapshot tests — design tokens** — **100% COMPLETE** (Authored `tests/tokens.test.ts` and `tests/__snapshots__/tokens.test.ts.snap` with 6 Vitest tests asserting 58 design tokens, obsidian palette, 38px/24px/32px metrics, JetBrains Mono font, and sharp radii snapshot baseline)
-* **Next Immediate Task**: Task 3.1 — Define app routes / view enum (`src/lib/routes.ts`: `Dashboard`, `Workspaces`, `ActiveSession`, `Settings`, `About`)
+  * **Phase 3: Application Shell & Navigation (Tasks 3.1 – 3.18)** — **100% COMPLETE** (Client-side router, 5 view skeletons, sidebar navigation, localStorage persistence, CommandPalette Ctrl+K, shortcut map, Tauri global shortcuts, system tray integration, minimize to tray, dynamic badge, autostart, window geometry persistence, multi-monitor clamping, Vitest test suite)
+* **Next Immediate Task**: Task 4.1 — Add `tauri-plugin-sql` dependency to Rust backend (`Cargo.toml`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
