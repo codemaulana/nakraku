@@ -77,9 +77,9 @@ Audit executed via `scripts/check-env.ps1`:
 | Phase | Description | Task Count | Status |
 |---|---|---|---|
 | **Phase 0** | Foundations & Toolchain | 15 | **COMPLETED (15/15) [Tag: v0.0.1-scaffold]** |
-| **Phase 1** | FigCraft UI/UX Design & Vibe Coding (MCP) | 10 | **ACTIVE (In Progress)** |
-| **Phase 2** | React Design System & Component Library | 28 | Queued |
-| **Phase 3** | Application Shell & Navigation | 18 | Queued |
+| **Phase 1** | FigCraft UI/UX Design & Vibe Coding (MCP) | 10 | **COMPLETED (10/10)** |
+| **Phase 2** | React Design System & Component Library | 28 | **COMPLETED (28/28)** |
+| **Phase 3** | Application Shell & Navigation | 18 | **ACTIVE (In Progress)** |
 | **Phase 4** | Data Layer & Local Database | 17 | Queued |
 | **Phase 5** | Win32 OS Engine (Rust) | 21 | Queued |
 | **Phase 6** | Core Business Logic | 14 | Queued |
@@ -162,4 +162,26 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.25]` Write Storybook / component gallery (dev-only) (`src/dev/Gallery.tsx`: visual QA gallery workbench with modular sections `AtomicsSection.tsx`, `InputsSection.tsx`, and `LayoutsSection.tsx`, interactive tab switcher, `DEFAULT_NAV_ITEMS` dev link in `Sidebar.tsx`, and isolated `ProcessList.tsx` extraction) — **DONE**
 - `[2.26]` Accessibility audit — components (`scripts/a11y-audit.mjs`: automated WCAG 2.1 AA luminance & contrast tester auditing 32 token pairings with 100% pass rate; adjusted `--danger` to `#F87171` (6.47:1), `--text-disabled` to `#7E8B9B` (5.82:1), and `--status-frozen` to `#60A5FA` (7.94:1); audited and added visible emerald focus rings across `Sidebar`, `Titlebar`, `Modal`, `Input`, and `Button`) — **DONE**
 - `[2.27]` Keyboard navigation audit — components (`scripts/keyboard-audit.mjs`, `src/hooks/useAppShortcuts.ts`, `src/App.tsx`, `src/components/Input.tsx`, `src/dev/Gallery.tsx`: global shortcut listener for Ctrl+F search focus, Ctrl+S stash modal, Alt+1..4 tab switching, Escape dismiss on Gallery and Input clear, Tab/Shift+Tab focus trap in modals, verified 27/27 keyboard invariants) — **DONE**
-- `[2.28]` Snapshot tests — design tokens (Vitest snapshot test ensuring tokens.css values don't drift silently) — **NEXT**
+- `[2.28]` Snapshot tests — design tokens (`tests/tokens.test.ts`, `tests/__snapshots__/tokens.test.ts.snap`: 6 Vitest tests asserting 58 design tokens, obsidian palette, 38px/24px/32px metrics, JetBrains Mono font, and sharp radii snapshot baseline) — **DONE**
+
+---
+
+## 8. Phase 3 Task Log (Application Shell & Navigation)
+- `[3.1]` Define app routes / view enum (`src/lib/routes.ts`: `Dashboard`, `Workspaces`, `ActiveSession`, `Settings`, `About`) — **NEXT**
+- `[3.2]` Build client-side router (`src/router/Router.tsx`: hash-based or in-memory router, zero bloated dependencies) — **QUEUED**
+- `[3.3]` Build `Dashboard` view skeleton — **QUEUED**
+- `[3.4]` Build `Workspaces` view skeleton — **QUEUED**
+- `[3.5]` Build `ActiveSession` view skeleton — **QUEUED**
+- `[3.6]` Build `Settings` view skeleton — **QUEUED**
+- `[3.7]` Build `About` view skeleton — **QUEUED**
+- `[3.8]` Build sidebar navigation with active state — **QUEUED**
+- `[3.9]` Persist last-open route across restarts — **QUEUED**
+- `[3.10]` Build `CommandPalette` (Ctrl+K) — **QUEUED**
+- `[3.11]` Global keyboard shortcut map (`src/lib/shortcuts.ts`) — **QUEUED**
+- `[3.12]` Register Tauri global shortcuts (`tauri-plugin-global-shortcut`) — **QUEUED**
+- `[3.13]` System tray integration (icon, tooltip, context menu) — **QUEUED**
+- `[3.14]` System tray — minimize to tray on close — **QUEUED**
+- `[3.15]` System tray — dynamic badge — **QUEUED**
+- `[3.16]` Auto-launch on Windows startup (`tauri-plugin-autostart`) — **QUEUED**
+- `[3.17]` Window state persistence (position, size) — **QUEUED**
+- `[3.18]` Multi-monitor support (screen bounds clamping) — **QUEUED**

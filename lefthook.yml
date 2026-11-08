@@ -12,3 +12,5 @@ pre-commit:
       run: cargo check --manifest-path src-tauri/Cargo.toml
     guardrails:
       run: powershell -ExecutionPolicy Bypass -File scripts/guardrails.ps1
+    test:
+      run: npm test
