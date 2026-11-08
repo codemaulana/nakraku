@@ -38,7 +38,8 @@
   * **Task 2.19: Build `Input` component** — **100% COMPLETE** (Authored `src/components/Input.tsx` high-density 32px/28px input with monospace text, focus ring, error state, label above, icon slots, clear button, and shortcut badge, plus extracted `src/components/StashModal.tsx`, integrated into `src/App.tsx`)
   * **Task 2.20: Build `Kbd` component** — **100% COMPLETE** (Authored `src/components/Kbd.tsx` keyboard shortcut display with sizes `xs`/`sm`/`md`, variants `default`/`elevated`/`outline`/`ghost`, multi-key splitting `splitKeys`, and accessible ARIA labeling; integrated into `Tooltip.tsx`, `Input.tsx`, `Sidebar.tsx`, `Button.tsx`, `ContextMenu.tsx`, and `App.tsx`)
   * **Task 2.21: Build `Spinner` / `SkeletonRow` loading states** — **100% COMPLETE** (Authored `src/components/Spinner.tsx` circular animated SVG spinner and `src/components/SkeletonRow.tsx` base `Skeleton`, 32px `SkeletonRow`, and `SkeletonList` with staggered realistic widths, integrated into `Button.tsx` and async loading in `src/App.tsx`)
-* **Next Immediate Task**: Task 2.22 — Build `EmptyState` component (Icon + title + message for empty workspace/window lists — no generic "No data found" slop)
+  * **Task 2.22: Build `EmptyState` component** — **100% COMPLETE** (Authored `src/components/EmptyState.tsx` high-density utility empty state with presets `windows`, `workspaces`, `search`, `history`, `tabs`, compact mode, action CTA slot, and shortcut keycaps; integrated into `src/App.tsx`)
+* **Next Immediate Task**: Task 2.23 — Build `Divider` component (1px horizontal/vertical separator respecting `--border-subtle`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

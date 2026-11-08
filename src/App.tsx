@@ -12,6 +12,7 @@ import { Input } from "./components/Input";
 import { Kbd } from "./components/Kbd";
 import { Spinner } from "./components/Spinner";
 import { SkeletonList } from "./components/SkeletonRow";
+import { EmptyState } from "./components/EmptyState";
 import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
 import {
@@ -133,7 +134,7 @@ interface MainContentProps {
 const TaskStatusHeader: React.FC<{ isLoading: boolean }> = ({ isLoading }) => (
   <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
     <div className="flex items-center gap-1.5">
-      <span>Task 2.21: Spinner & SkeletonRow</span>
+      <span>Task 2.22: EmptyState Component</span>
       {isLoading && <Spinner size="xs" variant="accent" />}
     </div>
     <div className="flex items-center gap-1.5">
@@ -148,6 +149,7 @@ interface TableContainerProps {
   isLoading: boolean;
   filtered: ProcessItem[];
   selectedId: string;
+  onClearFilter: () => void;
   onSelect: (id: string) => void;
   onContextMenu: (e: React.MouseEvent, item: ProcessItem) => void;
 }
@@ -156,22 +158,44 @@ const ProcessTableContainer: React.FC<TableContainerProps> = ({
   isLoading,
   filtered,
   selectedId,
+  onClearFilter,
   onSelect,
   onContextMenu,
-}) => (
-  <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-    {isLoading ? (
-      <SkeletonList count={4} />
-    ) : (
+}) => {
+  if (isLoading) {
+    return (
+      <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
+        <SkeletonList count={4} />
+      </div>
+    );
+  }
+
+  if (filtered.length === 0) {
+    return (
+      <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
+        <EmptyState
+          preset="search"
+          action={
+            <Button size="sm" variant="secondary" onClick={onClearFilter}>
+              Clear Filter
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
       <ProcessList
         items={filtered}
         selectedId={selectedId}
         onSelect={onSelect}
         onContextMenu={onContextMenu}
       />
-    )}
-  </div>
-);
+    </div>
+  );
+};
 
 const MainContent: React.FC<MainContentProps> = ({
   activeTab,
@@ -212,6 +236,7 @@ const MainContent: React.FC<MainContentProps> = ({
           isLoading={isLoading}
           filtered={filtered}
           selectedId={selectedProcess}
+          onClearFilter={() => onSearchChange("")}
           onSelect={onSelectProcess}
           onContextMenu={onContextMenu}
         />
