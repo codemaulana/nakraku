@@ -7,6 +7,11 @@ import { Row } from "./components/Row";
 import { Badge, type BadgeVariant } from "./components/Badge";
 import { Icon, type IconName } from "./components/Icon";
 import { Tooltip } from "./components/Tooltip";
+import {
+  ContextMenu,
+  useContextMenu,
+  type ContextMenuItem,
+} from "./components/ContextMenu";
 
 interface ProcessItem {
   id: string;
@@ -56,9 +61,36 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
   },
 ];
 
-const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void }> = ({
+const createWorkspaceSubMenu = (onClose: () => void): ContextMenuItem[] => [
+  { id: "ws-dev", label: "Dev Core (Active)", onClick: onClose },
+  { id: "ws-ai", label: "Research & AI", onClick: onClose },
+  { id: "ws-personal", label: "Personal", onClick: onClose },
+];
+
+const createProcessMenuItems = (
+  item: ProcessItem | null,
+  onClose: () => void
+): ContextMenuItem[] => [
+  { id: "focus", label: "Focus Window", icon: "window", shortcut: "Enter", onClick: onClose },
+  { id: "pin", label: "Pin to Workspace", icon: "pin", shortcut: "Alt+P", onClick: onClose },
+  { id: "move-sub", label: "Move to Workspace", icon: "workspaces", subMenu: createWorkspaceSubMenu(onClose) },
+  { id: "sep-1", separator: true },
+  { id: "stash", label: "Stash Window", icon: "stash", shortcut: "Ctrl+S", onClick: onClose },
+  { id: "copy", label: "Copy Process Info", icon: "copy", shortcut: "Ctrl+C", onClick: onClose },
+  { id: "sep-2", separator: true },
+  { id: "kill", label: `End Task (${item?.pid ?? "PID"})`, icon: "trash", danger: true, shortcut: "Del", onClick: onClose },
+];
+
+interface ProcessListProps {
+  selectedId: string;
+  onSelect: (id: string) => void;
+  onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
+}
+
+const ProcessList: React.FC<ProcessListProps> = ({
   selectedId,
   onSelect,
+  onContextMenu,
 }) => (
   <div className="flex flex-col w-full divide-y divide-border-subtle/50">
     {SAMPLE_PROCESSES.map((item) => (
@@ -69,6 +101,7 @@ const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void
         description={item.desc}
         selected={selectedId === item.id}
         onClick={() => onSelect(item.id)}
+        onContextMenu={(e) => onContextMenu(e, item)}
         actions={
           <Tooltip content={`Pin ${item.title}`} shortcut="Alt+P" position="left">
             <button
@@ -132,6 +165,9 @@ const ActionToolbar: React.FC = () => (
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [selectedProcess, setSelectedProcess] = useState<string>("p1");
+  const { position, data, open, close } = useContextMenu<ProcessItem>();
+
+  const menuItems = createProcessMenuItems(data, close);
 
   return (
     <div className="flex flex-col h-screen bg-bg-base text-text-primary font-ui overflow-hidden select-none">
@@ -155,18 +191,20 @@ export const App: React.FC = () => {
           <div className="p-base flex flex-col gap-sm">
             <ActionToolbar />
             <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-              Task 2.15: Tooltip (200ms Delay, Dark Surface, Kbd Shortcuts)
+              Task 2.16: Right-Click ContextMenu (Keyboard Nav & Sub-menus)
             </div>
             <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
               <ProcessList
                 selectedId={selectedProcess}
                 onSelect={setSelectedProcess}
+                onContextMenu={open}
               />
             </div>
           </div>
         </MainPanel>
       </div>
       <StatusBar ramSaved="1.8 GB" />
+      <ContextMenu items={menuItems} position={position} onClose={close} />
     </div>
   );
 };

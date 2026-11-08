@@ -16,6 +16,7 @@ export interface RowProps {
   className?: string;
   onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
   onDoubleClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   tabIndex?: number;
   role?: string;
@@ -127,6 +128,7 @@ export const Row: React.FC<RowProps> = ({
   className = "",
   onClick,
   onDoubleClick,
+  onContextMenu,
   onKeyDown,
   tabIndex,
   role,
@@ -150,6 +152,7 @@ export const Row: React.FC<RowProps> = ({
       aria-label={ariaLabel}
       onClick={disabled ? undefined : onClick}
       onDoubleClick={disabled ? undefined : onDoubleClick}
+      onContextMenu={disabled ? undefined : onContextMenu}
       onKeyDown={handleKeyDown}
       className={`group flex items-center w-full px-sm gap-xs select-none border-l-2 transition-colors duration-100 ease-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-focus ${heightClass} ${stateClass} ${className}`}
     >
