@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { AppWindow, Terminal, Globe } from "lucide-react";
 import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
 import { MainPanel } from "./components/MainPanel";
 import { StatusBar } from "./components/StatusBar";
 import { Row } from "./components/Row";
 import { Badge, type BadgeVariant } from "./components/Badge";
+import { Icon, type IconName } from "./components/Icon";
 
 interface ProcessItem {
   id: string;
   title: string;
   desc: string;
-  icon: React.ReactNode;
+  iconName: IconName;
+  iconColor: string;
   pid: string;
   ram: string;
   status: BadgeVariant;
@@ -23,7 +24,8 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
     id: "p1",
     title: "Visual Studio Code — nakraku",
     desc: "C:\\Nakraku\\src\\components\\Row.tsx",
-    icon: <AppWindow className="w-3.5 h-3.5 text-accent-emerald" />,
+    iconName: "window",
+    iconColor: "text-accent-emerald",
     pid: "PID 18420",
     ram: "142.4 MB",
     status: "active",
@@ -33,7 +35,8 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
     id: "p2",
     title: "Google Chrome — GitHub PR #42",
     desc: "chrome.exe — 8 tabs active",
-    icon: <Globe className="w-3.5 h-3.5 text-status-frozen" />,
+    iconName: "globe",
+    iconColor: "text-status-frozen",
     pid: "PID 9424",
     ram: "624.1 MB",
     status: "frozen",
@@ -43,7 +46,8 @@ const SAMPLE_PROCESSES: ProcessItem[] = [
     id: "p3",
     title: "Windows PowerShell — cargo check",
     desc: "powershell.exe — dev profile",
-    icon: <Terminal className="w-3.5 h-3.5 text-text-secondary" />,
+    iconName: "terminal",
+    iconColor: "text-text-secondary",
     pid: "PID 3112",
     ram: "28.5 MB",
     status: "neutral",
@@ -59,7 +63,7 @@ const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void
     {SAMPLE_PROCESSES.map((item) => (
       <Row
         key={item.id}
-        icon={item.icon}
+        icon={<Icon name={item.iconName} size="sm" className={item.iconColor} />}
         label={item.title}
         description={item.desc}
         selected={selectedId === item.id}
@@ -78,16 +82,34 @@ const ProcessList: React.FC<{ selectedId: string; onSelect: (id: string) => void
   </div>
 );
 
-const BadgeShowcase: React.FC = () => (
-  <div className="flex flex-wrap items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
-    <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">Badges:</span>
-    <Badge variant="active" dot pulse>ACTIVE</Badge>
-    <Badge variant="frozen" dot>FROZEN</Badge>
-    <Badge variant="warning" dot>HIGH RAM</Badge>
-    <Badge variant="danger" dot>CRITICAL</Badge>
-    <Badge variant="accent">PRO</Badge>
-    <Badge variant="count">14</Badge>
-    <Badge variant="neutral">READY</Badge>
+const SHOWCASE_ICONS: IconName[] = [
+  "stash",
+  "restore",
+  "search",
+  "filter",
+  "pin",
+  "trash",
+  "lock",
+  "wifi",
+  "cpu",
+  "memory",
+  "sparkles",
+];
+
+const IconShowcase: React.FC = () => (
+  <div className="flex items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
+    <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">
+      Icon System (14px/1.5px):
+    </span>
+    {SHOWCASE_ICONS.map((name) => (
+      <div
+        key={name}
+        title={name}
+        className="w-5 h-5 flex items-center justify-center rounded-xs bg-bg-elevated hover:bg-bg-hover text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+      >
+        <Icon name={name} size={14} />
+      </div>
+    ))}
   </div>
 );
 
@@ -113,9 +135,9 @@ export const App: React.FC = () => {
           }
         >
           <div className="p-base flex flex-col gap-sm">
-            <BadgeShowcase />
+            <IconShowcase />
             <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-              Task 2.13: Live Windows & Badges
+              Task 2.14: Unified Thin-Line Icon System
             </div>
             <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
               <ProcessList
