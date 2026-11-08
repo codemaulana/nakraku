@@ -1,3 +1,4 @@
+pub mod db;
 mod shortcuts;
 mod tray;
 mod window_state;
@@ -19,6 +20,15 @@ pub fn run() {
                         .level(log::LevelFilter::Info)
                         .build(),
                 );
+            }
+
+            match db::setup_db(app.handle()) {
+                Ok(pool) => {
+                    app.manage(pool);
+                }
+                Err(err) => {
+                    eprintln!("Warning: Failed to initialize SQLite database: {}", err);
+                }
             }
 
             if let Err(err) = tray::setup_tray(app.handle()) {
@@ -50,6 +60,22 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             tray::update_tray_status,
+            db::commands::create_workspace,
+            db::commands::list_workspaces,
+            db::commands::get_workspace,
+            db::commands::rename_workspace,
+            db::commands::delete_workspace,
+            db::commands::reorder_workspaces,
+            db::commands::save_session,
+            db::commands::list_sessions,
+            db::commands::get_session,
+            db::commands::delete_session,
+            db::commands::save_session_windows,
+            db::commands::get_session_windows,
+            db::commands::get_window_tabs,
+            db::commands::get_setting,
+            db::commands::set_setting,
+            db::commands::backup_database,
         ])
         .run(tauri::generate_context!());
 

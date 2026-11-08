@@ -80,8 +80,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 1** | FigCraft UI/UX Design & Vibe Coding (MCP) | 10 | **COMPLETED (10/10)** |
 | **Phase 2** | React Design System & Component Library | 28 | **COMPLETED (28/28)** |
 | **Phase 3** | Application Shell & Navigation | 18 | **COMPLETED (18/18)** |
-| **Phase 4** | Data Layer & Local Database | 17 | **ACTIVE (In Progress)** |
-| **Phase 5** | Win32 OS Engine (Rust) | 21 | Queued |
+| **Phase 4** | Data Layer & Local Database | 17 | **COMPLETED (17/17)** |
+| **Phase 5** | Win32 OS Engine (Rust) | 21 | **ACTIVE (In Progress)** |
 | **Phase 6** | Core Business Logic | 14 | Queued |
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | Queued |
 | **Phase 8** | Frontend — Workspaces View | 13 | Queued |
@@ -189,6 +189,27 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 9. Phase 4 Task Log (Data Layer & Local Database)
-- `[4.1]` Add `tauri-plugin-sql` dependency to Rust backend (`Cargo.toml`) — **NEXT**
-- `[4.2]` Configure SQLite database initialization with WAL journal mode — **QUEUED**
-- `[4.3]` Write initial SQL migration schema (`workspaces`, `sessions`, `windows`, `tabs`) — **QUEUED**
+- `[4.1]` Design SQLite database schema v1 & ERD diagram (`docs/schema.md`: `workspaces`, `sessions`, `windows`, `tabs`, `app_settings` with relations & indexes) — **DONE**
+- `[4.2]` Write initial SQL migration schema (`migrations/001_init.sql`, `src-tauri/migrations/001_init.sql`: Foreign keys, cascades, indexes, timestamps) — **DONE**
+- `[4.3]` Configure SQLite database initialization with WAL journal mode (`src-tauri/src/db/mod.rs`: `journal_mode=WAL`, `foreign_keys=ON`, `synchronous=NORMAL`, automated migration runner) — **DONE**
+- `[4.4]` Build thread-safe connection pool/wrapper (`src-tauri/src/db/mod.rs`: `DbPool` using `Arc<Mutex<Connection>>` with transaction helpers) — **DONE**
+- `[4.5]` Write Rust repository `workspace_repo.rs` (`create`, `list`, `get`, `rename`, `delete`, `reorder` — typed errors, zero unwrap) — **DONE**
+- `[4.6]` Write Rust repository `session_repo.rs` (`save_session`, `list_sessions`, `get_session`, `delete_session`) — **DONE**
+- `[4.7]` Write Rust repository `window_repo.rs` (`upsert_windows`, `list_by_session`, `delete_by_session`) — **DONE**
+- `[4.8]` Write Rust repository `tab_repo.rs` (`upsert_tabs`, `list_by_window`, `delete_by_session`) — **DONE**
+- `[4.9]` Expose Tauri commands for workspace CRUD (`src-tauri/src/db/commands.rs`: `create_workspace`, `list_workspaces`, `get_workspace`, `rename_workspace`, `delete_workspace`, `reorder_workspaces`) — **DONE**
+- `[4.10]` Expose Tauri commands for session, window, and tab CRUD (`src-tauri/src/db/commands.rs`: `save_session`, `list_sessions`, `get_session`, `delete_session`, `upsert_windows`, `list_windows_by_session`, `upsert_tabs`, `list_tabs_by_window`) — **DONE**
+- `[4.11]` Write TypeScript API client (`src/lib/api.ts`: typed wrappers around `invoke()` with `isTauri` detection, typed error mapping, and Zod output validation) — **DONE**
+- `[4.12]` Write Zod validation schemas (`src/lib/schemas.ts`: strict runtime validation for workspaces, sessions, windows, tabs, and settings) — **DONE**
+- `[4.13]` Unit tests for Rust repositories (`src-tauri/src/db/`: in-memory SQLite CRUD tests with zero unwrap, returning Result) — **DONE**
+- `[4.14]` Unit tests for TypeScript API client (`tests/api.test.ts`: Vitest suite covering Zod validation, IPC calls, fallbacks, and error paths) — **DONE**
+- `[4.15]` Write settings migration (`migrations/002_settings.sql`, `src-tauri/migrations/002_settings.sql`: `app_settings` key-value table) — **DONE**
+- `[4.16]` Write settings repository & Tauri commands (`src-tauri/src/db/settings_repo.rs`: `get_app_setting`, `set_app_setting`) — **DONE**
+- `[4.17]` Database backup utility (`src-tauri/src/db/backup.rs`: `backup_db()` creating timestamped `.bak` files) — **DONE**
+
+---
+
+## 10. Phase 5 Task Log (Win32 OS Engine)
+- `[5.1]` Research Win32 API surface needed (`docs/win32-api-surface.md`) — **NEXT**
+- `[5.2]` Add `windows-sys` crate with required features — **QUEUED**
+- `[5.3]` Write `src-tauri/src/os/window_enum.rs` (`enumerate_windows()`) — **QUEUED**

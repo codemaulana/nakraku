@@ -13,13 +13,14 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 4 — Data Layer & Local Database
+* **Active Phase**: Phase 5 — Win32 OS Engine (Rust)
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
   * **Phase 2: React Design System & Component Library (Tasks 2.1 – 2.28)** — **100% COMPLETE** (28 high-density desktop components, tokens.css, WCAG 2.1 AA a11y audit, keyboard audit, Vitest snapshots)
   * **Phase 3: Application Shell & Navigation (Tasks 3.1 – 3.18)** — **100% COMPLETE** (Client-side router, 5 view skeletons, sidebar navigation, localStorage persistence, CommandPalette Ctrl+K, shortcut map, Tauri global shortcuts, system tray integration, minimize to tray, dynamic badge, autostart, window geometry persistence, multi-monitor clamping, Vitest test suite)
-* **Next Immediate Task**: Task 4.1 — Add `tauri-plugin-sql` dependency to Rust backend (`Cargo.toml`)
+  * **Phase 4: Data Layer & Local Database (Tasks 4.1 – 4.17)** — **100% COMPLETE** (SQLite database in WAL mode, migrations 001/002, 6 Rust repositories, Tauri IPC commands, TypeScript client with Zod runtime validation, in-memory Rust tests, Vitest client tests, DB backup)
+* **Next Immediate Task**: Task 5.1 — Win32 API Surface Research (`docs/win32-api-surface.md`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
