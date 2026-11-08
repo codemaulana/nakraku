@@ -23,7 +23,8 @@
   * **Task 2.4: Define design tokens — border & radius** — **100% COMPLETE** (Defined `--border-width`, `--border-width-thick`, semantic border colors `--border-color-subtle` through `--border-color-warning`, and radius scale `--radius-none` to `--radius-full` in `src/styles/tokens.css`, verified with build & guardrails)
   * **Task 2.5: Configure Tailwind CSS** — **100% COMPLETE** (Created `tailwind.config.ts` consuming `tokens.css` with strict color isolation overriding default palettes, PostCSS configured, verified via `src/App.tsx` and production build)
   * **Task 2.6: Build `Titlebar` component** — **100% COMPLETE** (Authored `src/components/Titlebar.tsx` frameless 38px titlebar with `data-tauri-drag-region`, status indicator, customizable title and badge, and Windows 11 style minimize/maximize/close button controls, integrated into `src/App.tsx`)
-* **Next Immediate Task**: Task 2.7 — Build `Titlebar` — window control logic (Wire Tauri v2 `window.minimize()`, `window.toggleMaximize()`, `window.close()`)
+  * **Task 2.7: Build `Titlebar` — window control logic** — **100% COMPLETE** (Authored `src/hooks/useWindowControls.ts` wiring Tauri v2 `window.minimize()`, `window.toggleMaximize()`, `window.close()`, and dynamic resize state sync with granular Tauri permissions in `src-tauri/capabilities/default.json` and resilient browser fallbacks)
+* **Next Immediate Task**: Task 2.8 — Build `Titlebar` — vibrancy / blur effect (CSS backdrop-filter blur on titlebar background)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

@@ -141,4 +141,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.4]` Define design tokens — border & radius (`src/styles/tokens.css`: `--border-width`, `--border-width-thick`, semantic border colors `--border-color-subtle` through `--border-color-warning`, and radius scale `--radius-none` to `--radius-full`) — **DONE**
 - `[2.5]` Configure Tailwind CSS (`tailwind.config.ts` consuming `tokens.css` with strict colors isolation, PostCSS configured, purge paths set, verified in `src/App.tsx`) — **DONE**
 - `[2.6]` Build `Titlebar` component (`src/components/Titlebar.tsx`: Frameless 38px bar with status dot, title, badge, drag region `data-tauri-drag-region`, and pixel-perfect minimize/maximize/close buttons, integrated into `src/App.tsx`) — **DONE**
-- `[2.7]` Build `Titlebar` — window control logic (Wire Tauri v2 `window.minimize()`, `window.toggleMaximize()`, `window.close()`) — **NEXT**
+- `[2.7]` Build `Titlebar` — window control logic (`src/hooks/useWindowControls.ts`: Wired Tauri v2 `appWindow.minimize()`, `appWindow.toggleMaximize()`, `appWindow.close()`, and `appWindow.onResized()` maximize state listener, with capabilities configured in `src-tauri/capabilities/default.json` and safe browser fallbacks) — **DONE**
+- `[2.8]` Build `Titlebar` — vibrancy / blur effect (CSS backdrop-filter blur on titlebar background) — **NEXT**

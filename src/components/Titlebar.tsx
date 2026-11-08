@@ -1,4 +1,5 @@
 import React from "react";
+import { useWindowControls } from "../hooks/useWindowControls";
 
 export interface TitlebarProps {
   title?: string;
@@ -67,11 +68,18 @@ const WindowControls: React.FC<WindowControlsProps> = ({
 export const Titlebar: React.FC<TitlebarProps> = ({
   title = "NAKRAKU STASH",
   badge,
-  isMaximized = false,
+  isMaximized: controlledMaximized,
   onMinimize,
   onMaximize,
   onClose,
 }) => {
+  const controls = useWindowControls();
+
+  const isMaximized = controlledMaximized ?? controls.isMaximized;
+  const handleMinimize = onMinimize ?? controls.minimize;
+  const handleMaximize = onMaximize ?? controls.toggleMaximize;
+  const handleClose = onClose ?? controls.close;
+
   return (
     <header
       data-tauri-drag-region
@@ -93,9 +101,9 @@ export const Titlebar: React.FC<TitlebarProps> = ({
 
       <WindowControls
         isMaximized={isMaximized}
-        onMinimize={onMinimize}
-        onMaximize={onMaximize}
-        onClose={onClose}
+        onMinimize={handleMinimize}
+        onMaximize={handleMaximize}
+        onClose={handleClose}
       />
     </header>
   );
