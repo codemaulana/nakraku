@@ -95,8 +95,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 16**| Installer & Distribution | 12 | **COMPLETED (12/12)** |
 | **Phase 17**| CI/CD Pipeline | 8 | **COMPLETED (8/8)** |
 | **Phase 18**| Documentation | 14 | **COMPLETED (14/14)** |
-| **Phase 19**| Open Source Hygiene | 9 | **ACTIVE (In Progress)** |
-| **Phase 20**| Landing Page | 7 | Queued |
+| **Phase 19**| Open Source Hygiene | 9 | **COMPLETED (9/9)** |
+| **Phase 20**| Landing Page | 7 | **ACTIVE (In Progress)** |
 | **TOTAL** | | **288** | |
 
 ---
@@ -446,3 +446,16 @@ Audit executed via `scripts/check-env.ps1`:
 - `[18.12]` Inline JSDoc on all exported TS functions (parameter contracts only without narrative slop, modularized into `src/lib/osApi.ts`, `src/lib/wsApi.ts`, `src/lib/api.ts`) — **DONE**
 - `[18.13]` Inline `///` doc comments on all public Rust items (crate-level documentation and typed `AppError` docs verified via `cargo doc --no-deps`) — **DONE**
 - `[18.14]` Record demo GIF / video assets (`docs/previews/stash-restore-flow.svg`: animated SVG illustrating 3-step active session, instant stash, and coordinate restore cycle) — **DONE**
+
+---
+
+## 24. Phase 19 Task Log (Open Source Hygiene)
+- `[19.1]` Choose and add license file (`LICENSE`: standard MIT license with 2026 Nakraku Contributors copyright notice) — **DONE**
+- `[19.2]` Add `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1 with reporting email `security@nakraku.app` and enforcement impact guidelines) — **DONE**
+- `[19.3]` Write `.github/ISSUE_TEMPLATE/bug_report.md` (structured issue template with telemetry fields for OS build, monitor setup, and sanitized log output) — **DONE**
+- `[19.4]` Write `.github/ISSUE_TEMPLATE/feature_request.md` (enhancement proposal template requiring problem statement, 32px desktop UX design, and subsystem impact checklist) — **DONE**
+- `[19.5]` Write `.github/PULL_REQUEST_TEMPLATE.md` (PR template enforcing zero narrative comments, <50 line functions, <300 line files, zero `any`, zero unhandled `unwrap()`, and quality gate checklist) — **DONE**
+- `[19.6]` Write `TRIAGE.md` (formal issue triage protocol with P0-P3 SLA matrix, subsystem label taxonomy, reproduction loop, and PR review merge strategy) — **DONE**
+- `[19.7]` GitHub repo settings specification & automation (`.github/settings.yml` + `docs/GITHUB-SETTINGS.md`: repository metadata, topics, branch protection rules on `master`, and merge policies) — **DONE**
+- `[19.8]` Set up GitHub Discussions configuration & guidelines (`.github/DISCUSSION_TEMPLATE/ideas.md` + `docs/DISCUSSIONS.md`: category definitions, Q&A vs Issues guidance, and RFC templates) — **DONE**
+- `[19.9]` First public release announcement (`docs/ANNOUNCEMENT.md`: publication-ready copy for Hacker News Show HN, Reddit r/rust & r/windows, Twitter/X thread, and Product Hunt) — **DONE**
