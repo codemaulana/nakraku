@@ -27,4 +27,41 @@
   --danger-muted: rgba(239, 68, 68, 0.15);
   --warning: #F59E0B;
   --warning-muted: rgba(245, 158, 11, 0.15);
+
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+
+  --leading-none: 1;
+  --leading-compact: 1.25;
+  --leading-normal: 1.4;
+
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  line-height: var(--leading-compact);
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
 }
