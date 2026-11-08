@@ -13,7 +13,7 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 8 — Frontend — Workspaces View
+* **Active Phase**: Phase 9 — Frontend — Settings View
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
@@ -23,7 +23,8 @@
   * **Phase 5: Win32 OS Engine (Tasks 5.1 – 5.21)** — **100% COMPLETE** (Win32 API surface docs, `windows-sys` v0.59, `EnumWindows` safe enumerator, system window exclusion filter, process memory telemetry, session snapshot, window restore & minimize engine, process launch, `SetWinEventHook` OS listeners, 7 Rust integration tests, 9 Vitest tests)
   * **Phase 6: Core Business Logic (Tasks 6.1 – 6.14)** — **100% COMPLETE** (StashService orchestration, restore session, quick switch, 3-workspace free-tier limit, auto-snapshot controller with interval pruning, session diff engine, 5-slot bounded undo stack, 11 Rust tests, 11 Vitest tests)
   * **Phase 7: Frontend — Dashboard & Live View (Tasks 7.1 – 7.12)** — **100% COMPLETE** (LiveWindowList 32px rows, process icon resolution & caching, multi-selection, memory meter, live process counter, StashButton 36px CTA with confirmation tooltip, event-driven reactive refresh, empty and error states, 51 Vitest tests)
-* **Next Immediate Task**: Task 8.1 — Build `WorkspaceCard` component
+  * **Phase 8: Frontend — Workspaces View (Tasks 8.1 – 8.13)** — **100% COMPLETE** (WorkspaceCard 36px rows, inline double-click rename, delete confirmation modal, up/down drag reordering, 8-dot color palette popover, free-tier slot #4 locking, sliding SessionHistoryPanel with window inspect list, session restore & delete, 63 Vitest tests)
+* **Next Immediate Task**: Task 9.1 — Build General settings panel
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

@@ -2,129 +2,141 @@ import React from "react";
 import { MainPanel } from "../components/MainPanel";
 import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
-import { Row } from "../components/Row";
 import { Tooltip } from "../components/Tooltip";
 import { Divider } from "../components/Divider";
+import { WorkspaceList, WorkspaceDeleteModal } from "../components/WorkspaceList";
+import { WorkspaceCreatorBar } from "../components/WorkspaceCreatorBar";
+import { SessionHistoryPanel } from "../components/SessionHistoryPanel";
+import { useWorkspaces, type UseWorkspacesReturn } from "../hooks/useWorkspaces";
 
-export interface WorkspaceItem {
-  id: string;
-  name: string;
-  windowCount: number;
-  ramSaved: string;
-  color: string;
-  updatedAt: string;
-  isCurrent?: boolean;
-}
+const WorkspacesHeader: React.FC<{
+  count: number;
+  isFreeTier: boolean;
+  canCreate: boolean;
+  onNewClick: () => void;
+}> = ({ count, isFreeTier, canCreate, onNewClick }) => {
+  const badgeLabel = isFreeTier ? `${count} / 3 Free Tier` : `${count} Workspaces (Pro)`;
 
-const SAMPLE_WORKSPACES: WorkspaceItem[] = [
-  {
-    id: "ws-1",
-    name: "Core Development",
-    windowCount: 8,
-    ramSaved: "1.4 GB",
-    color: "#10B981",
-    updatedAt: "2m ago",
-    isCurrent: true,
-  },
-  {
-    id: "ws-2",
-    name: "Research & Literature",
-    windowCount: 4,
-    ramSaved: "850 MB",
-    color: "#60A5FA",
-    updatedAt: "1h ago",
-  },
-  {
-    id: "ws-3",
-    name: "Design & Specs",
-    windowCount: 2,
-    ramSaved: "420 MB",
-    color: "#F59E0B",
-    updatedAt: "Yesterday",
-  },
-];
+  return (
+    <div className="flex items-center justify-between h-row px-base">
+      <div className="flex items-center gap-xs">
+        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
+          Workspaces
+        </span>
+        <Badge variant={isFreeTier && count >= 3 ? "warning" : "neutral"} size="sm">
+          {badgeLabel}
+        </Badge>
+      </div>
 
-const WorkspacesHeader: React.FC = () => (
-  <div className="flex items-center justify-between h-row px-base">
-    <div className="flex items-center gap-xs">
-      <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
-        Workspaces
-      </span>
-      <Badge variant="neutral" size="sm">
-        3 / 3 Free Tier
-      </Badge>
+      {canCreate ? (
+        <Button size="sm" variant="primary" icon="plus" onClick={onNewClick}>
+          New Workspace
+        </Button>
+      ) : (
+        <Tooltip content="Free tier limited to 3 workspaces. Upgrade to Pro for unlimited." position="left">
+          <Button size="sm" variant="secondary" icon="plus" disabled>
+            New Workspace
+          </Button>
+        </Tooltip>
+      )}
     </div>
-    <Tooltip content="Maximum free tier reached (3/3)" position="left">
-      <Button variant="secondary" size="sm" icon="plus" disabled>
-        New Workspace
-      </Button>
-    </Tooltip>
+  );
+};
+
+const WorkspacesStorageStatus: React.FC<{
+  count: number;
+  isFreeTier: boolean;
+}> = ({ count, isFreeTier }) => (
+  <div className="p-xs bg-bg-surface border border-border-subtle rounded-sm flex items-center justify-between text-2xs text-text-secondary font-mono">
+    <span>Local SQLite Storage: {count} active workspace{count === 1 ? "" : "s"}</span>
+    <span className={isFreeTier && count >= 3 ? "text-accent-amber font-semibold" : "text-accent-emerald font-semibold"}>
+      {isFreeTier ? (count >= 3 ? "Free Limit Reached (3/3)" : `${3 - count} slot(s) remaining`) : "Pro License: Unlimited"}
+    </span>
   </div>
 );
 
-const WorkspaceTag: React.FC<{ color: string }> = ({ color }) => (
-  <span
-    className="w-2 h-2 rounded-full shrink-0"
-    style={{ backgroundColor: color }}
-  />
+const WorkspacesErrorBanner: React.FC<{
+  error: string;
+  onDismiss: () => void;
+}> = ({ error, onDismiss }) => (
+  <div className="p-2 bg-danger/10 border border-danger/40 rounded-sm flex items-center justify-between text-2xs text-danger font-mono">
+    <span>{error}</span>
+    <button type="button" onClick={onDismiss} className="hover:underline text-text-primary ml-2">
+      Dismiss
+    </button>
+  </div>
 );
 
-interface WorkspaceRowItemProps {
-  ws: WorkspaceItem;
-  onRestore: (id: string) => void;
-}
+const WorkspacesContent: React.FC<{
+  w: UseWorkspacesReturn;
+  canCreate: boolean;
+}> = ({ w, canCreate }) => (
+  <div className="p-base flex flex-col gap-sm relative min-h-full">
+    {w.error && <WorkspacesErrorBanner error={w.error} onDismiss={w.clearError} />}
 
-const WorkspaceRowItem: React.FC<WorkspaceRowItemProps> = ({ ws, onRestore }) => (
-  <Row
-    key={ws.id}
-    size="lg"
-    active={ws.isCurrent}
-    icon={<WorkspaceTag color={ws.color} />}
-    label={ws.name}
-    description={`${ws.windowCount} windows stashed • updated ${ws.updatedAt}`}
-    meta={
-      <div className="flex items-center gap-xs">
-        <Badge variant={ws.isCurrent ? "active" : "frozen"} size="sm">
-          {ws.ramSaved}
-        </Badge>
-      </div>
-    }
-    actions={
-      <div className="flex items-center gap-2xs">
-        <Button
-          size="sm"
-          variant={ws.isCurrent ? "secondary" : "primary"}
-          icon="restore"
-          onClick={() => onRestore(ws.id)}
-        >
-          {ws.isCurrent ? "Active" : "Restore"}
-        </Button>
-      </div>
-    }
-  />
+    <WorkspacesStorageStatus count={w.workspaces.length} isFreeTier={w.isFreeTier} />
+
+    {w.isCreating && (
+      <WorkspaceCreatorBar
+        existingNames={w.workspaces.map((x) => x.name)}
+        onSubmit={async (name, color) => await w.createWorkspace(name, color)}
+        onCancel={() => w.setIsCreating(false)}
+      />
+    )}
+
+    <Divider label="Saved Workspaces" labelAlign="left" spacing="none" />
+
+    <WorkspaceList
+      workspaces={w.workspaces}
+      activeId={w.activeId}
+      isFreeTier={w.isFreeTier}
+      onRestore={w.restoreWorkspaceAction}
+      onOpenHistory={w.openHistory}
+      onRename={w.renameWorkspace}
+      onDeleteRequest={w.setDeleteTarget}
+      onChangeColor={w.changeColor}
+      onMoveUp={(idx) => w.moveWorkspace(idx, "up")}
+      onMoveDown={(idx) => w.moveWorkspace(idx, "down")}
+      onCreateClick={canCreate ? () => w.setIsCreating(true) : undefined}
+    />
+
+    <WorkspaceDeleteModal
+      target={w.deleteTarget}
+      onConfirm={w.confirmDelete}
+      onCancel={() => w.setDeleteTarget(null)}
+    />
+
+    {w.historyTarget && (
+      <SessionHistoryPanel
+        workspace={w.historyTarget}
+        sessions={w.historySessions}
+        expandedSessionId={w.expandedSessionId}
+        sessionWindows={w.sessionWindows}
+        onClose={w.closeHistory}
+        onToggleExpand={w.toggleExpandSession}
+        onRestoreSession={w.restoreSession}
+        onDeleteSession={w.deleteSession}
+      />
+    )}
+  </div>
 );
 
 export const WorkspacesView: React.FC = () => {
-  const handleRestore = (id: string) => {
-    void id;
-  };
+  const w = useWorkspaces();
+  const canCreate = !w.isFreeTier || w.workspaces.length < 3;
 
   return (
-    <MainPanel header={<WorkspacesHeader />}>
-      <div className="p-base flex flex-col gap-sm">
-        <div className="p-xs bg-bg-surface border border-border-subtle rounded-sm flex items-center justify-between text-2xs text-text-secondary font-mono">
-          <span>Local SQLite Storage: 3 active snapshots</span>
-          <span className="text-accent-emerald font-semibold">Total RAM Stashed: 2.67 GB</span>
-        </div>
-
-        <Divider label="Saved Workspaces" labelAlign="left" spacing="none" />
-
-        <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-          {SAMPLE_WORKSPACES.map((ws) => (
-            <WorkspaceRowItem key={ws.id} ws={ws} onRestore={handleRestore} />
-          ))}
-        </div>
-      </div>
+    <MainPanel
+      header={
+        <WorkspacesHeader
+          count={w.workspaces.length}
+          isFreeTier={w.isFreeTier}
+          canCreate={canCreate}
+          onNewClick={() => w.setIsCreating(true)}
+        />
+      }
+    >
+      <WorkspacesContent w={w} canCreate={canCreate} />
     </MainPanel>
   );
 };

@@ -84,8 +84,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 5** | Win32 OS Engine (Rust) | 21 | **COMPLETED (21/21)** |
 | **Phase 6** | Core Business Logic | 14 | **COMPLETED (14/14)** |
 | **Phase 7** | Frontend — Dashboard & Live View | 12 | **COMPLETED (12/12)** |
-| **Phase 8** | Frontend — Workspaces View | 13 | **ACTIVE (In Progress)** |
-| **Phase 9** | Frontend — Settings View | 9 | Queued |
+| **Phase 8** | Frontend — Workspaces View | 13 | **COMPLETED (13/13)** |
+| **Phase 9** | Frontend — Settings View | 9 | **ACTIVE (In Progress)** |
 | **Phase 10**| Browser Extension (MV3) | 16 | Queued |
 | **Phase 11**| Licensing & Monetization | 15 | Queued |
 | **Phase 12**| Error Handling & Telemetry | 10 | Queued |
@@ -269,6 +269,29 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 13. Phase 8 Task Log (Frontend — Workspaces View)
-- `[8.1]` Build `WorkspaceCard` component — **NEXT**
-- `[8.2]` Build `WorkspaceList` component — **QUEUED**
-- `[8.3]` Workspace — create flow — **QUEUED**
+- `[8.1]` Build `WorkspaceCard` component (`src/components/WorkspaceCard.tsx`: compact 36px desktop row with color dot popover, slot index `#1..N`, timestamp, status badge, restore CTA with shortcut hint, session history trigger, inline rename, delete button) — **DONE**
+- `[8.2]` Build `WorkspaceList` component (`src/components/WorkspaceList.tsx`: container rendering workspace card items, divider borders, empty state fallback) — **DONE**
+- `[8.3]` Workspace create flow (`src/components/WorkspaceCreatorBar.tsx`: inline creation input bar with length validation 1..50, case-insensitive duplicate check, 8-dot color palette selection, Esc/Enter keyboard control) — **DONE**
+- `[8.4]` Workspace rename flow (`src/components/WorkspaceCard.tsx`: inline editing mode triggered via double-click on row or rename icon button, Esc to cancel, Enter/blur to save) — **DONE**
+- `[8.5]` Workspace delete flow (`src/components/WorkspaceList.tsx`: `WorkspaceDeleteModal` warning user of permanent session loss from SQLite before deletion) — **DONE**
+- `[8.6]` Reordering (`src/components/WorkspaceCard.tsx`, `src/hooks/useWorkspaces.ts`: move up/down chevrons recalculating positions and persisting to SQLite via `api.reorderWorkspaces`) — **DONE**
+- `[8.7]` Color picker (`src/components/WorkspaceColorPicker.tsx`: 8 preset obsidian/terminal colors `#10B981`, `#3B82F6`, `#8B5CF6`, `#EC4899`, `#F59E0B`, `#06B6D4`, `#14B8A6`, `#EF4444` in click-to-open popover) — **DONE**
+- `[8.8]` Free tier lock UI (`src/components/WorkspaceList.tsx`: `FreeTierLockedSlot` rendering locked slot #4 with dashed border, lock icon, and Pro upgrade badge when >= 3 workspaces on free tier) — **DONE**
+- `[8.9]` `SessionHistoryPanel` (`src/components/SessionHistoryPanel.tsx`: right sliding drawer showing past snapshot history for selected workspace with session name, date, window count, and RAM saved) — **DONE**
+- `[8.10]` Session detail inspect (`src/components/SessionHistoryPanel.tsx`: "Inspect windows" toggle expanding saved window list with PID, process name, window title, and RAM consumption) — **DONE**
+- `[8.11]` Session restore action (`src/components/SessionHistoryPanel.tsx`, `src/hooks/useWorkspaces.ts`: 1-click restore button invoking `api.restoreSessionById(sessionId)`) — **DONE**
+- `[8.12]` Session delete action (`src/components/SessionHistoryPanel.tsx`, `src/hooks/useWorkspaces.ts`: snapshot delete button invoking `api.deleteSession(sessionId)` with reactive refresh) — **DONE**
+- `[8.13]` Workspace restore action (`src/components/WorkspaceCard.tsx`, `src/hooks/useWorkspaces.ts`: restore CTA button with keyboard shortcut hints `Alt+1` through `Alt+9` invoking `api.restoreWorkspace(id)`) — **DONE**
+
+---
+
+## 14. Phase 9 Task Log (Frontend — Settings View)
+- `[9.1]` General settings panel — **NEXT**
+- `[9.2]` Stash behavior settings — **QUEUED**
+- `[9.3]` Browser extension bridge toggle — **QUEUED**
+- `[9.4]` Storage & database settings — **QUEUED**
+- `[9.5]` Shortcut customization — **QUEUED**
+- `[9.6]` License & activation panel — **QUEUED**
+- `[9.7]` Danger zone — reset data — **QUEUED**
+- `[9.8]` Wire settings to SQLite — **QUEUED**
+- `[9.9]` Unit tests — Settings View — **QUEUED**
