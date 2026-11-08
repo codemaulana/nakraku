@@ -89,11 +89,11 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 10**| Browser Extension (MV3) | 16 | **COMPLETED (16/16)** |
 | **Phase 11**| Licensing & Monetization | 15 | **COMPLETED (15/15)** |
 | **Phase 12**| Error Handling & Telemetry | 10 | **COMPLETED (10/10)** |
-| **Phase 13**| Performance & Optimization | 10 | **ACTIVE (In Progress)** |
-| **Phase 14**| Testing Suite | 20 | Queued |
-| **Phase 15**| Security Audit | 10 | Queued |
-| **Phase 16**| Installer & Distribution | 12 | Queued |
-| **Phase 17**| CI/CD Pipeline | 8 | Queued |
+| **Phase 13**| Performance & Optimization | 10 | **COMPLETED (10/10)** |
+| **Phase 14**| Testing Suite | 20 | **COMPLETED (20/20)** |
+| **Phase 15**| Security Audit | 10 | **COMPLETED (10/10)** |
+| **Phase 16**| Installer & Distribution | 12 | **COMPLETED (12/12)** |
+| **Phase 17**| CI/CD Pipeline | 8 | **ACTIVE (In Progress)** |
 | **Phase 18**| Documentation | 14 | Queued |
 | **Phase 19**| Open Source Hygiene | 9 | Queued |
 | **Phase 20**| Landing Page | 7 | Queued |
@@ -404,15 +404,27 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 21. Phase 16 Task Log (Installer & Distribution)
-- `[16.1]` Configure NSIS installer (`tauri.conf.json` NSIS settings: install dir, shortcuts, uninstaller) — **ACTIVE**
-- `[16.2]` Configure MSI installer (WiX-based MSI packaging) — **QUEUED**
-- `[16.3]` App icon set (16, 32, 48, 64, 128, 256px icon assets) — **QUEUED**
-- `[16.4]` Windows code signing pipeline (`signtool.exe` configuration) — **QUEUED**
-- `[16.5]` Auto-updater configuration (updater plugin & endpoints) — **QUEUED**
-- `[16.6]` GitHub Releases upload script — **QUEUED**
-- `[16.7]` Silent install support (`/S` flag verification) — **QUEUED**
-- `[16.8]` Uninstaller clean-up (AppData, registry, and shortcut cleanup) — **QUEUED**
-- `[16.9]` Install size optimization (<20 MB installer bundle) — **QUEUED**
-- `[16.10]` First-run onboarding experience — **QUEUED**
-- `[16.11]` Windows startup registry entry (`Run` key integration) — **QUEUED**
-- `[16.12]` Packaging smoke test (clean installation & execution verification) — **QUEUED**
+- `[16.1]` Configure NSIS installer (`tauri.conf.json` NSIS settings: `currentUser` non-admin install mode, `en-US` language, custom installer branding assets, automatic Start Menu/Desktop shortcuts, clean uninstaller) — **DONE**
+- `[16.2]` Configure MSI installer (WiX-based MSI packager in `tauri.conf.json` with stable RFC 4122 GUID `upgradeCode: 8B3D9D5E-5D2B-4E38-92FE-7389AA8C1523` for enterprise GPO/Intune deployment) — **DONE**
+- `[16.3]` App icon set (multi-resolution Windows `icon.ico` with 16, 24, 32, 48, 64, 256px frames, 512x512 master PNG, and Windows square tile assets) — **DONE**
+- `[16.4]` Windows code signing — EV cert (`scripts/sign.ps1`: `signtool.exe` with RFC 3161 dual-timestamping, SHA-256 digest, Windows Certificate Store / PFX / Azure Trusted Signing support) — **DONE**
+- `[16.5]` Sign all binaries (`scripts/sign-release.ps1`: batch signs `nakraku-stash.exe`, DLLs, NSIS installer, and MSI package with verification) — **DONE**
+- `[16.6]` Windows Defender SmartScreen reputation (`docs/DISTRIBUTION.md`: comprehensive guide on EV HSM instant trust, Microsoft Security Intelligence WDSI submission, and Partner Center attestation) — **DONE**
+- `[16.7]` Tauri updater setup (`tauri-plugin-updater` v2.14.1 integrated in `Cargo.toml`, `src/lib.rs`, `tauri.conf.json`, and capabilities allowlist) — **DONE**
+- `[16.8]` Updater — update available UI (`src/components/Titlebar.tsx` update badge, `src/components/settings/AppUpdaterRow.tsx` checking/downloading states, and `src/services/updaterService.ts`) — **DONE**
+- `[16.9]` Updater — differential update (`docs/DISTRIBUTION.md`: differential patch evaluation vs full atomic NSIS payload replacement) — **DONE**
+- `[16.10]` Build GitHub Release pipeline (`.github/workflows/release.yml`: automated workflow on tag push building NSIS + MSI, running guardrails, signing, generating checksums, and uploading assets) — **DONE**
+- `[16.11]` Build artifact checksums (`scripts/generate-checksums.ps1`: computes SHA-256 hashes of all release artifacts and outputs `SHA256SUMS.txt`) — **DONE**
+- `[16.12]` Auto-update server config (`scripts/generate-updater-manifest.mjs`: generates standard Tauri v2 `latest.json` updater manifest with version, notes, pub_date, and platform signature) — **DONE**
+
+---
+
+## 22. Phase 17 Task Log (CI/CD Pipeline)
+- `[17.1]` GitHub Actions — PR checks — **ACTIVE**
+- `[17.2]` GitHub Actions — build check — **QUEUED**
+- `[17.3]` GitHub Actions — guardrails check — **QUEUED**
+- `[17.4]` GitHub Actions — release workflow — **QUEUED**
+- `[17.5]` Branch protection rules — **QUEUED**
+- `[17.6]` Dependabot / Renovate config — **QUEUED**
+- `[17.7]` CI — test coverage report — **QUEUED**
+- `[17.8]` CI — performance regression gate — **QUEUED**

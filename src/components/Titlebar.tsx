@@ -6,6 +6,10 @@ export interface TitlebarProps {
   badge?: string;
   vibrant?: boolean;
   isMaximized?: boolean;
+  updateAvailable?: {
+    version: string;
+    onClick?: () => void;
+  };
   onMinimize?: () => void;
   onMaximize?: () => void;
   onClose?: () => void;
@@ -66,11 +70,41 @@ const WindowControls: React.FC<WindowControlsProps> = ({
   </div>
 );
 
+const TitlebarBrand: React.FC<{
+  title: string;
+  badge?: string;
+  updateAvailable?: TitlebarProps["updateAvailable"];
+}> = ({ title, badge, updateAvailable }) => (
+  <div data-tauri-drag-region className="flex items-center gap-xs">
+    <span className="w-1.5 h-1.5 rounded-full bg-status-active" />
+    <span className="text-xs font-bold tracking-wide text-text-primary">
+      {title}
+    </span>
+    {badge ? (
+      <span className="text-2xs font-mono text-text-secondary bg-bg-elevated px-1.5 py-0.5 rounded-xs border border-border-subtle">
+        {badge}
+      </span>
+    ) : null}
+    {updateAvailable ? (
+      <button
+        type="button"
+        onClick={updateAvailable.onClick}
+        className="flex items-center gap-1.5 px-2 py-0.5 rounded text-2xs font-mono font-medium text-text-inverse bg-accent-emerald hover:bg-accent-emerald-bright active:scale-95 transition-all shadow-glow-emerald cursor-pointer"
+        title={`Update to v${updateAvailable.version} available`}
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+        <span>v{updateAvailable.version} Available</span>
+      </button>
+    ) : null}
+  </div>
+);
+
 export const Titlebar: React.FC<TitlebarProps> = ({
   title = "NAKRAKU STASH",
   badge,
   vibrant = true,
   isMaximized: controlledMaximized,
+  updateAvailable,
   onMinimize,
   onMaximize,
   onClose,
@@ -78,10 +112,6 @@ export const Titlebar: React.FC<TitlebarProps> = ({
   const controls = useWindowControls();
 
   const isMaximized = controlledMaximized ?? controls.isMaximized;
-  const handleMinimize = onMinimize ?? controls.minimize;
-  const handleMaximize = onMaximize ?? controls.toggleMaximize;
-  const handleClose = onClose ?? controls.close;
-
   const bgStyle = vibrant
     ? "bg-bg-surface-glass backdrop-blur-vibrant backdrop-saturate-150"
     : "bg-bg-surface";
@@ -91,25 +121,13 @@ export const Titlebar: React.FC<TitlebarProps> = ({
       data-tauri-drag-region
       className={`flex items-center justify-between h-titlebar w-full border-b border-border-subtle select-none px-sm transition-colors ${bgStyle}`}
     >
-      <div data-tauri-drag-region className="flex items-center gap-xs">
-        <span className="w-1.5 h-1.5 rounded-full bg-status-active" />
-        <span className="text-xs font-bold tracking-wide text-text-primary">
-          {title}
-        </span>
-        {badge ? (
-          <span className="text-2xs font-mono text-text-secondary bg-bg-elevated px-1.5 py-0.5 rounded-xs border border-border-subtle">
-            {badge}
-          </span>
-        ) : null}
-      </div>
-
+      <TitlebarBrand title={title} badge={badge} updateAvailable={updateAvailable} />
       <div data-tauri-drag-region className="flex-1 h-full" />
-
       <WindowControls
         isMaximized={isMaximized}
-        onMinimize={handleMinimize}
-        onMaximize={handleMaximize}
-        onClose={handleClose}
+        onMinimize={onMinimize ?? controls.minimize}
+        onMaximize={onMaximize ?? controls.toggleMaximize}
+        onClose={onClose ?? controls.close}
       />
     </header>
   );

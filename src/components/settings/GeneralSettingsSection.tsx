@@ -1,6 +1,7 @@
 import React from "react";
 import { Divider } from "../Divider";
 import { Button } from "../Button";
+import { AppUpdaterRow } from "./AppUpdaterRow";
 import type { AppSettings } from "../../lib/schemas";
 
 interface GeneralSettingsSectionProps {
@@ -71,6 +72,7 @@ export const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
       enabled={settings.send_anonymous_crash_reports}
       onToggle={() => onUpdate("send_anonymous_crash_reports", !settings.send_anonymous_crash_reports)}
     />
+    <AppUpdaterRow />
     <LanguageSelectorRow language={settings.language} />
   </div>
 );

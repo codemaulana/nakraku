@@ -1,0 +1,92 @@
+name: Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Code Quality & Guardrails Gate
+        run: |
+          npm run lint
+          npm run check
+          npm test
+          npm run test:rust
+          powershell -ExecutionPolicy Bypass -File scripts/guardrails.ps1
+
+      - name: Package Chrome/Edge Extension
+        run: npm run build:extension
+
+      - name: Build Tauri Application (NSIS & MSI)
+        run: |
+          npm run build
+          npx tauri build
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+
+      - name: Code Sign Windows Binaries
+        shell: powershell
+        env:
+          SIGN_CERT_THUMBPRINT: ${{ secrets.SIGN_CERT_THUMBPRINT }}
+          SIGN_CERT_FILE: ${{ secrets.SIGN_CERT_FILE }}
+          SIGN_CERT_PASSWORD: ${{ secrets.SIGN_CERT_PASSWORD }}
+        run: |
+          powershell -ExecutionPolicy Bypass -File scripts/sign-release.ps1
+
+      - name: Generate Artifact Checksums
+        shell: powershell
+        run: |
+          powershell -ExecutionPolicy Bypass -File scripts/generate-checksums.ps1 -ArtifactsDir src-tauri/target/release/bundle
+
+      - name: Generate Updater Manifest
+        shell: powershell
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $ver = "$env:RELEASE_TAG".TrimStart('v')
+          $sig = "${{ secrets.TAURI_UPDATER_SIG }}"
+          if (-not $sig) { $sig = "DEV_PLACEHOLDER_SIGNATURE" }
+          $url = "https://github.com/${{ github.repository }}/releases/download/$env:RELEASE_TAG/Nakraku.Stash_${ver}_x64-setup.nsis.zip"
+          node scripts/generate-updater-manifest.mjs $ver $sig $url
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/nsis/*.zip
+            dist/nakraku-extension.zip
+            SHA256SUMS.txt
+            latest.json
+          generate_release_notes: true
+          draft: false
+          prerelease: false

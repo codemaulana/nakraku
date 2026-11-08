@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Titlebar } from "../../src/components/Titlebar";
 
-describe("Phase 14 - Titlebar Component Tests", () => {
+describe("Phase 14 - Titlebar Basics & Header", () => {
   it("renders default title and drag attributes", () => {
     const { container } = render(<Titlebar />);
     expect(screen.getByText("NAKRAKU STASH")).toBeDefined();
@@ -18,6 +18,25 @@ describe("Phase 14 - Titlebar Component Tests", () => {
     expect(screen.getByText("v1.0.0-PRO")).toBeDefined();
   });
 
+  it("renders update available badge and handles click", () => {
+    const onUpdateClick = vi.fn();
+    render(
+      <Titlebar
+        updateAvailable={{
+          version: "0.2.0",
+          onClick: onUpdateClick,
+        }}
+      />
+    );
+    const updateBtn = screen.getByTitle("Update to v0.2.0 available");
+    expect(updateBtn).toBeDefined();
+    expect(screen.getByText("v0.2.0 Available")).toBeDefined();
+    fireEvent.click(updateBtn);
+    expect(onUpdateClick).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("Phase 14 - Titlebar Window Controls", () => {
   it("fires minimize callback when minimize button clicked", () => {
     const onMinimize = vi.fn();
     render(<Titlebar onMinimize={onMinimize} />);

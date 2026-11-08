@@ -15,12 +15,15 @@
     "test:coverage": "vitest run --coverage",
     "test:rust": "cargo test --manifest-path src-tauri/Cargo.toml",
     "test:all": "npm test && npm run test:rust",
+    "checksums": "powershell -ExecutionPolicy Bypass -File scripts/generate-checksums.ps1",
+    "sign:release": "powershell -ExecutionPolicy Bypass -File scripts/sign-release.ps1",
     "prepare": "lefthook install",
     "tauri": "tauri"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.14.26",
     "@tauri-apps/api": "^2.12.4",
+    "@tauri-apps/plugin-updater": "^2.14.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",

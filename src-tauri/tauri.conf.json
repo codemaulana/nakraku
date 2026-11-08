@@ -37,15 +37,30 @@
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/icon.ico",
+      "icons/icon.png"
     ],
     "windows": {
       "nsis": {
-        "installMode": "currentUser"
+        "installMode": "currentUser",
+        "languages": ["en-US"],
+        "displayLanguageSelector": false,
+        "installerIcon": "icons/icon.ico",
+        "headerImage": "icons/Square150x150Logo.png",
+        "sidebarImage": "icons/Square150x150Logo.png"
       },
       "wix": {
-        "language": ["en-US"]
+        "language": ["en-US"],
+        "upgradeCode": "8B3D9D5E-5D2B-4E38-92FE-7389AA8C1523"
       }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/nakraku/nakraku-stash/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDRBODkzRThCNzlGNEJBOTAKUldUZVlscG5QOU5lYndQY2t1SEc5M01jWVhkc1k3c3IrdWhaWkVQcEdJOHQxV3B3cURlUW95NGIK"
     }
   }
 }
