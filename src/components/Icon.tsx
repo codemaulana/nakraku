@@ -34,6 +34,7 @@ import {
   Wifi,
   WifiOff,
   GripVertical,
+  X,
 } from "lucide-react";
 
 export type IconSize = "xs" | "sm" | "md" | "lg" | number;
@@ -71,7 +72,8 @@ export type IconName =
   | "key"
   | "wifi"
   | "wifi-off"
-  | "grip-vertical";
+  | "grip-vertical"
+  | "close";
 
 export const ICON_MAP: Record<IconName, LucideIcon> = {
   dashboard: LayoutDashboard,
@@ -107,6 +109,7 @@ export const ICON_MAP: Record<IconName, LucideIcon> = {
   wifi: Wifi,
   "wifi-off": WifiOff,
   "grip-vertical": GripVertical,
+  close: X,
 };
 
 export interface IconProps {

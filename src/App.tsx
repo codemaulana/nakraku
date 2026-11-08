@@ -12,6 +12,7 @@ import {
   useContextMenu,
   type ContextMenuItem,
 } from "./components/ContextMenu";
+import { Modal } from "./components/Modal";
 
 interface ProcessItem {
   id: string;
@@ -126,7 +127,11 @@ const ProcessList: React.FC<ProcessListProps> = ({
   </div>
 );
 
-const ActionToolbar: React.FC = () => (
+interface ActionToolbarProps {
+  onOpenStashModal: () => void;
+}
+
+const ActionToolbar: React.FC<ActionToolbarProps> = ({ onOpenStashModal }) => (
   <div className="flex items-center gap-xs p-xs bg-bg-surface border border-border-subtle rounded-sm">
     <span className="text-2xs font-mono text-text-disabled uppercase mr-2xs">
       Actions:
@@ -134,6 +139,7 @@ const ActionToolbar: React.FC = () => (
     <Tooltip content="Stash All Windows" shortcut="Ctrl+S" position="bottom">
       <button
         type="button"
+        onClick={onOpenStashModal}
         className="flex items-center gap-1.5 px-2 py-1 rounded-xs bg-accent-emerald text-bg-base font-medium text-xs hover:bg-accent-emerald-hover transition-colors"
       >
         <Icon name="stash" size={13} strokeWidth={2} />
@@ -162,9 +168,106 @@ const ActionToolbar: React.FC = () => (
   </div>
 );
 
+const StashModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
+  isOpen,
+  onClose,
+}) => (
+  <Modal
+    isOpen={isOpen}
+    onClose={onClose}
+    title="Stash Current Workspace"
+    description="Freeze 14 windows to free up approximately 1.8 GB of system RAM."
+    size="md"
+    footer={
+      <>
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-sm py-1 rounded-xs bg-bg-elevated hover:bg-bg-hover text-text-secondary hover:text-text-primary text-xs border border-border-subtle transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-sm py-1 rounded-xs bg-accent-emerald hover:bg-accent-emerald-hover text-bg-base font-medium text-xs transition-colors"
+        >
+          Confirm Stash
+        </button>
+      </>
+    }
+  >
+    <div className="flex flex-col gap-xs">
+      <p className="text-xs text-text-secondary">
+        Windows will be minimized to taskbar, processes frozen via Windows API, and workspace coordinates saved into SQLite.
+      </p>
+      <div className="border border-border-subtle rounded-xs bg-bg-elevated p-xs font-mono text-2xs space-y-1">
+        <div className="flex justify-between text-text-secondary">
+          <span>Target Workspace:</span>
+          <span className="text-accent-emerald">Dev Core</span>
+        </div>
+        <div className="flex justify-between text-text-secondary">
+          <span>Processes to Freeze:</span>
+          <span className="text-text-primary">14 active</span>
+        </div>
+        <div className="flex justify-between text-text-secondary">
+          <span>Estimated Memory Reclaim:</span>
+          <span className="text-accent-emerald">~1,842 MB</span>
+        </div>
+      </div>
+    </div>
+  </Modal>
+);
+
+interface MainContentProps {
+  activeTab: string;
+  selectedProcess: string;
+  onSelectProcess: (id: string) => void;
+  onOpenStashModal: () => void;
+  onContextMenu: (event: React.MouseEvent, item: ProcessItem) => void;
+}
+
+const MainContent: React.FC<MainContentProps> = ({
+  activeTab,
+  selectedProcess,
+  onSelectProcess,
+  onOpenStashModal,
+  onContextMenu,
+}) => (
+  <MainPanel
+    header={
+      <div className="flex items-center justify-between h-row px-base">
+        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
+          {activeTab}
+        </span>
+        <Tooltip content="System IPC healthy (48123)" position="left">
+          <Badge variant="active" dot pulse size="sm">
+            SYSTEM OK
+          </Badge>
+        </Tooltip>
+      </div>
+    }
+  >
+    <div className="p-base flex flex-col gap-sm">
+      <ActionToolbar onOpenStashModal={onOpenStashModal} />
+      <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
+        Task 2.17: Modal (Focus Trap, Escape Closes, A11y Dialog)
+      </div>
+      <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
+        <ProcessList
+          selectedId={selectedProcess}
+          onSelect={onSelectProcess}
+          onContextMenu={onContextMenu}
+        />
+      </div>
+    </div>
+  </MainPanel>
+);
+
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [selectedProcess, setSelectedProcess] = useState<string>("p1");
+  const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
   const { position, data, open, close } = useContextMenu<ProcessItem>();
 
   const menuItems = createProcessMenuItems(data, close);
@@ -174,37 +277,20 @@ export const App: React.FC = () => {
       <Titlebar badge="v0.1.0" />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar activeId={activeTab} onSelect={setActiveTab} />
-        <MainPanel
-          header={
-            <div className="flex items-center justify-between h-row px-base">
-              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary font-mono">
-                {activeTab}
-              </span>
-              <Tooltip content="System IPC healthy (48123)" position="left">
-                <Badge variant="active" dot pulse size="sm">
-                  SYSTEM OK
-                </Badge>
-              </Tooltip>
-            </div>
-          }
-        >
-          <div className="p-base flex flex-col gap-sm">
-            <ActionToolbar />
-            <div className="text-2xs font-mono text-text-secondary uppercase tracking-wider">
-              Task 2.16: Right-Click ContextMenu (Keyboard Nav & Sub-menus)
-            </div>
-            <div className="border border-border-subtle rounded-sm bg-bg-surface overflow-hidden">
-              <ProcessList
-                selectedId={selectedProcess}
-                onSelect={setSelectedProcess}
-                onContextMenu={open}
-              />
-            </div>
-          </div>
-        </MainPanel>
+        <MainContent
+          activeTab={activeTab}
+          selectedProcess={selectedProcess}
+          onSelectProcess={setSelectedProcess}
+          onOpenStashModal={() => setIsStashModalOpen(true)}
+          onContextMenu={open}
+        />
       </div>
       <StatusBar ramSaved="1.8 GB" />
       <ContextMenu items={menuItems} position={position} onClose={close} />
+      <StashModal
+        isOpen={isStashModalOpen}
+        onClose={() => setIsStashModalOpen(false)}
+      />
     </div>
   );
 };

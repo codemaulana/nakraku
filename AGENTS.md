@@ -33,7 +33,8 @@
   * **Task 2.14: Build `Icon` system** — **100% COMPLETE** (Authored `src/components/Icon.tsx` thin-line SVG icon set mapped to curated `IconName` registry at 14px/16px with consistent 1.5 stroke, accessible title/aria support, integrated into `Row.tsx` and `App.tsx`)
   * **Task 2.15: Build `Tooltip` component** — **100% COMPLETE** (Authored `src/components/Tooltip.tsx` 200ms delay, 12px font `--text-sm`, dark surface `bg-bg-elevated`, no arrow, keyboard accessibility, shortcut keycaps hint support, positionable top/bottom/left/right, integrated into `src/App.tsx`)
   * **Task 2.16: Build `ContextMenu` component** — **100% COMPLETE** (Authored `src/components/ContextMenu.tsx` and `src/hooks/useContextMenu.ts` right-click menu, viewport edge clamping, keyboard navigation, sub-menu cascading, integrated into `Row.tsx` and `App.tsx`)
-* **Next Immediate Task**: Task 2.17 — Build `Modal` component (Overlay + dialog, focus trap, Escape closes, aria-modal, aria-labelledby)
+  * **Task 2.17: Build `Modal` component** — **100% COMPLETE** (Authored `src/components/Modal.tsx` and `src/hooks/useFocusTrap.ts` dialog overlay, keyboard focus trap, Escape key dismiss, aria-modal, aria-labelledby, integrated into `src/App.tsx`)
+* **Next Immediate Task**: Task 2.18 — Build `Button` component variants (`primary`, `ghost`, `danger`, `icon-only` — all 32px height, no padding inflation)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
