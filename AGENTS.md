@@ -21,7 +21,8 @@
   * **Task 2.2: Define design tokens — typography** — **100% COMPLETE** (Defined `--font-mono`, `--font-ui`, scales `--text-2xs` to `--text-lg`, line heights `--leading-none` to `--leading-normal`, tracking, weights, and default body/code typography in `src/styles/tokens.css`, verified with build & guardrails)
   * **Task 2.3: Define design tokens — spacing & density** — **100% COMPLETE** (Defined `--titlebar-height: 38px`, `--statusbar-height: 24px`, `--sidebar-width: 200px`, `--row-height: 32px`, `--row-height-lg: 36px`, micro-gaps `--gap-3xs` to `--gap-lg`, and padding scale `--pad-3xs` to `--pad-lg` in `src/styles/tokens.css`, verified with build & guardrails)
   * **Task 2.4: Define design tokens — border & radius** — **100% COMPLETE** (Defined `--border-width`, `--border-width-thick`, semantic border colors `--border-color-subtle` through `--border-color-warning`, and radius scale `--radius-none` to `--radius-full` in `src/styles/tokens.css`, verified with build & guardrails)
-* **Next Immediate Task**: Task 2.5 — Configure Tailwind CSS (`tailwind.config.ts` consuming `tokens.css`, purge paths set, no default colors leaked)
+  * **Task 2.5: Configure Tailwind CSS** — **100% COMPLETE** (Created `tailwind.config.ts` consuming `tokens.css` with strict color isolation overriding default palettes, PostCSS configured, verified via `src/App.tsx` and production build)
+* **Next Immediate Task**: Task 2.6 — Build `Titlebar` component (Frameless 38px bar: app icon, title text, minimize/maximize/close buttons — drag region via `data-tauri-drag-region`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

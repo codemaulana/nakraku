@@ -139,4 +139,5 @@ Audit executed via `scripts/check-env.ps1`:
 - `[2.2]` Define design tokens — typography (`src/styles/tokens.css`: `--font-mono`, `--font-ui`, `--text-2xs` through `--text-lg`, line heights `--leading-none` to `--leading-normal`, tracking, font weights, and body/code element defaults) — **DONE**
 - `[2.3]` Define design tokens — spacing & density (`src/styles/tokens.css`: `--titlebar-height: 38px`, `--statusbar-height: 24px`, `--sidebar-width: 200px`, `--row-height: 32px`, `--row-height-lg: 36px`, micro-gaps `--gap-3xs` to `--gap-lg`, and padding scale `--pad-3xs` to `--pad-lg`) — **DONE**
 - `[2.4]` Define design tokens — border & radius (`src/styles/tokens.css`: `--border-width`, `--border-width-thick`, semantic border colors `--border-color-subtle` through `--border-color-warning`, and radius scale `--radius-none` to `--radius-full`) — **DONE**
-- `[2.5]` Configure Tailwind CSS (`tailwind.config.ts` consuming `tokens.css`, purge paths set, no default colors leaked) — **NEXT**
+- `[2.5]` Configure Tailwind CSS (`tailwind.config.ts` consuming `tokens.css` with strict colors isolation, PostCSS configured, purge paths set, verified in `src/App.tsx`) — **DONE**
+- `[2.6]` Build `Titlebar` component (Frameless 38px bar: app icon, title text, minimize/maximize/close buttons — drag region via `data-tauri-drag-region`) — **NEXT**
