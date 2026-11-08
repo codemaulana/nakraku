@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "./Badge";
 import { Kbd } from "./Kbd";
+import { ScrollArea } from "./ScrollArea";
 import {
   LayoutDashboard,
   Layers,
@@ -92,7 +93,7 @@ const SidebarNavList: React.FC<SidebarNavListProps> = ({
   collapsed,
   onSelect,
 }) => (
-  <div className="flex-1 overflow-y-auto p-xs space-y-3xs">
+  <ScrollArea scrollbarSize="thin" autoHide className="flex-1 p-xs space-y-3xs">
     {!collapsed && (
       <div className="px-xs pt-xs pb-3xs text-2xs font-semibold tracking-wider text-text-disabled uppercase">
         Views
@@ -107,7 +108,7 @@ const SidebarNavList: React.FC<SidebarNavListProps> = ({
         onClick={() => onSelect?.(item.id)}
       />
     ))}
-  </div>
+  </ScrollArea>
 );
 
 interface SidebarFooterProps {

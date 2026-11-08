@@ -139,3 +139,46 @@ code, kbd, samp, pre {
   scrollbar-width: thin;
   scrollbar-color: var(--border-subtle) transparent;
 }
+
+.scrollarea-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.scrollarea-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollarea-standard::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollarea-standard::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollarea-autohide::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius-full);
+  transition: background-color 0.15s ease-out;
+}
+
+.scrollarea-autohide:hover::-webkit-scrollbar-thumb,
+.scrollarea-autohide.is-scrolling::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+}
+
+.scrollarea-autohide:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--text-disabled);
+}
+
+.scrollarea-autohide {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scrollarea-autohide:hover,
+.scrollarea-autohide.is-scrolling {
+  scrollbar-color: var(--border-subtle) transparent;
+}

@@ -138,7 +138,7 @@ const TaskStatusHeader: React.FC<{ isLoading: boolean }> = ({ isLoading }) => (
   <div className="flex flex-col gap-1.5 w-full">
     <div className="flex items-center justify-between text-2xs font-mono text-text-secondary">
       <div className="flex items-center gap-1.5">
-        <span>Task 2.23: Divider Component</span>
+        <span>Task 2.24: ScrollArea Component</span>
         {isLoading && <Spinner size="xs" variant="accent" />}
       </div>
       <div className="flex items-center gap-1.5">

@@ -1,4 +1,5 @@
 import React from "react";
+import { ScrollArea } from "./ScrollArea";
 
 export interface MainPanelProps {
   header?: React.ReactNode;
@@ -29,11 +30,13 @@ export const MainPanel: React.FC<MainPanelProps> = ({
         </header>
       )}
 
-      <div
-        className={`flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar ${paddingClass} ${contentClassName}`}
+      <ScrollArea
+        scrollbarSize="thin"
+        autoHide
+        className={`flex-1 ${paddingClass} ${contentClassName}`}
       >
         {children}
-      </div>
+      </ScrollArea>
 
       {footer && (
         <footer className="shrink-0 border-t border-border-subtle bg-bg-surface select-none">

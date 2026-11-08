@@ -1,5 +1,6 @@
 import React, { useEffect, useId, useRef } from "react";
 import { Icon } from "./Icon";
+import { ScrollArea } from "./ScrollArea";
 import { useFocusTrap } from "../hooks/useFocusTrap";
 
 export type ModalSize = "sm" | "md" | "lg" | "xl";
@@ -102,9 +103,13 @@ const ModalBodyAndFooter: React.FC<{
   footer?: React.ReactNode;
 }> = ({ children, footer }) => (
   <>
-    <div className="p-base text-xs text-text-secondary leading-normal overflow-y-auto max-h-[70vh] custom-scrollbar">
+    <ScrollArea
+      scrollbarSize="thin"
+      autoHide
+      className="p-base text-xs text-text-secondary leading-normal max-h-[70vh]"
+    >
       {children}
-    </div>
+    </ScrollArea>
     {footer && (
       <div className="flex items-center justify-end gap-xs px-base py-sm border-t border-border-subtle bg-bg-surface shrink-0">
         {footer}

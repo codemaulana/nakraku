@@ -40,7 +40,8 @@
   * **Task 2.21: Build `Spinner` / `SkeletonRow` loading states** — **100% COMPLETE** (Authored `src/components/Spinner.tsx` circular animated SVG spinner and `src/components/SkeletonRow.tsx` base `Skeleton`, 32px `SkeletonRow`, and `SkeletonList` with staggered realistic widths, integrated into `Button.tsx` and async loading in `src/App.tsx`)
   * **Task 2.22: Build `EmptyState` component** — **100% COMPLETE** (Authored `src/components/EmptyState.tsx` high-density utility empty state with presets `windows`, `workspaces`, `search`, `history`, `tabs`, compact mode, action CTA slot, and shortcut keycaps; integrated into `src/App.tsx`)
   * **Task 2.23: Build `Divider` component** — **100% COMPLETE** (Authored `src/components/Divider.tsx` 1px horizontal and vertical separator respecting `--border-subtle`, variants `subtle`/`muted`/`accent`/`danger`, spacing scales, and horizontal labeled dividers; integrated into `ContextMenu.tsx` and `App.tsx`)
-* **Next Immediate Task**: Task 2.24 — Build `ScrollArea` component (Custom thin scrollbar 4px, auto-hide on idle, works in sidebar + main panel)
+  * **Task 2.24: Build `ScrollArea` component** — **100% COMPLETE** (Authored `src/components/ScrollArea.tsx` custom 4px/6px thin scrollbar with idle auto-hiding hook `useScrollIdle`, integrated into `MainPanel.tsx`, `Sidebar.tsx`, `Modal.tsx`, and `App.tsx`)
+* **Next Immediate Task**: Task 2.25 — Write Storybook / component gallery (dev-only) (`src/dev/Gallery.tsx` — renders all components isolated, used for visual QA)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---
