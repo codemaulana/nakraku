@@ -154,4 +154,19 @@ mod tests {
 
         Ok(())
     }
+
+    #[test]
+    fn test_ws_origin_validation() {
+        use super::server::is_allowed_origin;
+        assert!(is_allowed_origin("chrome-extension://abcdefghijklmnop"));
+        assert!(is_allowed_origin("moz-extension://abcdefghijklmnop"));
+        assert!(is_allowed_origin("edge://extension"));
+        assert!(is_allowed_origin("http://localhost:5173"));
+        assert!(is_allowed_origin("http://127.0.0.1:48123"));
+        assert!(is_allowed_origin("tauri://localhost"));
+
+        assert!(!is_allowed_origin("https://evil-attacker.com"));
+        assert!(!is_allowed_origin("http://phishing.site"));
+        assert!(!is_allowed_origin("https://random-domain.org/payload"));
+    }
 }

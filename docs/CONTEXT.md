@@ -390,13 +390,29 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 20. Phase 15 Task Log (Security Audit)
-- `[15.1]` Tauri allowlist audit — **ACTIVE**
-- `[15.2]` CSP audit — **QUEUED**
-- `[15.3]` IPC input validation audit — **QUEUED**
-- `[15.4]` Local WebSocket security — **QUEUED**
-- `[15.5]` License key storage audit — **QUEUED**
-- `[15.6]` Dependency audit — **QUEUED**
-- `[15.7]` Sensitive data audit — **QUEUED**
-- `[15.8]` HWID fingerprint privacy review — **QUEUED**
-- `[15.9]` Extension CSP — **QUEUED**
-- `[15.10]` Write `docs/SECURITY.md` — **QUEUED**
+- `[15.1]` Tauri allowlist audit (`src-tauri/capabilities/default.json`: only explicitly declared commands exposed, no broad wildcard permissions) — **DONE**
+- `[15.2]` CSP audit (`src-tauri/tauri.conf.json`: strict `script-src 'self'`, zero `'unsafe-eval'`, zero external scripts) — **DONE**
+- `[15.3]` IPC input validation audit (dual-layer validation: Zod on frontend, typed structs & boundary limits on Rust backend) — **DONE**
+- `[15.4]` Local WebSocket security (`src-tauri/src/ws/server.rs`: strict `127.0.0.1:48123` loopback binding, handshake Origin header validation rejecting untrusted web origins with 403 Forbidden) — **DONE**
+- `[15.5]` License key storage audit (`src-tauri/src/license/store.rs`: primary storage in Windows Credential Manager keyring via `keyring` crate) — **DONE**
+- `[15.6]` Dependency audit (`npm audit --omit=dev`: 0 production vulnerabilities, pinned Rust crates in `Cargo.lock`) — **DONE**
+- `[15.7]` Sensitive data audit (`src-tauri/src/logging.rs`: `sanitize_pii` redacting `%USERPROFILE%` / username in logs and crash dumps) — **DONE**
+- `[15.8]` HWID fingerprint privacy review (`src-tauri/src/license/machine_id.rs`: non-reversible SHA-256 HMAC hash with domain separation salt `nakraku:hwid:v1:`) — **DONE**
+- `[15.9]` Extension CSP (`extension/manifest.json`: CSP restricts `connect-src` strictly to `ws://127.0.0.1:48123` and `http://127.0.0.1:48123`, blocks eval and remote code) — **DONE**
+- `[15.10]` Write `docs/SECURITY.md` (comprehensive threat model, mitigations, zero-cloud architecture, and responsible disclosure policy) — **DONE**
+
+---
+
+## 21. Phase 16 Task Log (Installer & Distribution)
+- `[16.1]` Configure NSIS installer (`tauri.conf.json` NSIS settings: install dir, shortcuts, uninstaller) — **ACTIVE**
+- `[16.2]` Configure MSI installer (WiX-based MSI packaging) — **QUEUED**
+- `[16.3]` App icon set (16, 32, 48, 64, 128, 256px icon assets) — **QUEUED**
+- `[16.4]` Windows code signing pipeline (`signtool.exe` configuration) — **QUEUED**
+- `[16.5]` Auto-updater configuration (updater plugin & endpoints) — **QUEUED**
+- `[16.6]` GitHub Releases upload script — **QUEUED**
+- `[16.7]` Silent install support (`/S` flag verification) — **QUEUED**
+- `[16.8]` Uninstaller clean-up (AppData, registry, and shortcut cleanup) — **QUEUED**
+- `[16.9]` Install size optimization (<20 MB installer bundle) — **QUEUED**
+- `[16.10]` First-run onboarding experience — **QUEUED**
+- `[16.11]` Windows startup registry entry (`Run` key integration) — **QUEUED**
+- `[16.12]` Packaging smoke test (clean installation & execution verification) — **QUEUED**

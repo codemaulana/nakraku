@@ -7,6 +7,20 @@ use tauri_plugin_log::{RotationStrategy, Target, TargetKind};
 
 pub const MAX_LOG_SIZE_BYTES: u128 = 5 * 1024 * 1024; // 5 MB
 
+pub fn sanitize_pii(input: &str) -> String {
+    let mut sanitized = input.to_string();
+    if let Ok(username) = std::env::var("USERNAME") {
+        if !username.trim().is_empty() {
+            let user_pattern = format!("Users\\{}", username);
+            let user_pattern_fwd = format!("Users/{}", username);
+            sanitized = sanitized.replace(&user_pattern, "Users\\[REDACTED]");
+            sanitized = sanitized.replace(&user_pattern_fwd, "Users/[REDACTED]");
+            sanitized = sanitized.replace(&username, "[REDACTED_USER]");
+        }
+    }
+    sanitized
+}
+
 pub fn get_log_dir(app: &AppHandle) -> PathBuf {
     if let Ok(dir) = app.path().app_log_dir() {
         if !dir.exists() {
@@ -61,12 +75,13 @@ pub fn setup_panic_hook(log_dir: PathBuf) {
              {backtrace}\n"
         );
 
-        eprintln!("{report}");
-        log::error!("{report}");
+        let clean_report = sanitize_pii(&report);
+        eprintln!("{clean_report}");
+        log::error!("{clean_report}");
 
         let crash_file = log_dir.join(format!("crash-{timestamp}.log"));
         if let Ok(mut file) = OpenOptions::new().create(true).write(true).open(&crash_file) {
-            let _ = file.write_all(report.as_bytes());
+            let _ = file.write_all(clean_report.as_bytes());
         }
 
         default_hook(panic_info);
@@ -107,11 +122,12 @@ pub fn cmd_get_recent_logs(app: AppHandle, max_lines: Option<usize>) -> Result<S
     }
 
     let contents = fs::read_to_string(&path).map_err(|e| e.to_string())?;
+    let sanitized_contents = sanitize_pii(&contents);
     let limit = max_lines.unwrap_or(100);
-    let lines: Vec<&str> = contents.lines().collect();
+    let lines: Vec<&str> = sanitized_contents.lines().collect();
 
     if lines.len() <= limit {
-        Ok(contents)
+        Ok(sanitized_contents)
     } else {
         let start = lines.len() - limit;
         Ok(lines[start..].join("\n"))
@@ -144,5 +160,15 @@ mod tests {
 
         let _ = fs::remove_file(crash_file);
         Ok(())
+    }
+
+    #[test]
+    fn test_sanitize_pii_removes_username() {
+        if let Ok(username) = std::env::var("USERNAME") {
+            let sensitive = format!("Error at C:\\Users\\{}\\app\\data", username);
+            let sanitized = sanitize_pii(&sensitive);
+            assert!(!sanitized.contains(&username));
+            assert!(sanitized.contains("[REDACTED]"));
+        }
     }
 }

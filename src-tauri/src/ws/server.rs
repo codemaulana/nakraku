@@ -8,8 +8,22 @@ use tokio::net::{TcpListener, TcpStream};
 use tokio::sync::broadcast;
 use tokio_tungstenite::tungstenite::Message;
 
+use tokio_tungstenite::tungstenite::handshake::server::{ErrorResponse, Request, Response};
+use tokio_tungstenite::tungstenite::http::StatusCode;
+
 pub const WS_PORT: u16 = 48123;
 pub const WS_ADDR: &str = "127.0.0.1:48123";
+
+pub fn is_allowed_origin(origin: &str) -> bool {
+    let lower = origin.to_lowercase();
+    lower.starts_with("chrome-extension://")
+        || lower.starts_with("moz-extension://")
+        || lower.starts_with("edge://")
+        || lower.starts_with("http://localhost")
+        || lower.starts_with("http://127.0.0.1")
+        || lower.starts_with("https://tauri.localhost")
+        || lower.starts_with("tauri://localhost")
+}
 
 #[derive(Debug, Default)]
 pub struct WsServerInner {
@@ -100,7 +114,20 @@ pub async fn run_ws_server(server: WsServer, addr: &str) -> Result<(), String> {
 }
 
 async fn handle_ws_connection(stream: TcpStream, _peer: SocketAddr, server: WsServer) {
-    let ws_stream = match tokio_tungstenite::accept_async(stream).await {
+    let callback = |req: &Request, response: Response| -> Result<Response, ErrorResponse> {
+        if let Some(origin_header) = req.headers().get("Origin") {
+            if let Ok(origin_str) = origin_header.to_str() {
+                if !is_allowed_origin(origin_str) {
+                    let mut err = ErrorResponse::new(Some("403 Forbidden: Untrusted Origin".into()));
+                    *err.status_mut() = StatusCode::FORBIDDEN;
+                    return Err(err);
+                }
+            }
+        }
+        Ok(response)
+    };
+
+    let ws_stream = match tokio_tungstenite::accept_hdr_async(stream, callback).await {
         Ok(ws) => ws,
         Err(_) => return,
     };
