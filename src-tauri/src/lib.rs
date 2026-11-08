@@ -1,3 +1,9 @@
+//! Nakraku Stash — Core native desktop library for Windows 10/11.
+//!
+//! Provides Win32 window snapshot and restore orchestration, embedded SQLite storage,
+//! offline Ed25519 cryptographic licensing, and a local loopback WebSocket server
+//! for companion browser extensions.
+
 pub mod core;
 pub mod db;
 pub mod error;
@@ -12,6 +18,7 @@ mod window_state;
 use tauri::{Manager, WindowEvent};
 use tauri_plugin_autostart::MacosLauncher;
 
+/// Main application entry point initializing plugins, SQLite, system tray, and OS listeners.
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()

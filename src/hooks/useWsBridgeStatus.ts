@@ -8,6 +8,10 @@ const DEFAULT_STATUS: WsStatusPayload = {
   port: 48123,
 };
 
+/**
+ * Polling hook tracking real-time status of the local WebSocket browser extension bridge.
+ * @returns {{ status: WsStatusPayload; connected: boolean; clientCount: number; port: number; refresh: () => Promise<void> }} Extension bridge telemetry and manual refresh trigger.
+ */
 export const useWsBridgeStatus = () => {
   const [status, setStatus] = useState<WsStatusPayload>(DEFAULT_STATUS);
 

@@ -94,8 +94,8 @@ Audit executed via `scripts/check-env.ps1`:
 | **Phase 15**| Security Audit | 10 | **COMPLETED (10/10)** |
 | **Phase 16**| Installer & Distribution | 12 | **COMPLETED (12/12)** |
 | **Phase 17**| CI/CD Pipeline | 8 | **COMPLETED (8/8)** |
-| **Phase 18**| Documentation | 14 | **ACTIVE (In Progress)** |
-| **Phase 19**| Open Source Hygiene | 9 | Queued |
+| **Phase 18**| Documentation | 14 | **COMPLETED (14/14)** |
+| **Phase 19**| Open Source Hygiene | 9 | **ACTIVE (In Progress)** |
 | **Phase 20**| Landing Page | 7 | Queued |
 | **TOTAL** | | **288** | |
 
@@ -432,17 +432,17 @@ Audit executed via `scripts/check-env.ps1`:
 ---
 
 ## 23. Phase 18 Task Log (Documentation)
-- `[18.1]` Write `README.md` — **ACTIVE**
-- `[18.2]` Write `CONTRIBUTING.md` — **QUEUED**
-- `[18.3]` Write `CHANGELOG.md` — **QUEUED**
-- `[18.4]` Write `docs/ARCHITECTURE.md` — **QUEUED**
-- `[18.5]` Write `docs/WIN32-API-SURFACE.md` — **QUEUED**
-- `[18.6]` Write `docs/WS-PROTOCOL.md` — **QUEUED**
-- `[18.7]` Write `docs/SCHEMA.md` — **QUEUED**
-- `[18.8]` Write `docs/LICENSE-SPEC.md` — **QUEUED**
-- `[18.9]` Write `docs/SECURITY.md` — **DONE (Completed in Phase 15)**
-- `[18.10]` Write `docs/PERF.md` — **DONE (Completed in Phase 13)**
-- `[18.11]` Write `docs/BUGS.md` — **DONE (Living document)**
-- `[18.12]` Inline JSDoc on all exported TS functions — **QUEUED**
-- `[18.13]` Inline `///` doc comments on all public Rust items — **QUEUED**
-- `[18.14]` Record demo GIF / video assets — **QUEUED**
+- `[18.1]` Write `README.md` (comprehensive hero, architecture, system requirements, installation, shortcuts, QA battery, and demo preview) — **DONE**
+- `[18.2]` Write `CONTRIBUTING.md` (anti-slop invariants, conventional commits, branch strategy, pre-commit quality gates, PR review protocol) — **DONE**
+- `[18.3]` Write `CHANGELOG.md` (Keep-a-Changelog standard, SemVer v0.1.0 initial public release notes covering all 18 phases) — **DONE**
+- `[18.4]` Write `docs/ARCHITECTURE.md` (Mermaid system architecture, IPC command lifecycle, Win32 engine, SQLite WAL persistence, loopback WebSocket bridge, memory management, and crash recovery) — **DONE**
+- `[18.5]` Write `docs/WIN32-API-SURFACE.md` (`docs/win32-api-surface.md`: full FFI signatures, User32/Kernel32/Dwmapi invariants, system window exclusion filter matrix) — **DONE**
+- `[18.6]` Write `docs/WS-PROTOCOL.md` (`docs/ws-protocol.md`: RFC 6455 loopback WebSocket protocol, handshake Origin header validation, request-response envelope, keepalive ping/pong) — **DONE**
+- `[18.7]` Write `docs/SCHEMA.md` (`docs/schema.md`: complete SQLite schema, ERD diagram, table column contracts, index specifications, WAL PRAGMA tuning) — **DONE**
+- `[18.8]` Write `docs/LICENSE-SPEC.md` (`docs/license-spec.md`: Ed25519 digital signature format, canonical payload string, dot-delimited key structure, Windows Credential Manager storage) — **DONE**
+- `[18.9]` Write `docs/SECURITY.md` (threat model, zero-cloud architecture, IPC validation, strict CSP, loopback origin checking, and disclosure policy) — **DONE**
+- `[18.10]` Write `docs/PERF.md` (`docs/perf.md`: 113.8 kB bundle breakdown, 71.3% reduction, SQLite WAL mmap tuning, 3.2ms EnumWindows benchmarks, sub-second latency) — **DONE**
+- `[18.11]` Write `docs/BUGS.md` (living bug log, updated with BUG-016 through BUG-020 triage entries) — **DONE**
+- `[18.12]` Inline JSDoc on all exported TS functions (parameter contracts only without narrative slop, modularized into `src/lib/osApi.ts`, `src/lib/wsApi.ts`, `src/lib/api.ts`) — **DONE**
+- `[18.13]` Inline `///` doc comments on all public Rust items (crate-level documentation and typed `AppError` docs verified via `cargo doc --no-deps`) — **DONE**
+- `[18.14]` Record demo GIF / video assets (`docs/previews/stash-restore-flow.svg`: animated SVG illustrating 3-step active session, instant stash, and coordinate restore cycle) — **DONE**

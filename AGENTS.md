@@ -13,7 +13,7 @@
 ---
 
 ## 2. Current Execution State
-* **Active Phase**: Phase 18 — Documentation
+* **Active Phase**: Phase 19 — Open Source Hygiene
 * **Completed Tasks**:
   * **Phase 0: Foundations & Toolchain (Tasks 0.1 – 0.15)** — **100% COMPLETE** (Git commit `15cd469`, Release tag `v0.0.1-scaffold`)
   * **Phase 1: FigCraft UI/UX Design (Tasks 1.1 – 1.9)** — **COMPLETE** (Tasks 1.1–1.9 authored in `NakrakuUI.figcraft`; Task 1.10 skipped per user directive to build directly in React)
@@ -33,7 +33,8 @@
   * **Phase 15: Security Audit (Tasks 15.1 – 15.10)** — **100% COMPLETE** (Tauri allowlist audit, strict CSP, dual-layer IPC input validation with Zod & Rust structs, local WS handshake Origin validation rejecting untrusted origins with 403 Forbidden, Windows Credential Manager keyring storage, npm audit --omit=dev 0 vulns, PII username sanitization in logs/crashes, SHA-256 HWID domain separation, extension CSP, 31 Vitest suites / 150 tests, 27 Rust tests, docs/SECURITY.md)
   * **Phase 16: Installer & Distribution (Tasks 16.1 – 16.12)** — **100% COMPLETE** (NSIS currentUser non-admin install, WiX MSI enterprise packager with RFC 4122 GUID, multi-resolution icon suite, scripts/sign.ps1 & sign-release.ps1 with RFC 3161 dual timestamping, docs/DISTRIBUTION.md, tauri-plugin-updater v2.14.1 with Ed25519 verification, Titlebar & Settings AppUpdaterRow UI, .github/workflows/release.yml, scripts/generate-checksums.ps1, scripts/generate-updater-manifest.mjs, 33 Vitest suites / 163 tests, 27 Rust tests)
   * **Phase 17: CI/CD Pipeline (Tasks 17.1 – 17.8)** — **100% COMPLETE** (GitHub Actions ci.yml with parallel quality/test/build/perf jobs, release.yml on tag push, branch protection specs in docs/CI-CD.md, dependabot.yml for npm/cargo/actions, v8 code coverage with test:coverage, scripts/perf-regression-gate.mjs enforcing bundle <250kB & diff latency <15ms, 34 Vitest suites / 169 tests, 27 Rust tests)
-* **Next Immediate Task**: Task 18.1 — Write `README.md`
+  * **Phase 18: Documentation (Tasks 18.1 – 18.14)** — **100% COMPLETE** (README.md with workflow SVG demo, CONTRIBUTING.md with anti-slop guidelines, CHANGELOG.md Keep-a-Changelog v0.1.0, ARCHITECTURE.md Mermaid subsystem deep-dive, updated Win32/WS/Schema/License/Security/Perf/Bugs specs, inline JSDoc parameter contracts across TypeScript API modules, Rustdoc comments on public items verified via `cargo doc`, tests/docs.test.ts, 35 Vitest suites / 176 tests, 27 Rust tests)
+* **Next Immediate Task**: Task 19.1 — Add MIT License file (`LICENSE`)
 * **Total Roadmap**: 288 tasks across 21 phases (Detailed in `nakraku_full_task_breakdown.md`)
 
 ---

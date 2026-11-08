@@ -1,14 +1,22 @@
 use std::fmt;
 
+/// Top-level strongly typed application error enum for Tauri IPC and native subsystems.
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq, Eq)]
 #[serde(tag = "type", content = "details")]
 pub enum AppError {
+    /// Database query or connection pool failure.
     Db(String),
+    /// Win32 OS API or process interaction failure.
     Os(String),
+    /// Core business logic or workspace orchestration failure.
     Core(String),
+    /// Offline cryptographic license verification failure.
     License(String),
+    /// Loopback WebSocket protocol or client transmission failure.
     Ws(String),
+    /// Input schema or boundary constraint validation failure.
     Validation(String),
+    /// Internal application state or IO error.
     Internal(String),
 }
 

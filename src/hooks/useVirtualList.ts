@@ -12,6 +12,11 @@ export interface VirtualItem {
   start: number;
 }
 
+/**
+ * High-performance list virtualizer hook computing visible row indices and scroll offsets.
+ * @param {VirtualListOptions} options Virtualizer configuration parameters.
+ * @returns {{ totalHeight: number; items: VirtualItem[]; onScroll: (e: React.UIEvent<HTMLDivElement>) => void }} Virtualization calculations and scroll event handler.
+ */
 export const useVirtualList = ({
   count,
   itemHeight,

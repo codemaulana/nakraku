@@ -61,6 +61,10 @@ const useLicenseState = () => {
   return { status, setStatus, machineId, isLoading, setIsLoading, error, setError, refresh };
 };
 
+/**
+ * Manages offline Ed25519 licensing state, hardware machine ID, and key activation.
+ * @returns {{ status: LicenseStatus; machineId: string; tier: string; isPro: boolean; expiresAt: number | null; isLoading: boolean; error: string | null; activate: (key: string) => Promise<boolean>; deactivate: () => Promise<void>; refresh: () => Promise<void> }} Active license management interface.
+ */
 export const useLicense = () => {
   const { status, setStatus, machineId, isLoading, setIsLoading, error, setError, refresh } =
     useLicenseState();

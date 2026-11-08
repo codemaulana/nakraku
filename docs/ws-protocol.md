@@ -8,6 +8,7 @@ The Nakraku Stash desktop application embeds a local WebSocket server listening 
 * **Transport**: WebSocket (RFC 6455)
 * **Encoding**: UTF-8 JSON text frames
 * **Security & Sandboxing**: Loopback interface only (`127.0.0.1`). External incoming connections are rejected.
+* **Origin Validation**: Strict Origin header inspection during WebSocket handshake. Rejects any untrusted web origins with HTTP 403 Forbidden. Allowed origins: `chrome-extension://*`, `moz-extension://*`, or loopback clients without browser Origin headers.
 
 ---
 

@@ -85,10 +85,20 @@ const ROUTE_LOOKUP = new Map<AppRoute, RouteConfig>(
   APP_ROUTES.map((route) => [route.id, route])
 );
 
+/**
+ * Type guard verifying whether an arbitrary value matches a registered AppRoute.
+ * @param {unknown} value Candidate value to test.
+ * @returns {value is AppRoute} True if value is a valid AppRoute.
+ */
 export const isAppRoute = (value: unknown): value is AppRoute => {
   return typeof value === "string" && ROUTE_LOOKUP.has(value as AppRoute);
 };
 
+/**
+ * Resolves metadata configuration for a specific route.
+ * @param {AppRoute} route Route identifier.
+ * @returns {RouteConfig} Route metadata object.
+ */
 export const getRouteConfig = (route: AppRoute): RouteConfig => {
   const config = ROUTE_LOOKUP.get(route);
   if (!config) {
@@ -97,10 +107,20 @@ export const getRouteConfig = (route: AppRoute): RouteConfig => {
   return config;
 };
 
+/**
+ * Serializes an AppRoute into a URL hash fragment.
+ * @param {AppRoute} route Route identifier.
+ * @returns {string} Hash fragment string (e.g. '#/dashboard').
+ */
 export const routeToHash = (route: AppRoute): string => {
   return `#/${route}`;
 };
 
+/**
+ * Parses a window location hash fragment into an AppRoute.
+ * @param {string} hash Raw hash string from location.hash.
+ * @returns {AppRoute} Matched AppRoute or DEFAULT_ROUTE fallback.
+ */
 export const hashToRoute = (hash: string): AppRoute => {
   const clean = hash.replace(/^#\/?/u, "").split("?")[0].toLowerCase();
   return isAppRoute(clean) ? clean : DEFAULT_ROUTE;

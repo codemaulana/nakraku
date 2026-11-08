@@ -4,6 +4,9 @@ import { listen } from "@tauri-apps/api/event";
 import { useToast } from "../context/ToastContext";
 import { AppErrorPayloadSchema } from "../lib/appError";
 
+/**
+ * Subscribes to backend 'app://error' events and surfaces errors as toast notifications.
+ */
 export const useAppErrorListener = () => {
   const toast = useToast();
 

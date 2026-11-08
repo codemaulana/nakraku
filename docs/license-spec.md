@@ -53,7 +53,7 @@ NAKRAKU.<BASE64URL(canonical_payload)>.<BASE64URL(ed25519_signature)>
 ---
 
 ## 4. Verification Workflow (Rust Engine)
-1. **Key Splitting**: Split license key by `-`. Validate exactly 3 segments with prefix `NAKRAKU`.
+1. **Key Splitting**: Split license key by `.` (with legacy `NAKRAKU-` prefix normalization). Validate exactly 3 segments with prefix `NAKRAKU`.
 2. **Base64URL Decoding**:
    - Decode Segment 1 into UTF-8 canonical string.
    - Decode Segment 2 into 64-byte signature slice.

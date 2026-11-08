@@ -137,6 +137,11 @@ export const APP_SHORTCUTS: readonly ShortcutItem[] = [
   },
 ] as const;
 
+/**
+ * Filters the registered command shortcuts using case-insensitive substring matching.
+ * @param {string} query Search input string.
+ * @returns {ShortcutItem[]} Matching shortcut items or all shortcuts if query is empty.
+ */
 export const fuzzySearchCommands = (query: string): ShortcutItem[] => {
   const clean = query.trim().toLowerCase();
   if (!clean) return [...APP_SHORTCUTS];

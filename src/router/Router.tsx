@@ -23,6 +23,10 @@ export interface RouterContextValue {
 
 const STORAGE_KEY = "nakraku_last_route";
 
+/**
+ * Reads the previously stored active route from localStorage or the URL hash fragment.
+ * @returns {AppRoute} Resolved AppRoute or DEFAULT_ROUTE fallback.
+ */
 export const getStoredRoute = (): AppRoute => {
   if (typeof window === "undefined") return DEFAULT_ROUTE;
   try {
@@ -41,6 +45,10 @@ export const getStoredRoute = (): AppRoute => {
   return DEFAULT_ROUTE;
 };
 
+/**
+ * Persists the active route string to localStorage.
+ * @param {AppRoute} route Route identifier to store.
+ */
 export const setStoredRoute = (route: AppRoute): void => {
   if (typeof window === "undefined") return;
   try {
@@ -118,6 +126,11 @@ export const RouterProvider: React.FC<RouterProviderProps> = ({
   );
 };
 
+/**
+ * Accesses the active RouterContextValue navigation state.
+ * @returns {RouterContextValue} Active router controller.
+ * @throws {Error} If invoked outside a RouterProvider.
+ */
 export const useRouter = (): RouterContextValue => {
   const context = useContext(RouterContext);
   if (!context) {
