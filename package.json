@@ -20,7 +20,10 @@
     "perf:gate": "node scripts/perf-regression-gate.mjs",
     "ci:all": "npm run lint && npm run check && npm run test:coverage && npm run test:rust && npm run build && npm run perf:gate",
     "prepare": "lefthook install",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:build:app": "tauri build --no-bundle"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.14.26",
