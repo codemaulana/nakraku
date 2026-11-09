@@ -6,6 +6,7 @@ interface AppShortcutsConfig {
   onFocusSearch: () => void;
   onOpenPalette: () => void;
   onSelectRoute: (route: AppRoute) => void;
+  onRestoreLast?: () => void;
 }
 
 const ROUTE_NUM_MAP: Record<string, AppRoute> = {
@@ -20,6 +21,7 @@ export const useAppShortcuts = ({
   onFocusSearch,
   onOpenPalette,
   onSelectRoute,
+  onRestoreLast,
 }: AppShortcutsConfig): void => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -35,6 +37,9 @@ export const useAppShortcuts = ({
       ) {
         e.preventDefault();
         onOpenStash();
+      } else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "r") {
+        e.preventDefault();
+        onRestoreLast?.();
       } else if (e.altKey && e.key >= "1" && e.key <= "4") {
         e.preventDefault();
         onSelectRoute(ROUTE_NUM_MAP[e.key]);
@@ -52,5 +57,5 @@ export const useAppShortcuts = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onOpenStash, onFocusSearch, onOpenPalette, onSelectRoute]);
+  }, [onOpenStash, onFocusSearch, onOpenPalette, onSelectRoute, onRestoreLast]);
 };

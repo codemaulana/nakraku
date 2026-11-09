@@ -189,9 +189,20 @@ const handleStashCmd = (
     return {
       total_ram_bytes: 32 * 1024 * 1024 * 1024,
       used_ram_bytes: 14 * 1024 * 1024 * 1024,
-      app_ram_bytes: 84 * 1024 * 1024,
-      tracked_windows_count: state.windows.length,
+      available_ram_bytes: 18 * 1024 * 1024 * 1024,
+      memory_load_percentage: 44,
     };
+  }
+  if (cmd === "cmd_minimize_window" || cmd === "cmd_restore_window" || cmd === "update_tray_status") {
+    return null;
+  }
+  if (cmd === "update_workspace_color") {
+    const id = args?.id as string;
+    const color = args?.color as string;
+    const found = state.workspaces.find((w) => w.id === id);
+    if (!found) throw new Error(`Workspace ${id} not found`);
+    found.color = color;
+    return found;
   }
   if (cmd === "cmd_stash_now") {
     const wsId = args?.workspaceId as string;

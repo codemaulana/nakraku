@@ -96,6 +96,23 @@ export const renameWorkspace = async (
 };
 
 /**
+ * Updates the accent color of an existing workspace.
+ * @param {string} id Workspace UUID string.
+ * @param {string} color Hex color string.
+ * @returns {Promise<Workspace>} Updated workspace record.
+ */
+export const updateWorkspaceColor = async (
+  id: string,
+  color: string
+): Promise<Workspace> => {
+  const raw = await safeInvoke<unknown>("update_workspace_color", {
+    id,
+    color,
+  });
+  return WorkspaceSchema.parse(raw);
+};
+
+/**
  * Deletes a workspace and all cascaded session snapshots from the database.
  * @param {string} id Workspace UUID string.
  * @returns {Promise<boolean>} True if record was removed.

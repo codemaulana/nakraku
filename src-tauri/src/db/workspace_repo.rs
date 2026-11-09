@@ -121,6 +121,24 @@ pub fn rename(conn: &Connection, id: &str, new_name: &str) -> Result<WorkspaceRe
     get(conn, id)
 }
 
+pub fn update_color(conn: &Connection, id: &str, color: &str) -> Result<WorkspaceRecord, DbError> {
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis() as i64)
+        .unwrap_or(0);
+
+    let rows = conn.execute(
+        "UPDATE workspaces SET color = ?1, updated_at = ?2 WHERE id = ?3",
+        params![color, now, id],
+    )?;
+
+    if rows == 0 {
+        return Err(DbError::NotFound(format!("Workspace '{}' not found", id)));
+    }
+
+    get(conn, id)
+}
+
 pub fn delete(conn: &Connection, id: &str) -> Result<bool, DbError> {
     let rows = conn.execute("DELETE FROM workspaces WHERE id = ?1", [id])?;
     Ok(rows > 0)

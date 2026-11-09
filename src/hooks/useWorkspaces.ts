@@ -221,6 +221,7 @@ export const useWorkspaces = (): UseWorkspacesReturn => {
     crud.setWorkspaces((prev) =>
       prev.map((w) => (w.id === id ? { ...w, color } : w))
     );
+    void api.updateWorkspaceColor(id, color).catch(() => {});
   };
 
   const restoreWorkspaceAction = async (id: string) => {

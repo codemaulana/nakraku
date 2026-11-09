@@ -39,6 +39,16 @@ pub fn rename_workspace(
 }
 
 #[tauri::command]
+pub fn update_workspace_color(
+    pool: State<DbPool>,
+    id: String,
+    color: String,
+) -> Result<WorkspaceRecord, DbError> {
+    let conn = pool.lock().map_err(|_| DbError::Poisoned)?;
+    workspace_repo::update_color(&conn, &id, &color)
+}
+
+#[tauri::command]
 pub fn delete_workspace(pool: State<DbPool>, id: String) -> Result<bool, DbError> {
     let conn = pool.lock().map_err(|_| DbError::Poisoned)?;
     workspace_repo::delete(&conn, &id)

@@ -68,7 +68,7 @@ pub fn cmd_restore_session(pool: State<'_, DbPool>, session_id: String) -> Resul
                 class_name: String::new(),
                 process_id: w.process_id as u32,
                 process_name: w.process_name,
-                exe_path: None,
+                exe_path: w.executable_path,
                 rect: WindowRect {
                     x: w.x,
                     y: w.y,

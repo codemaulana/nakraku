@@ -2,10 +2,13 @@ use super::error::CoreError;
 use super::types::{ConflictResolutionMode, QuickSwitchResult, RestoreResult, StashResult, UndoItem};
 use super::undo_stack::UndoStack;
 use crate::db::session_repo::{self, CreateSessionInput};
+use crate::db::settings_repo;
 use crate::db::window_repo::{self, InsertWindowInput};
 use crate::db::DbPool;
 use crate::os::types::{RawWindow, WindowRect};
-use crate::os::window_restore::{minimize_all_windows, restore_session_windows, restore_window};
+use crate::os::window_restore::{
+    minimize_all_windows, minimize_window, restore_session_windows, restore_window,
+};
 use crate::os::window_snapshot::snapshot_session;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -14,8 +17,23 @@ pub fn stash_now(
     undo_stack: &UndoStack,
     workspace_id: &str,
     session_name: &str,
+    selected_hwnds: Option<Vec<String>>,
 ) -> Result<StashResult, CoreError> {
     let snapshot = snapshot_session().map_err(|e| CoreError::OsError(e.to_string()))?;
+
+    let is_selective = selected_hwnds
+        .as_ref()
+        .map(|list| !list.is_empty())
+        .unwrap_or(false);
+
+    let target_windows: Vec<RawWindow> = match &selected_hwnds {
+        Some(filter) if !filter.is_empty() => snapshot
+            .windows
+            .into_iter()
+            .filter(|w| filter.iter().any(|h| h.eq_ignore_ascii_case(&w.hwnd)))
+            .collect(),
+        _ => snapshot.windows,
+    };
 
     let now_ms = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -23,12 +41,13 @@ pub fn stash_now(
         .unwrap_or(0);
 
     let session_id = format!("s_{now_ms}");
-    let window_count = snapshot.windows.len() as u32;
-    let ram_saved = snapshot.total_ram_saved_bytes;
+    let window_count = target_windows.len() as u32;
+    let ram_saved: u64 = target_windows.iter().map(|w| w.ram_bytes).sum();
 
-    let window_hwnds: Vec<String> = snapshot.windows.iter().map(|w| w.hwnd.clone()).collect();
+    let window_hwnds: Vec<String> = target_windows.iter().map(|w| w.hwnd.clone()).collect();
+    let window_hwnd_vals: Vec<usize> = target_windows.iter().map(|w| w.hwnd_val).collect();
 
-    {
+    let should_minimize = {
         let mut conn = pool
             .lock()
             .map_err(|e| CoreError::LockError(e.to_string()))?;
@@ -50,6 +69,11 @@ pub fn stash_now(
             );
         }
 
+        let min_setting = settings_repo::get_setting(&conn, "minimize_on_stash")
+            .ok()
+            .flatten();
+        let do_min = min_setting.as_deref() != Some("false");
+
         let new_session = CreateSessionInput {
             id: session_id.clone(),
             workspace_id: workspace_id.to_string(),
@@ -62,8 +86,7 @@ pub fn stash_now(
         session_repo::save_session(&conn, new_session)
             .map_err(|e| CoreError::DbError(e.to_string()))?;
 
-        let new_windows: Vec<InsertWindowInput> = snapshot
-            .windows
+        let new_windows: Vec<InsertWindowInput> = target_windows
             .into_iter()
             .enumerate()
             .map(|(idx, w)| InsertWindowInput {
@@ -87,10 +110,23 @@ pub fn stash_now(
 
         window_repo::upsert_windows(&mut conn, &new_windows)
             .map_err(|e| CoreError::DbError(e.to_string()))?;
-    }
 
-    let minimized_count =
-        minimize_all_windows().map_err(|e| CoreError::OsError(e.to_string()))?;
+        do_min
+    };
+
+    let minimized_count = if !should_minimize {
+        0
+    } else if is_selective {
+        let mut count = 0u32;
+        for hwnd_val in window_hwnd_vals {
+            if minimize_window(hwnd_val).is_ok() {
+                count += 1;
+            }
+        }
+        count
+    } else {
+        minimize_all_windows().map_err(|e| CoreError::OsError(e.to_string()))?
+    };
 
     undo_stack.push(UndoItem {
         id: format!("undo_{now_ms}"),
@@ -202,7 +238,7 @@ pub fn quick_switch(
     to_workspace_id: &str,
 ) -> Result<QuickSwitchResult, CoreError> {
     let from_name = format!("Switch from {from_workspace_id}");
-    let stashed = stash_now(pool, undo_stack, from_workspace_id, &from_name)?;
+    let stashed = stash_now(pool, undo_stack, from_workspace_id, &from_name, None)?;
     let restored = restore_workspace(
         pool,
         undo_stack,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { isTauri } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { getLiveWindows, getMemoryStats, stashNow } from "../lib/api";
+import { getLiveWindows, getMemoryStats, listWorkspaces, stashNow } from "../lib/api";
 import type { RawWindow, MemoryStats, StashResult } from "../lib/schemas";
 import type { WindowSortOption } from "../components/LiveWindowList";
 
@@ -21,6 +21,7 @@ export interface UseLiveDashboardReturn {
   toggleSelectAll: () => void;
   refresh: () => Promise<void>;
   executeStash: (workspaceId?: string, sessionName?: string) => Promise<StashResult | null>;
+  executeStashSlot: (slotIndex: number) => Promise<StashResult | null>;
   clearError: () => void;
 }
 
@@ -78,7 +79,12 @@ const useDashboardSelection = (windows: RawWindow[]) => {
   return { selectedHwnds: activeHwnds, toggleSelect, toggleSelectAll };
 };
 
-const useDashboardStash = (refresh: () => Promise<void>, setError: (e: string | null) => void) => {
+const useDashboardStash = (
+  refresh: () => Promise<void>,
+  setError: (e: string | null) => void,
+  selectedHwnds: Set<string>,
+  totalWindows: number
+) => {
   const [isStashing, setIsStashing] = useState(false);
 
   const executeStash = useCallback(
@@ -86,7 +92,11 @@ const useDashboardStash = (refresh: () => Promise<void>, setError: (e: string | 
       try {
         setIsStashing(true);
         const name = sessionName ?? `Stash ${new Date().toLocaleTimeString()}`;
-        const result = await stashNow(workspaceId, name);
+        const subset =
+          selectedHwnds.size > 0 && selectedHwnds.size < totalWindows
+            ? Array.from(selectedHwnds)
+            : undefined;
+        const result = await stashNow(workspaceId, name, subset);
         await refresh();
         return result;
       } catch (err) {
@@ -96,10 +106,19 @@ const useDashboardStash = (refresh: () => Promise<void>, setError: (e: string | 
         setIsStashing(false);
       }
     },
-    [refresh, setError]
+    [refresh, setError, selectedHwnds, totalWindows]
   );
 
-  return { isStashing, executeStash };
+  const executeStashSlot = useCallback(
+    async (slotIndex: number) => {
+      const wsList = await listWorkspaces().catch(() => []);
+      const targetWs = wsList[slotIndex - 1]?.id ?? "default";
+      return executeStash(targetWs, `Slot #${slotIndex} Stash`);
+    },
+    [executeStash]
+  );
+
+  return { isStashing, executeStash, executeStashSlot };
 };
 
 const setupEventSubscriptions = (onEvent: () => void) => {
@@ -124,7 +143,7 @@ const setupEventSubscriptions = (onEvent: () => void) => {
 export const useLiveDashboard = (): UseLiveDashboardReturn => {
   const { windows, memoryStats, isLoading, error, setError, refresh } = useDashboardData();
   const { selectedHwnds, toggleSelect, toggleSelectAll } = useDashboardSelection(windows);
-  const { isStashing, executeStash } = useDashboardStash(refresh, setError);
+  const { isStashing, executeStash, executeStashSlot } = useDashboardStash(refresh, setError, selectedHwnds, windows.length);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<WindowSortOption>("memory");
 
@@ -141,30 +160,13 @@ export const useLiveDashboard = (): UseLiveDashboardReturn => {
   const filteredWindows = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return windows;
-    return windows.filter(
-      (w) =>
-        w.title.toLowerCase().includes(q) ||
-        w.process_name.toLowerCase().includes(q) ||
-        String(w.process_id).includes(q)
-    );
+    return windows.filter((w) => w.title.toLowerCase().includes(q) || w.process_name.toLowerCase().includes(q) || String(w.process_id).includes(q));
   }, [windows, searchQuery]);
 
   return {
-    windows,
-    filteredWindows,
-    memoryStats,
-    isLoading,
-    isStashing,
-    error,
-    searchQuery,
-    selectedHwnds,
-    sortBy,
-    setSearchQuery,
-    setSortBy,
-    toggleSelect,
-    toggleSelectAll,
-    refresh,
-    executeStash,
+    windows, filteredWindows, memoryStats, isLoading, isStashing, error,
+    searchQuery, selectedHwnds, sortBy, setSearchQuery, setSortBy,
+    toggleSelect, toggleSelectAll, refresh, executeStash, executeStashSlot,
     clearError: () => setError(null),
   };
 };

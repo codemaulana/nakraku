@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { isTauri } from "@tauri-apps/api/core";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "./Badge";
 import { Kbd } from "./Kbd";
 import { ScrollArea } from "./ScrollArea";
+import { getLiveWindows, listWorkspaces } from "../lib/api";
 import {
   LayoutDashboard,
   Layers,
@@ -141,6 +143,40 @@ const SidebarFooter: React.FC<SidebarFooterProps> = ({ collapsed, onToggle }) =>
   </div>
 );
 
+const useLiveNavItems = (baseItems: NavItem[]): NavItem[] => {
+  const [counts, setCounts] = useState<{ windows: number; workspaces: number } | null>(null);
+
+  useEffect(() => {
+    if (!isTauri() || baseItems !== DEFAULT_NAV_ITEMS) return;
+    let mounted = true;
+    const syncCounts = () => {
+      Promise.all([getLiveWindows().catch(() => null), listWorkspaces().catch(() => null)])
+        .then(([wins, ws]) => {
+          if (mounted && (wins || ws)) {
+            setCounts((prev) => ({
+              windows: wins ? wins.length : (prev?.windows ?? 14),
+              workspaces: ws ? ws.length : (prev?.workspaces ?? 3),
+            }));
+          }
+        })
+        .catch(() => {});
+    };
+    syncCounts();
+    const timer = setInterval(syncCounts, 4000);
+    return () => {
+      mounted = false;
+      clearInterval(timer);
+    };
+  }, [baseItems]);
+
+  if (!counts || baseItems !== DEFAULT_NAV_ITEMS) return baseItems;
+  return baseItems.map((item) => {
+    if (item.id === "dashboard") return { ...item, badge: String(counts.windows) };
+    if (item.id === "workspaces") return { ...item, badge: String(counts.workspaces) };
+    return item;
+  });
+};
+
 export const Sidebar: React.FC<SidebarProps> = ({
   items = DEFAULT_NAV_ITEMS,
   activeId = "dashboard",
@@ -149,6 +185,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
 }) => {
   const [internalCollapsed, setInternalCollapsed] = useState<boolean>(false);
+  const resolvedItems = useLiveNavItems(items);
 
   const isCollapsed = controlledCollapsed ?? internalCollapsed;
 
@@ -178,7 +215,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       }`}
     >
       <SidebarNavList
-        items={items}
+        items={resolvedItems}
         activeId={activeId}
         collapsed={isCollapsed}
         onSelect={onSelect}

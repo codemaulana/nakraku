@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
+import { isTauri } from "@tauri-apps/api/core";
+import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 import { useWindowControls } from "../hooks/useWindowControls";
 
 export type ViewportMode = "compact" | "standard" | "fullscreen";
@@ -58,17 +60,33 @@ export const ViewportProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setUserCollapsed((prev) => !(prev ?? (activeMode === "compact")));
   }, [activeMode]);
 
+  const handleSetMode = useCallback((nextMode: ViewportMode) => {
+    setUserModeOverride(nextMode);
+    if (!isTauri()) return;
+    try {
+      const win = getCurrentWindow();
+      if (nextMode === "fullscreen") {
+        void win.maximize().catch(() => {});
+      } else {
+        const size = nextMode === "compact" ? new LogicalSize(720, 520) : new LogicalSize(960, 640);
+        void win.unmaximize().then(() => win.setSize(size)).catch(() => {});
+      }
+    } catch {
+      setUserModeOverride(nextMode);
+    }
+  }, []);
+
   const value = useMemo<ViewportContextValue>(
     () => ({
       mode: activeMode,
       isMaximized,
       isSidebarCollapsed,
       windowWidth,
-      setMode: setUserModeOverride,
+      setMode: handleSetMode,
       toggleSidebar,
       setSidebarCollapsed: (val) => setUserCollapsed(val),
     }),
-    [activeMode, isMaximized, isSidebarCollapsed, windowWidth, toggleSidebar]
+    [activeMode, isMaximized, isSidebarCollapsed, windowWidth, handleSetMode, toggleSidebar]
   );
 
   return <ViewportContext.Provider value={value}>{children}</ViewportContext.Provider>;

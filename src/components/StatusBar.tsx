@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { isTauri } from "@tauri-apps/api/core";
+import { getLiveWindows } from "../lib/api";
 
 export interface StatusBarProps {
   ramUsage?: string;
@@ -91,27 +93,62 @@ const StatusBarMetrics: React.FC<{
   </div>
 );
 
+const useLiveStatusBarMetrics = () => {
+  const [live, setLive] = useState<{ procs: number; wins: number; ramGb: string } | null>(null);
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    let mounted = true;
+    const sync = () => {
+      getLiveWindows()
+        .then((wins) => {
+          if (!mounted) return;
+          const procs = new Set(wins.map((w) => w.process_name)).size;
+          const totalBytes = wins.reduce((acc, w) => acc + w.ram_bytes, 0);
+          const gb = (totalBytes / (1024 * 1024 * 1024)).toFixed(1);
+          setLive({ procs, wins: wins.length, ramGb: `${gb} GB` });
+        })
+        .catch(() => {});
+    };
+    sync();
+    const timer = setInterval(sync, 4000);
+    return () => {
+      mounted = false;
+      clearInterval(timer);
+    };
+  }, []);
+
+  return live;
+};
+
 export const StatusBar: React.FC<StatusBarProps> = ({
   ramUsage = "34.5 MB",
   ramSaved,
-  processCount = 14,
-  windowCount = 5,
+  processCount,
+  windowCount,
   bridgeConnected = true,
   bridgePort = 48123,
   showClock = true,
   viewportMode,
   className = "",
-}) => (
-  <footer
-    className={`flex items-center justify-between h-statusbar w-full bg-bg-surface border-t border-border-subtle px-sm text-2xs font-mono text-text-secondary select-none shrink-0 ${className}`}
-  >
-    <StatusBarTelemetry
-      connected={bridgeConnected}
-      port={bridgePort}
-      processCount={processCount}
-      windowCount={windowCount}
-      viewportMode={viewportMode}
-    />
-    <StatusBarMetrics ramUsage={ramUsage} ramSaved={ramSaved} showClock={showClock} />
-  </footer>
-);
+}) => {
+  const live = useLiveStatusBarMetrics();
+  const resolvedProcs = processCount ?? live?.procs ?? 14;
+  const resolvedWins = windowCount ?? live?.wins ?? 5;
+  const resolvedSaved = ramSaved ?? live?.ramGb;
+
+  return (
+    <footer
+      className={`flex items-center justify-between h-statusbar w-full bg-bg-surface border-t border-border-subtle px-sm text-2xs font-mono text-text-secondary select-none shrink-0 ${className}`}
+    >
+      <StatusBarTelemetry
+        connected={bridgeConnected}
+        port={bridgePort}
+        processCount={resolvedProcs}
+        windowCount={resolvedWins}
+        viewportMode={viewportMode}
+      />
+      <StatusBarMetrics ramUsage={ramUsage} ramSaved={resolvedSaved} showClock={showClock} />
+    </footer>
+  );
+};

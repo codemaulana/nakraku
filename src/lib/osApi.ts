@@ -93,17 +93,19 @@ export const restoreSessionById = async (
  * Executes a full workspace stash operation: snapshots windows, persists to DB, and minimizes windows.
  * @param {string} workspaceId Target workspace UUID.
  * @param {string} sessionName Human-readable snapshot session label.
+ * @param {string[]} [selectedHwnds] Optional subset of window HWNDs to stash.
  * @returns {Promise<StashResult>} Result summary including saved window count and freed RAM.
  * @throws {ApiError} If snapshot capture or DB insertion fails.
  */
 export const stashNow = async (
   workspaceId: string,
-  sessionName: string
+  sessionName: string,
+  selectedHwnds?: string[]
 ): Promise<StashResult> => {
-  const raw = await safeInvoke<unknown>("cmd_stash_now", {
-    workspaceId,
-    sessionName,
-  });
+  const payload = selectedHwnds
+    ? { workspaceId, sessionName, selectedHwnds }
+    : { workspaceId, sessionName };
+  const raw = await safeInvoke<unknown>("cmd_stash_now", payload);
   return StashResultSchema.parse(raw);
 };
 

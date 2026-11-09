@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { MainPanel } from "../components/MainPanel";
 import { MemoryMeter } from "../components/MemoryMeter";
 import { ProcessCount } from "../components/ProcessCount";
 import { StashButton } from "../components/StashButton";
 import { LiveWindowList } from "../components/LiveWindowList";
+import { ContextMenu, type ContextMenuItem } from "../components/ContextMenu";
 import {
   DashboardEmptyState,
   DashboardErrorState,
@@ -15,6 +16,8 @@ import { Button } from "../components/Button";
 import { Badge } from "../components/Badge";
 import { useLiveDashboard, type UseLiveDashboardReturn } from "../hooks/useLiveDashboard";
 import { useViewport } from "../context/ViewportContext";
+import { useToast } from "../context/ToastContext";
+import { minimizeWindow, restoreWindow, stashNow } from "../lib/osApi";
 import { TacticalInspectorPanel } from "../components/dashboard/TacticalInspectorPanel";
 import type { RawWindow } from "../lib/schemas";
 
@@ -155,35 +158,106 @@ const DashboardBody: React.FC<{
   </div>
 );
 
+const buildWindowMenuItems = (
+  win: RawWindow,
+  refresh: () => Promise<void>,
+  showToast: (msg: string, variant?: "info" | "success" | "warning" | "error") => void
+): ContextMenuItem[] => [
+  {
+    id: "focus",
+    label: "Restore & Focus Window",
+    icon: "restore",
+    onClick: () => {
+      void restoreWindow(win.hwnd, win.is_maximized).then(() => refresh()).catch(() => {});
+    },
+  },
+  {
+    id: "minimize",
+    label: "Minimize Window",
+    icon: "window",
+    onClick: () => {
+      void minimizeWindow(win.hwnd).then(() => refresh()).catch(() => {});
+    },
+  },
+  {
+    id: "stash-single",
+    label: "Stash Single Window",
+    icon: "stash",
+    onClick: () => {
+      void stashNow("default", `Single: ${win.process_name}`, [win.hwnd])
+        .then(() => {
+          showToast(`Stashed ${win.process_name}`, "success");
+          return refresh();
+        })
+        .catch(() => {});
+    },
+  },
+  { id: "sep-1", separator: true },
+  {
+    id: "copy-info",
+    label: "Copy HWND & PID",
+    icon: "copy",
+    onClick: () => {
+      void navigator.clipboard?.writeText(`${win.process_name} (PID:${win.process_id} HWND:${win.hwnd})`);
+      showToast(`${win.process_name} telemetry copied.`, "info");
+    },
+  },
+];
+
+const useWindowContextMenu = (
+  refresh: () => Promise<void>,
+  externalHandler?: (event: React.MouseEvent, window: RawWindow) => void
+) => {
+  const { showToast } = useToast();
+  const [ctxTarget, setCtxTarget] = useState<{ x: number; y: number; win: RawWindow } | null>(null);
+
+  const handleContextMenu = useCallback(
+    (event: React.MouseEvent, win: RawWindow) => {
+      event.preventDefault();
+      externalHandler?.(event, win);
+      setCtxTarget({ x: event.clientX, y: event.clientY, win });
+    },
+    [externalHandler]
+  );
+
+  const items = useMemo(
+    () => (ctxTarget ? buildWindowMenuItems(ctxTarget.win, refresh, showToast) : []),
+    [ctxTarget, refresh, showToast]
+  );
+
+  return { ctxTarget, closeCtx: () => setCtxTarget(null), handleContextMenu, items };
+};
+
 export const DashboardView: React.FC<DashboardViewProps> = ({
   searchRef,
   onContextMenu,
 }) => {
   const d = useLiveDashboard();
   const { mode: viewportMode } = useViewport();
+  const ctx = useWindowContextMenu(d.refresh, onContextMenu);
 
-  const estimatedRam = useMemo(() => {
-    return d.windows
-      .filter((w) => d.selectedHwnds.has(w.hwnd))
-      .reduce((acc, w) => acc + w.ram_bytes, 0);
-  }, [d.windows, d.selectedHwnds]);
+  const estimatedRam = useMemo(
+    () => d.windows.filter((w) => d.selectedHwnds.has(w.hwnd)).reduce((acc, w) => acc + w.ram_bytes, 0),
+    [d.windows, d.selectedHwnds]
+  );
 
-  const uniqueProcesses = useMemo(() => {
-    return new Set(d.windows.map((w) => w.process_name)).size;
-  }, [d.windows]);
-
-  const isFullscreen = viewportMode === "fullscreen";
+  const uniqueProcesses = useMemo(
+    () => new Set(d.windows.map((w) => w.process_name)).size,
+    [d.windows]
+  );
 
   return (
     <MainPanel
       header={<DashboardHeader windowCount={d.windows.length} isLoading={d.isLoading} />}
       aside={
-        isFullscreen ? (
+        viewportMode === "fullscreen" ? (
           <TacticalInspectorPanel
             windows={d.windows}
             memoryStats={d.memoryStats}
             selectedCount={d.selectedHwnds.size}
-            onQuickStashWorkspace={() => d.executeStash()}
+            onQuickStashWorkspace={(slot) => {
+              void d.executeStashSlot(slot);
+            }}
           />
         ) : undefined
       }
@@ -193,7 +267,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         estimatedRam={estimatedRam}
         uniqueProcesses={uniqueProcesses}
         searchRef={searchRef}
-        onContextMenu={onContextMenu}
+        onContextMenu={ctx.handleContextMenu}
+      />
+      <ContextMenu
+        position={ctx.ctxTarget ? { x: ctx.ctxTarget.x, y: ctx.ctxTarget.y } : null}
+        items={ctx.items}
+        onClose={ctx.closeCtx}
       />
     </MainPanel>
   );

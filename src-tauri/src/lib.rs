@@ -79,6 +79,7 @@ pub fn run() {
             db::commands::list_workspaces,
             db::commands::get_workspace,
             db::commands::rename_workspace,
+            db::commands::update_workspace_color,
             db::commands::delete_workspace,
             db::commands::reorder_workspaces,
             db::commands::save_session,

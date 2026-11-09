@@ -5,7 +5,6 @@ import { RouterProvider, useRouter } from "./router/Router";
 import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
 import { StatusBar } from "./components/StatusBar";
-import { ContextMenu, useContextMenu } from "./components/ContextMenu";
 import { StashModal } from "./components/StashModal";
 import { CommandPalette } from "./components/CommandPalette";
 import { DashboardView } from "./views/DashboardView";
@@ -13,6 +12,9 @@ import { WorkspacesView } from "./views/WorkspacesView";
 
 const ActiveSessionView = React.lazy(() =>
   import("./views/ActiveSessionView").then((m) => ({ default: m.ActiveSessionView }))
+);
+const SpatialMinimapView = React.lazy(() =>
+  import("./views/SpatialMinimapView").then((m) => ({ default: m.SpatialMinimapView }))
 );
 const SettingsView = React.lazy(() =>
   import("./views/SettingsView").then((m) => ({ default: m.SettingsView }))
@@ -27,25 +29,15 @@ import { useAppShortcuts } from "./hooks/useAppShortcuts";
 import { useWsBridgeStatus } from "./hooks/useWsBridgeStatus";
 import { useAppErrorListener } from "./hooks/useAppErrorListener";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { ToastProvider } from "./context/ToastContext";
+import { ToastProvider, useToast } from "./context/ToastContext";
 import { ViewportProvider, useViewport } from "./context/ViewportContext";
-import {
-  createProcessMenuItems,
-  type ProcessItem,
-} from "./data/sampleProcesses";
+import { restoreWorkspace } from "./lib/osApi";
 import type { ShortcutItem } from "./lib/shortcuts";
 import type { AppRoute } from "./lib/routes";
 
 interface DashboardState {
-  selectedProcess: string;
-  setSelectedProcess: (id: string) => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  isLoading: boolean;
   searchInputRef: React.RefObject<HTMLInputElement>;
-  handleRefresh: () => void;
   onOpenStashModal: () => void;
-  onContextMenu: (e: React.MouseEvent, item: ProcessItem) => void;
 }
 
 const renderActiveView = (
@@ -58,6 +50,8 @@ const renderActiveView = (
       return <WorkspacesView />;
     case "active-session":
       return <ActiveSessionView />;
+    case "minimap":
+      return <SpatialMinimapView />;
     case "settings":
       return <SettingsView />;
     case "about":
@@ -75,87 +69,92 @@ const renderActiveView = (
   }
 };
 
-const handleCommand = (
-  cmd: ShortcutItem,
-  navigate: (r: AppRoute) => void,
-  openStash: () => void,
-  focusSearch: () => void
-) => {
+interface CommandHandlers {
+  navigate: (r: AppRoute) => void;
+  openStash: () => void;
+  focusSearch: () => void;
+  restoreLast: () => void;
+  toggleSidebar: () => void;
+  openPalette: () => void;
+}
+
+const handleCommand = (cmd: ShortcutItem, h: CommandHandlers) => {
   if (cmd.route) {
-    navigate(cmd.route);
+    h.navigate(cmd.route);
   } else if (cmd.actionId === "stash-all" || cmd.actionId === "global-stash") {
-    openStash();
+    h.openStash();
+  } else if (cmd.actionId === "restore-last") {
+    h.restoreLast();
+  } else if (cmd.actionId === "toggle-sidebar") {
+    h.toggleSidebar();
+  } else if (cmd.actionId === "open-palette") {
+    h.openPalette();
   } else if (cmd.actionId === "focus-search") {
-    navigate("dashboard");
-    setTimeout(focusSearch, 50);
+    h.navigate("dashboard");
+    setTimeout(h.focusSearch, 50);
   }
 };
 
-const useTauriGlobalListeners = (onOpenStash: () => void) => {
+const useTauriGlobalListeners = (onOpenStash: () => void, onRestoreLast: () => void) => {
   useEffect(() => {
     if (!isTauri()) return;
     let unsub1: (() => void) | undefined;
     let unsub2: (() => void) | undefined;
+    let unsub3: (() => void) | undefined;
 
-    listen("global:new-stash", onOpenStash)
-      .then((u) => { unsub1 = u; })
-      .catch(() => {});
-
-    listen("tray:stash-now", onOpenStash)
-      .then((u) => { unsub2 = u; })
-      .catch(() => {});
+    listen("global:new-stash", onOpenStash).then((u) => { unsub1 = u; }).catch(() => {});
+    listen("tray:stash-now", onOpenStash).then((u) => { unsub2 = u; }).catch(() => {});
+    listen("global:restore-last", onRestoreLast).then((u) => { unsub3 = u; }).catch(() => {});
 
     return () => {
       unsub1?.();
       unsub2?.();
+      unsub3?.();
     };
-  }, [onOpenStash]);
+  }, [onOpenStash, onRestoreLast]);
 };
 
 const useAppShellState = (navigate: (r: AppRoute) => void) => {
+  const { showToast } = useToast();
   const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState<boolean>(false);
-  const [selectedProcess, setSelectedProcess] = useState<string>("p1");
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1200);
-  };
-
-  const focusSearch = () => {
+  const focusSearch = useCallback(() => {
     searchInputRef.current?.focus();
     searchInputRef.current?.select();
-  };
+  }, []);
+
+  const restoreLast = useCallback(() => {
+    if (!isTauri()) return;
+    restoreWorkspace("default")
+      .then((res) => showToast(`Restored ${res.restored_count} windows from last session.`, "success"))
+      .catch((err) => showToast(err instanceof Error ? err.message : String(err), "error"));
+  }, [showToast]);
+
+  const openStashModal = useCallback(() => setIsStashModalOpen(true), []);
 
   useAppShortcuts({
-    onOpenStash: () => setIsStashModalOpen(true),
+    onOpenStash: openStashModal,
     onFocusSearch: () => {
       navigate("dashboard");
       setTimeout(focusSearch, 50);
     },
     onOpenPalette: () => setIsPaletteOpen(true),
     onSelectRoute: (r) => navigate(r),
+    onRestoreLast: restoreLast,
   });
 
-  const openStashModal = useCallback(() => setIsStashModalOpen(true), []);
-  useTauriGlobalListeners(openStashModal);
+  useTauriGlobalListeners(openStashModal, restoreLast);
 
   return {
     isStashModalOpen,
     setIsStashModalOpen,
     isPaletteOpen,
     setIsPaletteOpen,
-    selectedProcess,
-    setSelectedProcess,
-    searchQuery,
-    setSearchQuery,
-    isLoading,
     searchInputRef,
-    handleRefresh,
     focusSearch,
+    restoreLast,
   };
 };
 
@@ -166,51 +165,6 @@ const ViewLoadingSkeleton: React.FC = () => (
     <div className="h-8 bg-bg-surface border border-border-subtle/30 rounded-sm w-full" />
   </div>
 );
-
-const AppShellOverlays: React.FC<{
-  menuItems: ReturnType<typeof createProcessMenuItems>;
-  position: { x: number; y: number } | null;
-  onCloseMenu: () => void;
-  isStashOpen: boolean;
-  onCloseStash: () => void;
-  isPaletteOpen: boolean;
-  onClosePalette: () => void;
-  onSelectCommand: (cmd: ShortcutItem) => void;
-}> = ({
-  menuItems,
-  position,
-  onCloseMenu,
-  isStashOpen,
-  onCloseStash,
-  isPaletteOpen,
-  onClosePalette,
-  onSelectCommand,
-}) => (
-  <>
-    <ContextMenu items={menuItems} position={position} onClose={onCloseMenu} />
-    <StashModal isOpen={isStashOpen} onClose={onCloseStash} />
-    <CommandPalette
-      isOpen={isPaletteOpen}
-      onClose={onClosePalette}
-      onSelectCommand={onSelectCommand}
-    />
-  </>
-);
-
-const createViewState = (
-  s: ReturnType<typeof useAppShellState>,
-  openContextMenu: (e: React.MouseEvent, item: ProcessItem) => void
-): DashboardState => ({
-  selectedProcess: s.selectedProcess,
-  setSelectedProcess: s.setSelectedProcess,
-  searchQuery: s.searchQuery,
-  setSearchQuery: s.setSearchQuery,
-  isLoading: s.isLoading,
-  searchInputRef: s.searchInputRef,
-  handleRefresh: s.handleRefresh,
-  onOpenStashModal: () => s.setIsStashModalOpen(true),
-  onContextMenu: openContextMenu,
-});
 
 const AppShellMain: React.FC<{
   currentRoute: AppRoute;
@@ -240,9 +194,11 @@ const AppShell: React.FC = () => {
   const { mode: viewportMode, isSidebarCollapsed, toggleSidebar, setMode } = useViewport();
   const { connected: bridgeConnected, port: bridgePort } = useWsBridgeStatus();
   useAppErrorListener();
-  const { position, data, open, close } = useContextMenu<ProcessItem>();
-  const menuItems = createProcessMenuItems(data, close);
-  const viewState = createViewState(s, open);
+
+  const viewState: DashboardState = {
+    searchInputRef: s.searchInputRef,
+    onOpenStashModal: () => s.setIsStashModalOpen(true),
+  };
 
   return (
     <div className="flex flex-col h-screen bg-bg-base text-text-primary font-ui overflow-hidden select-none">
@@ -259,21 +215,23 @@ const AppShell: React.FC = () => {
         viewState={viewState}
       />
       <StatusBar
-        ramSaved="1.8 GB"
         bridgeConnected={bridgeConnected}
         bridgePort={bridgePort}
         viewportMode={viewportMode}
       />
-      <AppShellOverlays
-        menuItems={menuItems}
-        position={position}
-        onCloseMenu={close}
-        isStashOpen={s.isStashModalOpen}
-        onCloseStash={() => s.setIsStashModalOpen(false)}
-        isPaletteOpen={s.isPaletteOpen}
-        onClosePalette={() => s.setIsPaletteOpen(false)}
+      <StashModal isOpen={s.isStashModalOpen} onClose={() => s.setIsStashModalOpen(false)} />
+      <CommandPalette
+        isOpen={s.isPaletteOpen}
+        onClose={() => s.setIsPaletteOpen(false)}
         onSelectCommand={(cmd) =>
-          handleCommand(cmd, navigate, () => s.setIsStashModalOpen(true), s.focusSearch)
+          handleCommand(cmd, {
+            navigate,
+            openStash: () => s.setIsStashModalOpen(true),
+            focusSearch: s.focusSearch,
+            restoreLast: s.restoreLast,
+            toggleSidebar,
+            openPalette: () => s.setIsPaletteOpen(true),
+          })
         }
       />
     </div>

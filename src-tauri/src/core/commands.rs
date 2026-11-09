@@ -16,8 +16,10 @@ pub fn cmd_stash_now(
     undo_stack: State<'_, UndoStack>,
     workspace_id: String,
     session_name: String,
+    selected_hwnds: Option<Vec<String>>,
 ) -> Result<StashResult, String> {
-    stash_now(&pool, &undo_stack, &workspace_id, &session_name).map_err(|e| e.to_string())
+    stash_now(&pool, &undo_stack, &workspace_id, &session_name, selected_hwnds)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
