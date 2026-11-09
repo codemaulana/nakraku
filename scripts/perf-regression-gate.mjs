@@ -1,17 +1,32 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import { execSync } from 'node:child_process';
 
 const MAX_MAIN_BUNDLE_BYTES = 200 * 1024;
 const MAX_TOTAL_GZIP_BYTES = 250 * 1024;
 const MAX_DIFF_BENCHMARK_MS = 15;
 
-function checkBundleSizes() {
+function ensureDistAssets() {
   const distAssetsDir = path.resolve(process.cwd(), 'dist', 'assets');
   if (!fs.existsSync(distAssetsDir)) {
+    try {
+      execSync('npm run build', { stdio: 'ignore' });
+    } catch {
+      return null;
+    }
+  }
+  return fs.existsSync(distAssetsDir) ? distAssetsDir : null;
+}
+
+function checkBundleSizes() {
+  const distAssetsDir = ensureDistAssets();
+  if (!distAssetsDir) {
     return {
       ok: false,
-      error: 'dist/assets directory does not exist. Run npm run build first.',
+      mainBundleBytes: 0,
+      totalGzipBytes: 0,
+      errors: ['dist/assets directory does not exist. Run npm run build first.'],
     };
   }
 

@@ -20,7 +20,7 @@ describe('Phase 17 - GitHub Actions CI Workflows', () => {
 
   it('verifies ci.yml triggers on master branch push and pull requests', () => {
     const ciPath = path.join(rootDir, '.github', 'workflows', 'ci.yml');
-    const content = fs.readFileSync(ciPath, 'utf-8');
+    const content = fs.readFileSync(ciPath, 'utf-8').replace(/\r\n/gu, '\n');
     expect(content).toContain('branches:\n      - master');
     expect(content).toContain('pull_request:');
     expect(content).toContain('test:coverage');

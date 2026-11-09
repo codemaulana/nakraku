@@ -102,7 +102,7 @@ describe('Phase 16 - Release Workflow & Signing Scripts', () => {
   it('verifies release workflow exists and triggers on tag push', () => {
     const releaseYml = path.join(rootDir, '.github', 'workflows', 'release.yml');
     expect(fs.existsSync(releaseYml)).toBe(true);
-    const content = fs.readFileSync(releaseYml, 'utf-8');
+    const content = fs.readFileSync(releaseYml, 'utf-8').replace(/\r\n/gu, '\n');
     expect(content).toContain("tags:\n      - 'v*'");
     expect(content).toContain('scripts/sign-release.ps1');
     expect(content).toContain('scripts/generate-checksums.ps1');
