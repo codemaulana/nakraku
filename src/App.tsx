@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { isTauri } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { RouterProvider, useRouter } from "./router/Router";
 import { Titlebar } from "./components/Titlebar";
 import { Sidebar } from "./components/Sidebar";
@@ -89,6 +91,27 @@ const handleCommand = (
   }
 };
 
+const useTauriGlobalListeners = (onOpenStash: () => void) => {
+  useEffect(() => {
+    if (!isTauri()) return;
+    let unsub1: (() => void) | undefined;
+    let unsub2: (() => void) | undefined;
+
+    listen("global:new-stash", onOpenStash)
+      .then((u) => { unsub1 = u; })
+      .catch(() => {});
+
+    listen("tray:stash-now", onOpenStash)
+      .then((u) => { unsub2 = u; })
+      .catch(() => {});
+
+    return () => {
+      unsub1?.();
+      unsub2?.();
+    };
+  }, [onOpenStash]);
+};
+
 const useAppShellState = (navigate: (r: AppRoute) => void) => {
   const [isStashModalOpen, setIsStashModalOpen] = useState<boolean>(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState<boolean>(false);
@@ -116,6 +139,9 @@ const useAppShellState = (navigate: (r: AppRoute) => void) => {
     onOpenPalette: () => setIsPaletteOpen(true),
     onSelectRoute: (r) => navigate(r),
   });
+
+  const openStashModal = useCallback(() => setIsStashModalOpen(true), []);
+  useTauriGlobalListeners(openStashModal);
 
   return {
     isStashModalOpen,

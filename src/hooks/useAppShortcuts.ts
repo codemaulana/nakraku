@@ -29,7 +29,10 @@ export const useAppShortcuts = ({
       } else if (e.ctrlKey && e.key.toLowerCase() === "f") {
         e.preventDefault();
         onFocusSearch();
-      } else if (e.ctrlKey && e.key.toLowerCase() === "s") {
+      } else if (
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "n") ||
+        (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === "s")
+      ) {
         e.preventDefault();
         onOpenStash();
       } else if (e.altKey && e.key >= "1" && e.key <= "4") {

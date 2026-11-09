@@ -56,3 +56,6 @@ CREATE INDEX IF NOT EXISTS idx_windows_session ON windows(session_id);
 CREATE INDEX IF NOT EXISTS idx_tabs_window ON tabs(window_id);
 CREATE INDEX IF NOT EXISTS idx_tabs_session ON tabs(session_id);
 CREATE INDEX IF NOT EXISTS idx_workspaces_order ON workspaces(sort_order);
+
+INSERT OR IGNORE INTO workspaces (id, name, color, icon, sort_order, is_active, created_at, updated_at)
+VALUES ('default', 'General', '#10B981', 'workspace', 0, 1, 0, 0);

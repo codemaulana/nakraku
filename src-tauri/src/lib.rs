@@ -98,6 +98,7 @@ pub fn run() {
             os::commands::cmd_minimize_all,
             os::commands::cmd_get_memory_stats,
             os::commands::cmd_restore_window,
+            os::commands::cmd_minimize_window,
             os::commands::cmd_restore_session,
             core::commands::cmd_stash_now,
             core::commands::cmd_restore_workspace,

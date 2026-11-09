@@ -33,6 +33,23 @@ pub fn stash_now(
             .lock()
             .map_err(|e| CoreError::LockError(e.to_string()))?;
 
+        let ws_exists: bool = conn
+            .query_row(
+                "SELECT COUNT(*) FROM workspaces WHERE id = ?1",
+                [workspace_id],
+                |row| row.get::<_, i64>(0),
+            )
+            .map(|c| c > 0)
+            .unwrap_or(false);
+
+        if !ws_exists {
+            let _ = conn.execute(
+                "INSERT OR IGNORE INTO workspaces (id, name, color, icon, sort_order, is_active, created_at, updated_at)
+                 VALUES (?1, 'General', '#10B981', 'workspace', 0, 1, ?2, ?2)",
+                rusqlite::params![workspace_id, now_ms],
+            );
+        }
+
         let new_session = CreateSessionInput {
             id: session_id.clone(),
             workspace_id: workspace_id.to_string(),

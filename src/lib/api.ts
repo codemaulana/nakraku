@@ -242,6 +242,30 @@ export const purgeAllSessions = async (): Promise<number> => {
   return Number(raw ?? 0);
 };
 
+/**
+ * Enables auto-start on Windows boot via the native autostart plugin.
+ * @returns {Promise<void>}
+ */
+export const enableAutostart = async (): Promise<void> => {
+  await safeInvoke<void>("plugin:autostart|enable");
+};
+
+/**
+ * Disables auto-start on Windows boot.
+ * @returns {Promise<void>}
+ */
+export const disableAutostart = async (): Promise<void> => {
+  await safeInvoke<void>("plugin:autostart|disable");
+};
+
+/**
+ * Queries whether auto-start on Windows boot is active.
+ * @returns {Promise<boolean>}
+ */
+export const isAutostartEnabled = async (): Promise<boolean> => {
+  return await safeInvoke<boolean>("plugin:autostart|is_enabled");
+};
+
 export * from "./osApi";
 export * from "./wsApi";
 export * from "./licenseApi";

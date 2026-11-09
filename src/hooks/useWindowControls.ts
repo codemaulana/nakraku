@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { isTauri } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getSetting } from "../lib/api";
 
 export interface WindowControlsState {
   isMaximized: boolean;
@@ -56,7 +57,12 @@ export const useWindowControls = (): WindowControlsState => {
 
   const minimize = useCallback(async () => {
     if (isTauri()) {
-      await getCurrentWindow().minimize().catch(() => {});
+      const minToTray = await getSetting("minimize_to_tray").catch(() => null);
+      if (minToTray === "true" || minToTray === null) {
+        await getCurrentWindow().hide().catch(() => {});
+      } else {
+        await getCurrentWindow().minimize().catch(() => {});
+      }
     }
   }, []);
 
@@ -73,7 +79,12 @@ export const useWindowControls = (): WindowControlsState => {
 
   const close = useCallback(async () => {
     if (isTauri()) {
-      await getCurrentWindow().close().catch(() => {});
+      const closeToTray = await getSetting("close_to_tray").catch(() => null);
+      if (closeToTray === "true" || closeToTray === null) {
+        await getCurrentWindow().hide().catch(() => {});
+      } else {
+        await getCurrentWindow().close().catch(() => {});
+      }
     }
   }, []);
 

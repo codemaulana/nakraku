@@ -37,6 +37,7 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
     autostart, minToTray, closeToTray, lang,
     interval, conflict, minOnStash, bridge,
     stashTabs, tier, licenseKey, mid, crashReports,
+    autostartEnabled,
   ] = await Promise.all([
     api.getSetting("autostart_on_boot"),
     api.getSetting("minimize_to_tray"),
@@ -51,10 +52,15 @@ const loadAllSettingsFromDb = async (): Promise<AppSettings> => {
     api.getSetting("license_key"),
     api.getMachineId().catch(() => DEFAULT_SETTINGS.machine_id),
     api.getSetting("send_anonymous_crash_reports"),
+    api.isAutostartEnabled().catch(() => null),
   ]);
 
+  const autostartFinal = autostartEnabled === null
+    ? parseBooleanSetting(autostart, DEFAULT_SETTINGS.autostart_on_boot)
+    : autostartEnabled;
+
   return {
-    autostart_on_boot: parseBooleanSetting(autostart, DEFAULT_SETTINGS.autostart_on_boot),
+    autostart_on_boot: autostartFinal,
     minimize_to_tray: parseBooleanSetting(minToTray, DEFAULT_SETTINGS.minimize_to_tray),
     close_to_tray: parseBooleanSetting(closeToTray, DEFAULT_SETTINGS.close_to_tray),
     language: lang ?? DEFAULT_SETTINGS.language,
@@ -120,6 +126,13 @@ const useSettingsUpdater = (
   const updateSetting = async <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
     try {
+      if (key === "autostart_on_boot") {
+        if (value) {
+          await api.enableAutostart().catch(() => {});
+        } else {
+          await api.disableAutostart().catch(() => {});
+        }
+      }
       await api.setSetting(String(key), String(value));
       setSuccessMessage(`Saved ${String(key)}`);
     } catch (err) {

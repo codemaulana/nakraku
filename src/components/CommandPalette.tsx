@@ -136,6 +136,9 @@ const CommandPaletteContent: React.FC<PaletteContentProps> = ({
         leftIcon="search"
         placeholder="Type a command or shortcut name..."
         value={query}
+        onKeyDown={(e) =>
+          handleNavKey(e, results, selectedIndex, setSelectedIndex, handleSelect)
+        }
         onChange={(e) => {
           setQuery(e.target.value);
           setSelectedIndex(0);

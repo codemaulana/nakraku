@@ -120,6 +120,12 @@ pub fn run_migrations(conn: &mut Connection) -> Result<(), rusqlite::Error> {
         tx.commit()?;
     }
 
+    let _ = conn.execute(
+        "INSERT OR IGNORE INTO workspaces (id, name, color, icon, sort_order, is_active, created_at, updated_at)
+         VALUES ('default', 'General', '#10B981', 'workspace', 0, 1, ?1, ?1)",
+        [now],
+    );
+
     Ok(())
 }
 

@@ -482,3 +482,23 @@ Audit executed via `scripts/check-env.ps1`:
 - `[DS.6]` Views Refactor (`src/views/DashboardView.tsx`, `src/views/ActiveSessionView.tsx`, `src/views/AboutView.tsx`: tactical cards, display geometry inspector, native architectural invariant telemetry grid) — **DONE**
 - `[DS.7]` Design Tokens & Fonts (`src/styles/tokens.css`, `tailwind.config.ts`, `index.html`, `src-tauri/tauri.conf.json`: typography `@font-face` links, CSP whitelist for Google Fonts, tactical utility classes) — **DONE**
 - `[DS.8]` Verification & Build (`npm run lint`, `npm run check`, `npm run perf:gate`, `npm run test:all`, `npm run tauri:build:app`: 0 Oxlint warnings, 0 TS errors, 0 guardrail violations, 190 Vitest tests + 27 Rust tests passing, standalone release binary compiled) — **DONE**
+
+---
+
+## 27. Manual QA Resolution & Subsystem Polish (Release v0.1.0)
+- `[QA.1]` **Foreign Key Constraint in `cmd_stash_now` Fixed**: Added default workspace row (`id = 'default'`) insertion in `001_init.sql` and `run_migrations`, plus a defensive check in `stash_service.rs` auto-creating the workspace if missing before snapshotting.
+- `[QA.2]` **RAM Telemetry Segments Glow Restored**: Rewrote `src/components/MemoryMeter.tsx` using explicit solid hex styles and phosphor jade glowing drop-shadows (`box-shadow: 0 0 8px rgba(0, 242, 158, 0.8)`), tungsten amber, and laser red segments.
+- `[QA.3]` **Global & App Shortcuts Hooked**: Updated `src/hooks/useAppShortcuts.ts` to support both `Ctrl+Shift+N` and `Ctrl+S`. Wired Tauri listeners for `global:new-stash` and `tray:stash-now` in `src/App.tsx`.
+- `[QA.4]` **Active Session Orchestration Win32 Live Actions**: Refactored `src/views/ActiveSessionView.tsx` from static mock data to real Win32 live windows. Implemented single window minimize/restore Win32 IPC commands (`cmd_minimize_window`, `cmd_restore_window`), restore all stashed windows, and snapshot capturing with toast feedback.
+- `[QA.5]` **Command Palette Navigation Fixed**: Re-routed keyboard event listener in `src/components/CommandPalette.tsx` directly to the `<Input>` element to enable ArrowUp, ArrowDown, and Enter selection while typing without losing focus.
+- `[QA.6]` **Settings System Tray & Autostart Integration**:
+  - Added permissions in `src-tauri/capabilities/default.json` for `core:window:allow-hide`, `core:window:allow-show`, `core:window:allow-unminimize`, `core:window:allow-set-focus`, and `autostart:default`.
+  - Updated `useWindowControls.ts` to respect `minimize_to_tray` and `close_to_tray` settings, cleanly hiding the window into the system tray.
+  - Exported `enableAutostart`, `disableAutostart`, and `isAutostartEnabled` in `src/lib/api.ts` and synchronized them with `useSettings.ts`.
+- `[QA.7]` **Full Verification Matrix**:
+  - `oxlint`: 0 warnings, 0 errors across 142 files.
+  - `tsc --noEmit`: 0 type errors.
+  - `guardrails.ps1`: 0 violations across 84 TSX files and 49 Rust files.
+  - `npm test`: 37 test suites, 190 tests passed.
+  - `npm run test:rust`: 27 tests passed.
+  - `npm run tauri:build:app`: Release binary compiled at `src-tauri/target/release/nakraku-stash.exe` (16.1 MB).

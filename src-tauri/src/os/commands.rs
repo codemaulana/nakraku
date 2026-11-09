@@ -2,7 +2,7 @@ use super::error::OsError;
 use super::process_info::get_system_memory_stats;
 use super::types::{MemoryStats, RawWindow, SessionSnapshot, WindowRect};
 use super::window_enum::enumerate_windows;
-use super::window_restore::{minimize_all_windows, restore_session_windows, restore_window};
+use super::window_restore::{minimize_all_windows, minimize_window, restore_session_windows, restore_window};
 use super::window_snapshot::snapshot_session;
 use crate::db::window_repo;
 use crate::db::DbPool;
@@ -26,6 +26,15 @@ pub fn cmd_minimize_all() -> Result<u32, String> {
 #[tauri::command]
 pub fn cmd_get_memory_stats() -> Result<MemoryStats, String> {
     get_system_memory_stats().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn cmd_minimize_window(hwnd: String) -> Result<(), String> {
+    let clean_hex = hwnd.trim_start_matches("0x").trim_start_matches("0X");
+    let hwnd_val = usize::from_str_radix(clean_hex, 16)
+        .map_err(|_| format!("Invalid hex HWND format: {hwnd}"))?;
+
+    minimize_window(hwnd_val).map_err(|e| e.to_string())
 }
 
 #[tauri::command]

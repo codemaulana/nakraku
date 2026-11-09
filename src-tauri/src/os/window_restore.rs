@@ -25,6 +25,17 @@ pub fn minimize_all_windows() -> Result<u32, OsError> {
     Ok(count)
 }
 
+pub fn minimize_window(hwnd_val: usize) -> Result<(), OsError> {
+    let hwnd = hwnd_val as HWND;
+    if unsafe { IsWindow(hwnd) } == 0 {
+        return Err(OsError::WindowNotFound(format!("{:#x}", hwnd_val)));
+    }
+    unsafe {
+        ShowWindow(hwnd, SW_MINIMIZE);
+    }
+    Ok(())
+}
+
 pub fn restore_window(hwnd_val: usize, is_maximized: bool) -> Result<(), OsError> {
     let hwnd = hwnd_val as HWND;
     if unsafe { IsWindow(hwnd) } == 0 {

@@ -149,6 +149,8 @@ mod tests {
     #[test]
     fn test_workspace_crud() -> Result<(), Box<dyn std::error::Error>> {
         let conn = setup_test_db()?;
+        let initial_count = list(&conn)?.len();
+
         let ws = create(
             &conn,
             CreateWorkspaceInput {
@@ -169,7 +171,8 @@ mod tests {
         assert_eq!(updated.name, "Coding Engine");
 
         let list_all = list(&conn)?;
-        assert_eq!(list_all.len(), 1);
+        assert_eq!(list_all.len(), initial_count + 1);
+        assert!(list_all.iter().any(|w| w.id == "ws-1"));
 
         let deleted = delete(&conn, "ws-1")?;
         assert!(deleted);

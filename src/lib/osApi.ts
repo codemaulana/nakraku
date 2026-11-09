@@ -54,6 +54,15 @@ export const getMemoryStats = async (): Promise<MemoryStats> => {
 };
 
 /**
+ * Minimizes a specific active Win32 window.
+ * @param {string} hwnd Hexadecimal window handle string.
+ * @returns {Promise<void>}
+ */
+export const minimizeWindow = async (hwnd: string): Promise<void> => {
+  await safeInvoke<void>("cmd_minimize_window", { hwnd });
+};
+
+/**
  * Restores a specific minimized Win32 window to its prior active coordinate state.
  * @param {string} hwnd Hexadecimal window handle string.
  * @param {boolean} isMaximized Flag indicating whether window should be restored maximized.
